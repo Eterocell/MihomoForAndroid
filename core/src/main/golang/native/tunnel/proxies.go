@@ -187,7 +187,7 @@ func convertProxies(proxies []C.Proxy, uiSubtitlePattern *regexp2.Regexp) []*Pro
 			Title:    strings.TrimSpace(title),
 			Subtitle: strings.TrimSpace(subtitle),
 			Type:     p.Type().String(),
-			Delay:    int(p.LastDelay()),
+			Delay:    int(p.LastDelayForTestUrl("https://www.gstatic.com/generate_204")),
 		})
 	}
 	return result
@@ -218,7 +218,7 @@ func collectProviders(providers []provider.ProxyProvider, uiSubtitlePattern *reg
 				Title:    strings.TrimSpace(title),
 				Subtitle: strings.TrimSpace(subtitle),
 				Type:     px.Type().String(),
-				Delay:    int(px.LastDelay()),
+				Delay:    int(px.LastDelayForTestUrl("https://www.gstatic.com/generate_204")),
 			})
 		}
 	}
