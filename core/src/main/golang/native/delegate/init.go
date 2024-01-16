@@ -6,15 +6,15 @@ import (
 
 	"cfa/blob"
 
-	"github.com/Dreamacro/clash/component/process"
-	"github.com/Dreamacro/clash/log"
+	"github.com/metacubex/mihomo/component/process"
+	"github.com/metacubex/mihomo/log"
 
 	"cfa/native/app"
 	"cfa/native/platform"
 
-	"github.com/Dreamacro/clash/component/dialer"
-	"github.com/Dreamacro/clash/component/mmdb"
-	"github.com/Dreamacro/clash/constant"
+	"github.com/metacubex/mihomo/component/dialer"
+	"github.com/metacubex/mihomo/component/mmdb"
+	"github.com/metacubex/mihomo/constant"
 )
 
 var errBlocked = errors.New("blocked")

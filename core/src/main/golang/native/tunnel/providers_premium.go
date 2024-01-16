@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"time"
 
-	P "github.com/Dreamacro/clash/adapter/provider"
-	"github.com/Dreamacro/clash/constant/provider"
-	"github.com/Dreamacro/clash/log"
-	"github.com/Dreamacro/clash/tunnel"
+	P "github.com/metacubex/mihomo/adapter/provider"
+	"github.com/metacubex/mihomo/constant/provider"
+	"github.com/metacubex/mihomo/log"
+	"github.com/metacubex/mihomo/tunnel"
 )
 
 var ErrInvalidType = errors.New("invalid type")

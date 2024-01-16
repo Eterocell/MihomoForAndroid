@@ -8,7 +8,7 @@ require cfa/blob v0.0.0-00010101000000-000000000000 // indirect
 
 require (
 	github.com/3andne/restls-client-go v0.1.6 // indirect
-	github.com/Dreamacro/clash v1.7.0 // indirect
+	github.com/metacubex/mihomo v1.7.0 // indirect
 	github.com/Kr328/tun2socket v0.0.0-20220414050025-d07c78d06d34 // indirect
 	github.com/RyuaNerin/go-krypto v1.0.2 // indirect
 	github.com/Yawning/aez v0.0.0-20211027044916-e49e68abd344 // indirect
@@ -48,7 +48,7 @@ require (
 	github.com/metacubex/sing-quic v0.0.0-20231008050747-a684db516966 // indirect
 	github.com/metacubex/sing-shadowsocks v0.2.5 // indirect
 	github.com/metacubex/sing-shadowsocks2 v0.1.4 // indirect
-	github.com/metacubex/sing-tun v0.1.15-0.20231102032628-0f8a17217e56 // indirect
+	github.com/metacubex/sing-tun v0.1.15-0.20231103033938-170591e8d5bd // indirect
 	github.com/metacubex/sing-vmess v0.1.9-0.20230921005247-a0488d7dac74 // indirect
 	github.com/metacubex/sing-wireguard v0.0.0-20231001110902-321836559170 // indirect
 	github.com/miekg/dns v1.1.56 // indirect
@@ -104,10 +104,10 @@ require (
 	lukechampine.com/blake3 v1.2.1 // indirect
 )
 
-replace github.com/sagernet/sing => github.com/metacubex/sing v0.0.0-20231001053806-1230641572b9
+replace github.com/sagernet/sing => github.com/metacubex/sing v0.0.0-20240111014253-f1818b6a82b2
 
 replace cfa => ../../main/golang
 
-replace github.com/Dreamacro/clash => ./clash
+replace github.com/metacubex/mihomo => ./clash
 
 replace cfa/blob => ../../../build/intermediates/golang_blob

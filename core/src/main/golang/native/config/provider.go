@@ -3,7 +3,7 @@ package config
 import (
 	"io"
 
-	"github.com/Dreamacro/clash/config"
+	"github.com/metacubex/mihomo/config"
 )
 
 func forEachProviders(rawCfg *config.RawConfig, fun func(index int, total int, key string, provider map[string]any)) {

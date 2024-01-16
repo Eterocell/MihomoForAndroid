@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/Dreamacro/clash/constant"
+	"github.com/metacubex/mihomo/constant"
 )
 
 type OverrideSlot int

@@ -20,11 +20,11 @@ val golangSource = file("src/main/golang/native")
 golang {
     sourceSets {
         create("meta-alpha") {
-            tags.set(listOf("foss","with_gvisor"))
+            tags.set(listOf("foss","with_gvisor","cmfa"))
             srcDir.set(file("src/foss/golang"))
         }
         create("meta") {
-            tags.set(listOf("foss","with_gvisor"))
+            tags.set(listOf("foss","with_gvisor","cmfa"))
             srcDir.set(file("src/foss/golang"))
         }
         all {

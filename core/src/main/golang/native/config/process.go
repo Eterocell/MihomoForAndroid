@@ -9,11 +9,11 @@ import (
 	"github.com/dlclark/regexp2"
 
 	"cfa/native/common"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/log"
+	C "github.com/metacubex/mihomo/constant"
+	"github.com/metacubex/mihomo/log"
 
-	"github.com/Dreamacro/clash/config"
-	"github.com/Dreamacro/clash/dns"
+	"github.com/metacubex/mihomo/config"
+	"github.com/metacubex/mihomo/dns"
 )
 
 var processors = []processor{

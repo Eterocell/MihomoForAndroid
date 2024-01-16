@@ -5,7 +5,7 @@ package tun
 import (
 	"net"
 
-	C "github.com/Dreamacro/clash/constant"
+	C "github.com/metacubex/mihomo/constant"
 )
 
 func createMetadata(lAddr, rAddr *net.TCPAddr) *C.Metadata {
