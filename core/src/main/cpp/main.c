@@ -8,6 +8,9 @@
 #include "jni_helper.h"
 #include "trace.h"
 
+#include "version.h" // 添加当前编译core版本号变量
+
+
 JNIEXPORT void JNICALL
 Java_com_github_kr328_clash_core_bridge_Bridge_nativeInit(JNIEnv *env, jobject thiz,
                                                           jstring home,
@@ -330,6 +333,7 @@ Java_com_github_kr328_clash_core_bridge_Bridge_nativeSubscribeLogcat(JNIEnv *env
     subscribeLogcat(_callback);
 }
 
+
 static jmethodID m_tun_interface_mark_socket;
 static jmethodID m_tun_interface_query_socket_uid;
 static jmethodID m_completable_complete;
@@ -537,4 +541,13 @@ JNI_OnLoad(JavaVM *vm, void *reserved) {
     release_object_func = &release_jni_object_impl;
 
     return JNI_VERSION_1_6;
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_github_kr328_clash_core_bridge_Bridge_nativeCoreVersion(JNIEnv *env, jobject thiz) {
+    TRACE_METHOD();
+    
+    char* Version = make_String(GIT_VERSION);
+
+    return new_string(Version);
 }

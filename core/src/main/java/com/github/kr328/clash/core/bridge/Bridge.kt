@@ -49,6 +49,7 @@ object Bridge {
     external fun nativeInstallSideloadGeoip(data: ByteArray?)
     external fun nativeQueryConfiguration(): String
     external fun nativeSubscribeLogcat(callback: LogcatInterface)
+    external fun nativeCoreVersion(): String
 
     private external fun nativeInit(home: String, versionName: String, sdkVersion: Int)
 

@@ -1,6 +1,53 @@
 cmake_minimum_required(VERSION 3.0)
 
+# 获取git hash
+
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR= ${CMAKE_CURRENT_SOURCE_DIR}")
+execute_process(
+  COMMAND git submodule foreach git log -1 --format=%H   
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+  OUTPUT_VARIABLE COMMIT_HASH
+)
+string(REPLACE "\n" ";" COMMIT_HASH "${COMMIT_HASH}")
+list(GET COMMIT_HASH 1 COMMIT_HASH)
+string (REGEX REPLACE "[\n\t\r]" "" COMMIT_HASH ${COMMIT_HASH})
+string(SUBSTRING ${COMMIT_HASH} 0 7 COMMIT_HASH)
+message(STATUS "git hash= ${COMMIT_HASH}")
+
+# 获取分支名称
+execute_process(
+  COMMAND git submodule foreach git branch -r --contains ${COMMIT_HASH}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+  OUTPUT_VARIABLE CURRENT_BRANCH
+)
+string(REPLACE "\n" ";" CURRENT_BRANCH "${CURRENT_BRANCH}")
+list(GET CURRENT_BRANCH 1 CURRENT_BRANCH)
+string (REGEX REPLACE "origin/" "" CURRENT_BRANCH ${CURRENT_BRANCH})
+string (REGEX REPLACE "[\n\t\r]" "" CURRENT_BRANCH ${CURRENT_BRANCH})
+#string(SUBSTRING ${CURRENT_BRANCH} 0 8 CURRENT_BRANCH)
+message(STATUS "git current branch = ${CURRENT_BRANCH}")
+
+# 获取生成时间
+execute_process(
+  COMMAND date +"%y%m%d"
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+  OUTPUT_VARIABLE COMPILE_TIME
+)
+string (REGEX REPLACE "[\n\t\r]" "" COMPILE_TIME ${COMPILE_TIME})
+string(REGEX REPLACE "\"" "" COMPILE_TIME ${COMPILE_TIME})
+
+# 生成版本信息
+set(GIT_VERSION "Meta_${CURRENT_BRANCH}_${COMMIT_HASH}_${COMPILE_TIME}")
+message(STATUS "version info = ${GIT_VERSION}")
+
+# 去除空格
+string(REGEX REPLACE "[ ]+" "" GIT_VERSION "${GIT_VERSION}")
+
+# 保存变量到文件
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/version.h @ONLY)
+
 project(clash-bridge C)
+
 
 set(CMAKE_POSITION_INDEPENDENT_CODE on)
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
