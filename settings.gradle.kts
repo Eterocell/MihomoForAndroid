@@ -22,7 +22,7 @@ dependencyResolutionManagement {
             val kotlin = "1.7.0"
             val ksp = "$kotlin-1.0.6"
             val golang = "1.0.4"
-            val coroutine = "1.6.3"
+            val coroutine = "1.7.3"
             val coreKtx = "1.8.0"
             val activity = "1.5.0"
             val fragment = "1.5.0"
