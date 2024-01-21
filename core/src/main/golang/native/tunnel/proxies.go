@@ -96,8 +96,8 @@ func QueryProxyGroup(name string, sortMode SortMode, uiSubtitlePattern *regexp2.
 		return nil
 	}
 
- 	proxies := convertProxies(g.Proxies(), uiSubtitlePattern)
-// 	proxies := collectProviders(g.Providers(), uiSubtitlePattern)
+	proxies := convertProxies(g.Proxies(), uiSubtitlePattern)
+	// 	proxies := collectProviders(g.Providers(), uiSubtitlePattern)
 
 	switch sortMode {
 	case Title:
@@ -181,13 +181,20 @@ func convertProxies(proxies []C.Proxy, uiSubtitlePattern *regexp2.Regexp) []*Pro
 				}
 			}
 		}
+		testURL := "https://www.gstatic.com/generate_204"
+		for k := range p.ExtraDelayHistories() {
+			if len(k) > 0 {
+				testURL = k
+				break
+			}
+		}
 
 		result = append(result, &Proxy{
 			Name:     name,
 			Title:    strings.TrimSpace(title),
 			Subtitle: strings.TrimSpace(subtitle),
 			Type:     p.Type().String(),
-			Delay:    int(p.LastDelayForTestUrl("https://www.gstatic.com/generate_204")),
+			Delay:    int(p.LastDelayForTestUrl(testURL)),
 		})
 	}
 	return result
@@ -213,12 +220,20 @@ func collectProviders(providers []provider.ProxyProvider, uiSubtitlePattern *reg
 				}
 			}
 
+			testURL := "https://www.gstatic.com/generate_204"
+			for k := range px.ExtraDelayHistories() {
+				if len(k) > 0 {
+					testURL = k
+					break
+				}
+			}
+
 			result = append(result, &Proxy{
 				Name:     name,
 				Title:    strings.TrimSpace(title),
 				Subtitle: strings.TrimSpace(subtitle),
 				Type:     px.Type().String(),
-				Delay:    int(px.LastDelayForTestUrl("https://www.gstatic.com/generate_204")),
+				Delay:    int(px.LastDelayForTestUrl(testURL)),
 			})
 		}
 	}
