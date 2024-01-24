@@ -49,7 +49,7 @@ require (
 	github.com/metacubex/gvisor v0.0.0-20231209122014-3e43224c7bbc // indirect
 	github.com/metacubex/mihomo v1.7.0 // indirect
 	github.com/metacubex/quic-go v0.41.1-0.20240120014142-a02f4a533d4a // indirect
-	github.com/metacubex/sing-quic v0.0.0-20240120014430-9838ce4bbc41 // indirect
+	github.com/metacubex/sing-quic v0.0.0-20240122125415-d6eb83bc6ec4 // indirect
 	github.com/metacubex/sing-shadowsocks v0.2.6 // indirect
 	github.com/metacubex/sing-shadowsocks2 v0.2.0 // indirect
 	github.com/metacubex/sing-tun v0.2.0 // indirect
@@ -69,7 +69,7 @@ require (
 	github.com/sagernet/bbolt v0.0.0-20231014093535-ea5cb2fe9f0a // indirect
 	github.com/sagernet/netlink v0.0.0-20220905062125-8043b4a9aa97 // indirect
 	github.com/sagernet/sing v0.3.0 // indirect
-	github.com/sagernet/sing-mux v0.2.0 // indirect
+	github.com/sagernet/sing-mux v0.2.1-0.20240124034317-9bfb33698bb6 // indirect
 	github.com/sagernet/sing-shadowtls v0.1.4 // indirect
 	github.com/sagernet/smux v0.0.0-20231208180855-7041f6ea79e7 // indirect
 	github.com/sagernet/tfo-go v0.0.0-20231209031829-7b5343ac1dc6 // indirect
