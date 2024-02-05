@@ -45,7 +45,6 @@ require (
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/insomniacslk/dhcp v0.0.0-20231206064809-8c70d406f6d2 // indirect
 	github.com/josharian/native v1.1.0 // indirect
-	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
@@ -56,10 +55,10 @@ require (
 	github.com/metacubex/gopacket v1.1.20-0.20230608035415-7e2f98a3e759 // indirect
 	github.com/metacubex/gvisor v0.0.0-20231209122014-3e43224c7bbc // indirect
 	github.com/metacubex/quic-go v0.41.1-0.20240120014142-a02f4a533d4a // indirect
-	github.com/metacubex/sing-quic v0.0.0-20240122125415-d6eb83bc6ec4 // indirect
+	github.com/metacubex/sing-quic v0.0.0-20240130040922-cbe613c88f20 // indirect
 	github.com/metacubex/sing-shadowsocks v0.2.6 // indirect
 	github.com/metacubex/sing-shadowsocks2 v0.2.0 // indirect
-	github.com/metacubex/sing-tun v0.2.0 // indirect
+	github.com/metacubex/sing-tun v0.2.1-0.20240130042529-1f983547e9d4 // indirect
 	github.com/metacubex/sing-vmess v0.1.9-0.20231207122118-72303677451f // indirect
 	github.com/metacubex/sing-wireguard v0.0.0-20231209125515-0594297f7232 // indirect
 	github.com/mroth/weightedrand/v2 v2.1.0 // indirect
