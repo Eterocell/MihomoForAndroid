@@ -50,7 +50,7 @@ jobs:
 
       - name: Build
         if: success()
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: --no-daemon app:assembleMeta-AlphaRelease
 
