@@ -53,7 +53,7 @@ jobs:
           arguments: --no-daemon app:assembleMeta-AlphaRelease
 
       # Delete old Prerelease-alpha
-      - uses: dev-drprasad/delete-tag-and-release@v1.0
+      - uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
           tag_name: Prerelease-alpha
           github_token: ${{ secrets.GITHUB_TOKEN }}
