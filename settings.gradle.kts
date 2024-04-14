@@ -25,7 +25,7 @@ dependencyResolutionManagement {
             val coroutine = "1.7.3"
             val coreKtx = "1.8.0"
             val activity = "1.5.0"
-            val fragment = "1.5.0"
+            val fragment = "1.6.2"
             val appcompat = "1.4.2"
             val coordinator = "1.2.0"
             val recyclerview = "1.2.1"
