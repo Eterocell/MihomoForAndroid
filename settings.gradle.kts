@@ -18,7 +18,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            val agp = "7.2.1"
+            val agp = "7.4.2"
             val kotlin = "1.7.0"
             val ksp = "$kotlin-1.0.6"
             val golang = "1.0.4"
