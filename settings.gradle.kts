@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             val fragment = "1.5.0"
             val appcompat = "1.4.2"
             val coordinator = "1.2.0"
-            val recyclerview = "1.2.1"
+            val recyclerview = "1.3.2"
             val viewpager = "1.0.0"
             val material = "1.6.1"
             val serialization = "1.3.3"
