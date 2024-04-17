@@ -119,6 +119,7 @@ subprojects {
         }
 
         buildFeatures.apply {
+            buildConfig = true
             viewBinding {
                 isEnabled = name != "hideapi"
             }

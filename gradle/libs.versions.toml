@@ -1,5 +1,5 @@
 [versions]
-agp = "7.4.2"
+agp = "8.3.2"
 kotlin = "1.9.23"
 ksp = "1.9.23-1.0.20"
 coroutine = "1.8.0"

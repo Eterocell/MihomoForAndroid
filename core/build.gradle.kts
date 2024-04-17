@@ -54,24 +54,6 @@ android {
             path = file("src/main/cpp/CMakeLists.txt")
         }
     }
-
-    sourceSets {
-        getByName("meta") {
-            jniLibs {
-                srcDir("${GolangPlugin.outputDirOf(project, null, null)}/metaRelease")
-            }
-        }
-    }
-
-//    libraryVariants.configureEach {
-//        sourceSets {
-//            getByName(this@configureEach.name) {
-//                jniLibs {
-//                    srcDir(GolangPlugin.outputDirOf(project, this@configureEach, null))
-//                }
-//            }
-//        }
-//    }
 }
 
 dependencies {

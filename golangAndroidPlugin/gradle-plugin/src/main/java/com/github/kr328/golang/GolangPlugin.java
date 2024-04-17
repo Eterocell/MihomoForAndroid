@@ -82,11 +82,11 @@ public class GolangPlugin implements Plugin<Project> {
 
             variant.getExternalNativeBuildProviders().forEach(t -> t.get().dependsOn(task));
 
-            target.getTasks().stream().filter(t -> t.getName().contains("JniLib") || t.getName().contains("CMake")).forEach(t -> t.mustRunAfter(task));
+            target.getTasks().stream().filter(t -> t.getName().contains("JniLib") || t.getName().contains("CMake")).forEach(t -> t.dependsOn(task));
 
             output.mkdirs();
         });
 
-//        base.getSourceSets().getByName(variant.getName()).getJniLibs().srcDir(outputDirOf(target, variant, null));
+        base.getSourceSets().getByName(variant.getName()).getJniLibs().srcDir(outputDirOf(target, variant, null));
     }
 }
