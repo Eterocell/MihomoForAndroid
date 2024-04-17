@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(deps.android.gradle)
+    compileOnly(libs.build.android)
     compileOnly(gradleApi())
 }
 

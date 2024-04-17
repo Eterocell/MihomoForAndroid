@@ -23,10 +23,8 @@ dependencyResolutionManagement {
         }
     }
     versionCatalogs {
-        create("deps") {
-            val agpVersion = "7.4.2"
-
-            library("android-gradle", "com.android.tools.build:gradle:$agpVersion")
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
         }
     }
 }
