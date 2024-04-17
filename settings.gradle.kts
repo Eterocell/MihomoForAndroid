@@ -1,5 +1,7 @@
 rootProject.name = "ClashMetaForAndroid"
 
+includeBuild("golangAndroidPlugin")
+
 include(":app")
 include(":core")
 include(":service")
@@ -16,12 +18,26 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://androidx.dev/storage/compose-compiler/repository/") {
+            content {
+                includeGroup("androidx.compose.compiler")
+            }
+        }
+        maven("https://maven.kr328.app/releases") {
+            content {
+                includeGroupAndSubgroups("com.github.kr328")
+            }
+        }
+    }
     versionCatalogs {
         create("libs") {
-            val agp = "7.2.1"
-            val kotlin = "1.7.0"
-            val ksp = "$kotlin-1.0.6"
-            val golang = "1.0.4"
+            val agp = "7.4.2"
+            val kotlin = "1.7.22"
+            val ksp = "$kotlin-1.0.8"
             val coroutine = "1.7.3"
             val coreKtx = "1.8.0"
             val activity = "1.5.0"
@@ -40,7 +56,6 @@ dependencyResolutionManagement {
             library("build-kotlin-common", "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin")
             library("build-kotlin-serialization", "org.jetbrains.kotlin:kotlin-serialization:$kotlin")
             library("build-ksp", "com.google.devtools.ksp:symbol-processing-gradle-plugin:$ksp")
-            library("build-golang", "com.github.kr328.golang:gradle-plugin:$golang")
             library("kotlin-coroutine", "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine")
             library("kotlin-serialization-json", "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization")
             library("androidx-core", "androidx.core:core-ktx:$coreKtx")

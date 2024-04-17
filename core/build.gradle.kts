@@ -11,23 +11,16 @@ plugins {
     id("golang-android")
 }
 
-val geoipDatabaseUrl =
-    "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
+val geoipDatabaseUrl = "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
 val geoipInvalidate = Duration.ofDays(7)!!
 val geoipOutput = buildDir.resolve("intermediates/golang_blob")
 val golangSource = file("src/main/golang/native")
 
 golang {
     sourceSets {
-        create("meta-alpha") {
-            tags.set(listOf("foss","with_gvisor","cmfa"))
-            srcDir.set(file("src/foss/golang"))
-        }
         create("meta") {
-            tags.set(listOf("foss","with_gvisor","cmfa"))
+            tags.set(listOf("foss", "with_gvisor", "cmfa"))
             srcDir.set(file("src/foss/golang"))
-        }
-        all {
             fileName.set("libclash.so")
             packageName.set("cfa/native")
         }
@@ -49,9 +42,28 @@ android {
 
     externalNativeBuild {
         cmake {
+            version = "3.22.1"
             path = file("src/main/cpp/CMakeLists.txt")
         }
     }
+
+    sourceSets {
+        getByName("meta") {
+            jniLibs {
+                srcDir("${GolangPlugin.outputDirOf(project, null, null)}/metaRelease")
+            }
+        }
+    }
+
+//    libraryVariants.configureEach {
+//        sourceSets {
+//            getByName(this@configureEach.name) {
+//                jniLibs {
+//                    srcDir(GolangPlugin.outputDirOf(project, this@configureEach, null))
+//                }
+//            }
+//        }
+//    }
 }
 
 dependencies {

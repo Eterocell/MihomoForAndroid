@@ -9,23 +9,16 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        maven("https://maven.kr328.app/releases")
     }
     dependencies {
         classpath(libs.build.android)
         classpath(libs.build.kotlin.common)
         classpath(libs.build.kotlin.serialization)
         classpath(libs.build.ksp)
-        classpath(libs.build.golang)
     }
 }
 
 subprojects {
-    repositories {
-        mavenCentral()
-        google()
-        maven("https://maven.kr328.app/releases")
-    }
 
     val isApp = name == "app"
 
@@ -59,7 +52,7 @@ subprojects {
             }
         }
 
-        ndkVersion = "23.0.7599858"
+        ndkVersion = "26.2.11394342"
 
         compileSdkVersion(defaultConfig.targetSdk!!)
 
@@ -73,18 +66,6 @@ subprojects {
 
         productFlavors {
             flavorDimensions("feature")
-
-            create("meta-alpha") {
-                isDefault = true
-                dimension = flavorDimensionList[0]
-                versionNameSuffix = ".Meta-Alpha"
-
-                buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
-
-                if (isApp) {
-                    applicationIdSuffix = ".meta"
-                }
-            }
 
             create("meta") {
 
@@ -101,9 +82,6 @@ subprojects {
 
         sourceSets {
             getByName("meta") {
-                java.srcDirs("src/foss/java")
-            }
-            getByName("meta-alpha") {
                 java.srcDirs("src/foss/java")
             }
         }
@@ -140,6 +118,9 @@ subprojects {
         }
 
         buildFeatures.apply {
+            viewBinding {
+                isEnabled = name != "hideapi"
+            }
             dataBinding {
                 isEnabled = name != "hideapi"
             }
@@ -160,6 +141,10 @@ subprojects {
 
 task("clean", type = Delete::class) {
     delete(rootProject.buildDir)
+    allprojects.forEach {
+        delete(it.layout.buildDirectory)
+        delete(files("${it.layout.projectDirectory.asFile.absolutePath}/.cxx"))
+    }
 }
 
 tasks.wrapper {
