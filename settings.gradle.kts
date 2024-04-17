@@ -36,8 +36,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             val agp = "7.4.2"
-            val kotlin = "1.7.22"
-            val ksp = "$kotlin-1.0.8"
+            val kotlin = "1.9.23"
+            val ksp = "$kotlin-1.0.20"
             val coroutine = "1.7.3"
             val coreKtx = "1.8.0"
             val activity = "1.5.0"

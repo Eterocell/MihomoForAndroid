@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -9,6 +10,12 @@ plugins {
 }
 
 android.namespace = "com.github.kr328.clash"
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
 
 dependencies {
     compileOnly(project(":hideapi"))

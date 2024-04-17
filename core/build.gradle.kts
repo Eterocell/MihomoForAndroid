@@ -1,5 +1,6 @@
 import com.github.kr328.golang.GolangBuildTask
 import com.github.kr328.golang.GolangPlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileOutputStream
 import java.net.URL
 import java.time.Duration
@@ -24,6 +25,12 @@ golang {
             fileName.set("libclash.so")
             packageName.set("cfa/native")
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 

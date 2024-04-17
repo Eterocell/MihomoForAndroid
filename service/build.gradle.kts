@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("android")
     id("kotlinx-serialization")
@@ -6,6 +8,12 @@ plugins {
 }
 
 android.namespace = "com.github.kr328.clash.service"
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
 
 dependencies {
     implementation(project(":core"))

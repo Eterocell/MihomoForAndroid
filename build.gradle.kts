@@ -127,6 +127,11 @@ subprojects {
             }
         }
 
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+
         if (isApp) {
             this as AppExtension
 
