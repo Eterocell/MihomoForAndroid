@@ -5,6 +5,8 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
+android.namespace = "com.github.kr328.clash.service"
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":common"))

@@ -8,6 +8,8 @@ plugins {
     id("com.android.application")
 }
 
+android.namespace = "com.github.kr328.clash"
+
 dependencies {
     compileOnly(project(":hideapi"))
 
