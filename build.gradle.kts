@@ -1,31 +1,19 @@
-@file:Suppress("UNUSED_VARIABLE")
-
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import java.net.URL
 import java.util.*
 
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        maven("https://maven.kr328.app/releases")
-    }
-    dependencies {
-        classpath(libs.build.android)
-        classpath(libs.build.kotlin.common)
-        classpath(libs.build.kotlin.serialization)
-        classpath(libs.build.ksp)
-        classpath(libs.build.golang)
-    }
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ksp) apply false
+
+    id("build-logic.root-project")
 }
 
 subprojects {
-    repositories {
-        mavenCentral()
-        google()
-        maven("https://maven.kr328.app/releases")
-    }
 
     val isApp = name == "app"
 
@@ -34,14 +22,15 @@ subprojects {
     extensions.configure<BaseExtension> {
         defaultConfig {
             if (isApp) {
-                applicationId = "com.github.metacubex.clash"
+                applicationId = "com.eterocell.mihomoforandroid"
             }
 
             minSdk = 21
-            targetSdk = 31
+            targetSdk = 34
+            buildToolsVersion = "34.0.0"
 
-            versionName = "2.10.1"
-            versionCode = 210001
+            versionName = "2.11.1-alpha01"
+            versionCode = "02110101".toInt()
 
             resValue("string", "release_name", "v$versionName")
             resValue("integer", "release_code", "$versionCode")
@@ -59,7 +48,16 @@ subprojects {
             }
         }
 
-        ndkVersion = "23.0.7599858"
+        splits {
+            abi {
+                isEnable = true
+                reset()
+                include("arm64-v8a", "x86_64", "armeabi-v7a", "x86")
+                isUniversalApk = true
+            }
+        }
+
+        ndkVersion = "26.2.11394342"
 
         compileSdkVersion(defaultConfig.targetSdk!!)
 
@@ -73,18 +71,6 @@ subprojects {
 
         productFlavors {
             flavorDimensions("feature")
-
-            create("meta-alpha") {
-                isDefault = true
-                dimension = flavorDimensionList[0]
-                versionNameSuffix = ".Meta-Alpha"
-
-                buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
-
-                if (isApp) {
-                    applicationIdSuffix = ".meta"
-                }
-            }
 
             create("meta") {
 
@@ -103,9 +89,6 @@ subprojects {
             getByName("meta") {
                 java.srcDirs("src/foss/java")
             }
-            getByName("meta-alpha") {
-                java.srcDirs("src/foss/java")
-            }
         }
 
         signingConfigs {
@@ -116,7 +99,7 @@ subprojects {
                         keystore.inputStream().use(this::load)
                     }
 
-                    storeFile = rootProject.file("release.keystore")
+                    storeFile = rootProject.file(prop.getProperty("keystore.path"))
                     storePassword = prop.getProperty("keystore.password")!!
                     keyAlias = prop.getProperty("key.alias")!!
                     keyPassword = prop.getProperty("key.password")!!
@@ -140,9 +123,18 @@ subprojects {
         }
 
         buildFeatures.apply {
+            buildConfig = true
+            viewBinding {
+                isEnabled = name != "hideapi"
+            }
             dataBinding {
                 isEnabled = name != "hideapi"
             }
+        }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
         }
 
         if (isApp) {
@@ -155,21 +147,5 @@ subprojects {
                 }
             }
         }
-    }
-}
-
-task("clean", type = Delete::class) {
-    delete(rootProject.buildDir)
-}
-
-tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-
-    doLast {
-        val sha256 = URL("$distributionUrl.sha256").openStream()
-            .use { it.reader().readText().trim() }
-
-        file("gradle/wrapper/gradle-wrapper.properties")
-            .appendText("distributionSha256Sum=$sha256")
     }
 }

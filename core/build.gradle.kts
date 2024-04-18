@@ -1,40 +1,41 @@
 import com.github.kr328.golang.GolangBuildTask
 import com.github.kr328.golang.GolangPlugin
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileOutputStream
 import java.net.URL
 import java.time.Duration
 
 plugins {
-    kotlin("android")
-    id("com.android.library")
-    id("kotlinx-serialization")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     id("golang-android")
 }
 
-val geoipDatabaseUrl =
-    "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
+val geoipDatabaseUrl = "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
 val geoipInvalidate = Duration.ofDays(7)!!
 val geoipOutput = buildDir.resolve("intermediates/golang_blob")
 val golangSource = file("src/main/golang/native")
 
 golang {
     sourceSets {
-        create("meta-alpha") {
-            tags.set(listOf("foss","with_gvisor","cmfa"))
-            srcDir.set(file("src/foss/golang"))
-        }
         create("meta") {
-            tags.set(listOf("foss","with_gvisor","cmfa"))
+            tags.set(listOf("foss", "with_gvisor", "cmfa"))
             srcDir.set(file("src/foss/golang"))
-        }
-        all {
             fileName.set("libclash.so")
             packageName.set("cfa/native")
         }
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
+}
+
 android {
+    namespace = "com.github.kr328.clash.core"
     productFlavors {
         all {
             externalNativeBuild {
@@ -49,6 +50,7 @@ android {
 
     externalNativeBuild {
         cmake {
+            version = "3.22.1"
             path = file("src/main/cpp/CMakeLists.txt")
         }
     }
