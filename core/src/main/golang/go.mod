@@ -8,7 +8,7 @@ require (
 	github.com/metacubex/mihomo v1.7.0
 	github.com/miekg/dns v1.1.58
 	github.com/oschwald/maxminddb-golang v1.12.0
-	golang.org/x/sync v0.6.0
+	golang.org/x/sync v0.7.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
