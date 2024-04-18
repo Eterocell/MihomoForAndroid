@@ -6,9 +6,9 @@ import java.net.URL
 import java.time.Duration
 
 plugins {
-    kotlin("android")
-    id("com.android.library")
-    id("kotlinx-serialization")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     id("golang-android")
 }
 

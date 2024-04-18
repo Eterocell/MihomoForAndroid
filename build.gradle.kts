@@ -1,21 +1,15 @@
-@file:Suppress("UNUSED_VARIABLE")
-
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
 import java.net.URL
 import java.util.*
 
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-    }
-    dependencies {
-        classpath(libs.build.android)
-        classpath(libs.build.kotlin.common)
-        classpath(libs.build.kotlin.serialization)
-        classpath(libs.build.ksp)
-    }
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 subprojects {

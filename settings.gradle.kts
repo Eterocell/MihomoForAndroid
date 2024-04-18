@@ -1,17 +1,6 @@
-rootProject.name = "ClashMetaForAndroid"
-
-includeBuild("golangAndroidPlugin")
-
-include(":app")
-include(":core")
-include(":service")
-include(":design")
-include(":common")
-include(":hideapi")
-
 pluginManagement {
     repositories {
-        mavenLocal()
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -34,3 +23,14 @@ dependencyResolutionManagement {
         }
     }
 }
+
+includeBuild("golangAndroidPlugin")
+
+rootProject.name = "ClashMetaForAndroid"
+
+include(":app")
+include(":core")
+include(":service")
+include(":design")
+include(":common")
+include(":hideapi")
