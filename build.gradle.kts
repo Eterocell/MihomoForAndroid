@@ -1,6 +1,5 @@
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import java.net.URL
 import java.util.*
 
 plugins {
@@ -10,6 +9,8 @@ plugins {
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.ksp) apply false
+
+    id("build-logic.root-project")
 }
 
 subprojects {
@@ -137,25 +138,5 @@ subprojects {
                 }
             }
         }
-    }
-}
-
-task("clean", type = Delete::class) {
-    delete(rootProject.buildDir)
-    allprojects.forEach {
-        delete(it.layout.buildDirectory)
-        delete(files("${it.layout.projectDirectory.asFile.absolutePath}/.cxx"))
-    }
-}
-
-tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-
-    doLast {
-        val sha256 = URL("$distributionUrl.sha256").openStream()
-            .use { it.reader().readText().trim() }
-
-        file("gradle/wrapper/gradle-wrapper.properties")
-            .appendText("distributionSha256Sum=$sha256")
     }
 }
