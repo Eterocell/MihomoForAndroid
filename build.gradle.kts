@@ -22,15 +22,15 @@ subprojects {
     extensions.configure<BaseExtension> {
         defaultConfig {
             if (isApp) {
-                applicationId = "com.github.metacubex.clash"
+                applicationId = "com.eterocell.mihomoforandroid"
             }
 
             minSdk = 21
             targetSdk = 34
             buildToolsVersion = "34.0.0"
 
-            versionName = "2.10.1"
-            versionCode = 210001
+            versionName = "2.11.1-alpha01"
+            versionCode = "02110101".toInt()
 
             resValue("string", "release_name", "v$versionName")
             resValue("integer", "release_code", "$versionCode")
@@ -45,6 +45,15 @@ subprojects {
                 consumerProguardFiles("consumer-rules.pro")
             } else {
                 setProperty("archivesBaseName", "cmfa-$versionName")
+            }
+        }
+
+        splits {
+            abi {
+                isEnable = true
+                reset()
+                include("arm64-v8a", "x86_64", "armeabi-v7a", "x86")
+                isUniversalApk = true
             }
         }
 
@@ -90,7 +99,7 @@ subprojects {
                         keystore.inputStream().use(this::load)
                     }
 
-                    storeFile = rootProject.file("release.keystore")
+                    storeFile = rootProject.file(prop.getProperty("keystore.path"))
                     storePassword = prop.getProperty("keystore.password")!!
                     keyAlias = prop.getProperty("key.alias")!!
                     keyPassword = prop.getProperty("key.password")!!
