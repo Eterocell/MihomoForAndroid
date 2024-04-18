@@ -36,17 +36,32 @@ class TileService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
 
-        registerReceiver(
-            receiver,
-            IntentFilter().apply {
-                addAction(Intents.ACTION_CLASH_STARTED)
-                addAction(Intents.ACTION_CLASH_STOPPED)
-                addAction(Intents.ACTION_PROFILE_LOADED)
-                addAction(Intents.ACTION_SERVICE_RECREATED)
-            },
-            Permissions.RECEIVE_SELF_BROADCASTS,
-            null
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                receiver,
+                IntentFilter().apply {
+                    addAction(Intents.ACTION_CLASH_STARTED)
+                    addAction(Intents.ACTION_CLASH_STOPPED)
+                    addAction(Intents.ACTION_PROFILE_LOADED)
+                    addAction(Intents.ACTION_SERVICE_RECREATED)
+                },
+                Permissions.RECEIVE_SELF_BROADCASTS,
+                null,
+                Context.RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            registerReceiver(
+                receiver,
+                IntentFilter().apply {
+                    addAction(Intents.ACTION_CLASH_STARTED)
+                    addAction(Intents.ACTION_CLASH_STOPPED)
+                    addAction(Intents.ACTION_PROFILE_LOADED)
+                    addAction(Intents.ACTION_SERVICE_RECREATED)
+                },
+                Permissions.RECEIVE_SELF_BROADCASTS,
+                null
+            )
+        }
 
         val name = StatusClient(this).currentProfile()
 
@@ -70,10 +85,7 @@ class TileService : TileService() {
         else
             Tile.STATE_INACTIVE
 
-        tile.label = if (currentProfile.isEmpty())
-            getText(R.string.launch_name)
-        else
-            currentProfile
+        tile.label = currentProfile.ifEmpty { getText(R.string.launch_name) }
 
         tile.icon = Icon.createWithResource(this, R.drawable.ic_logo_service)
 

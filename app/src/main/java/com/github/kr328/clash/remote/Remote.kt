@@ -5,6 +5,7 @@ import android.content.Intent
 import com.github.kr328.clash.ApkBrokenActivity
 import com.github.kr328.clash.AppCrashedActivity
 import com.github.kr328.clash.common.Global
+import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.store.AppStore
@@ -68,6 +69,6 @@ object Remote {
     }
 
     private fun getLastUpdated(context: Context): Long {
-        return context.packageManager.getPackageInfo(context.packageName, 0).lastUpdateTime
+        return context.packageManager.getPackageInfoCompat(context.packageName, 0).lastUpdateTime
     }
 }

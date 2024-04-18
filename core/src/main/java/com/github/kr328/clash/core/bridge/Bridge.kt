@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import androidx.annotation.Keep
 import com.github.kr328.clash.common.Global
+import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.log.Log
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
@@ -62,7 +63,7 @@ object Bridge {
             .detachFd()
 
         val home = ctx.filesDir.resolve("clash").apply { mkdirs() }.absolutePath
-        val versionName = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName
+        val versionName = ctx.packageManager.getPackageInfoCompat(ctx.packageName, 0).versionName
         val sdkVersion = Build.VERSION.SDK_INT
 
         Log.d("Home = $home")

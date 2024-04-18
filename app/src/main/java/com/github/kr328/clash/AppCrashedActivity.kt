@@ -1,5 +1,6 @@
 package com.github.kr328.clash
 
+import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.compat.versionCodeCompat
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.design.AppCrashedDesign
@@ -15,7 +16,7 @@ class AppCrashedActivity : BaseActivity<AppCrashedDesign>() {
         setContentDesign(design)
 
         val packageInfo = withContext(Dispatchers.IO) {
-            packageManager.getPackageInfo(packageName, 0)
+            packageManager.getPackageInfoCompat(packageName, 0)
         }
 
         Log.i("App version: versionName = ${packageInfo.versionName} versionCode = ${packageInfo.versionCodeCompat}")
