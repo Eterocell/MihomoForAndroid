@@ -142,8 +142,10 @@ class ProfileWorker : BaseService() {
             .setGroup(STATUS_CHANNEL)
             .build()
 
-        NotificationManagerCompat.from(applicationContext)
-            .notify(id, notification)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat.from(this)
+                .notify(id, notification)
+        }
         try {
             block()
         } finally {
@@ -179,8 +181,10 @@ class ProfileWorker : BaseService() {
             .setContentText(getString(R.string.format_update_complete, name))
             .build()
 
-        NotificationManagerCompat.from(this)
-            .notify(id, notification)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat.from(this)
+                .notify(id, notification)
+        }
 
         sendProfileUpdateCompleted(uuid)
     }
