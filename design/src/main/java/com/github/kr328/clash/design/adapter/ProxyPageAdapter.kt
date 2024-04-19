@@ -30,7 +30,7 @@ class ProxyPageAdapter(
         proxies: List<Proxy>,
         selectable: Boolean,
         parent: ProxyState,
-        links: Map<String, ProxyState>
+        links: Map<String, ProxyState>,
     ) {
         val states = withContext(Dispatchers.Default) {
             proxies.map {
@@ -100,7 +100,6 @@ class ProxyPageAdapter(
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         this.parent = null
     }
-
 
     private var RecyclerView.position: Int
         get() {

@@ -10,7 +10,7 @@ import java.util.zip.ZipFile
 
 object ApplicationObserver {
     private val _createdActivities: MutableSet<Activity> = mutableSetOf()
-    private val _visibleActivities: MutableSet<Activity> = mutableSetOf()
+    private val visibleActivities: MutableSet<Activity> = mutableSetOf()
 
     private var visibleChanged: (Boolean) -> Unit = {}
 
@@ -35,18 +35,18 @@ object ApplicationObserver {
         @Synchronized
         override fun onActivityDestroyed(activity: Activity) {
             _createdActivities.remove(activity)
-            _visibleActivities.remove(activity)
-            appVisible = _visibleActivities.isNotEmpty()
+            visibleActivities.remove(activity)
+            appVisible = visibleActivities.isNotEmpty()
         }
 
         override fun onActivityStarted(activity: Activity) {
-            _visibleActivities.add(activity)
+            visibleActivities.add(activity)
             appVisible = true
         }
 
         override fun onActivityStopped(activity: Activity) {
-            _visibleActivities.remove(activity)
-            appVisible = _visibleActivities.isNotEmpty()
+            visibleActivities.remove(activity)
+            appVisible = visibleActivities.isNotEmpty()
         }
 
         override fun onActivityPaused(activity: Activity) {}

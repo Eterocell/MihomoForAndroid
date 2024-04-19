@@ -9,7 +9,6 @@ import kotlinx.serialization.encoding.CompositeDecoder
 import kotlinx.serialization.encoding.CompositeEncoder
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.modules.EmptySerializersModule
 import kotlinx.serialization.modules.SerializersModule
 
 object Parcelizer {
@@ -41,19 +40,17 @@ object Parcelizer {
             descriptor: SerialDescriptor,
             index: Int,
             deserializer: DeserializationStrategy<T?>,
-            previousValue: T?
+            previousValue: T?,
         ): T? = decodeNullableSerializableValue(deserializer)
 
         override fun <T> decodeSerializableElement(
             descriptor: SerialDescriptor,
             index: Int,
             deserializer: DeserializationStrategy<T>,
-            previousValue: T?
+            previousValue: T?,
         ): T = decodeSerializableValue(deserializer)
 
-
         override fun endStructure(descriptor: SerialDescriptor) {
-
         }
 
         override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
@@ -126,7 +123,7 @@ object Parcelizer {
         override fun encodeBooleanElement(
             descriptor: SerialDescriptor,
             index: Int,
-            value: Boolean
+            value: Boolean,
         ) = encodeBoolean(value)
 
         override fun encodeByteElement(descriptor: SerialDescriptor, index: Int, value: Byte) =
@@ -163,18 +160,17 @@ object Parcelizer {
             descriptor: SerialDescriptor,
             index: Int,
             serializer: SerializationStrategy<T>,
-            value: T?
+            value: T?,
         ) = encodeNullableSerializableValue(serializer, value)
 
         override fun <T> encodeSerializableElement(
             descriptor: SerialDescriptor,
             index: Int,
             serializer: SerializationStrategy<T>,
-            value: T
+            value: T,
         ) = encodeSerializableValue(serializer, value)
 
         override fun endStructure(descriptor: SerialDescriptor) {
-
         }
 
         override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
@@ -183,7 +179,7 @@ object Parcelizer {
 
         override fun beginCollection(
             descriptor: SerialDescriptor,
-            collectionSize: Int
+            collectionSize: Int,
         ): CompositeEncoder {
             encodeInt(collectionSize)
 

@@ -7,12 +7,12 @@ import kotlinx.coroutines.cancel
 
 object Global : CoroutineScope by CoroutineScope(Dispatchers.IO) {
     val application: Application
-        get() = application_
+        get() = _application
 
-    private lateinit var application_: Application
+    private lateinit var _application: Application
 
     fun init(application: Application) {
-        this.application_ = application
+        this._application = application
     }
 
     fun destroy() {

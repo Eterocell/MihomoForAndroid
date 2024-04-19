@@ -56,7 +56,6 @@ fun PreferenceScreen.switch(
                 binding.root.isClickable = value
                 binding.root.alpha = if (value) 1.0f else 0.33f
             }
-
     }
 
     if (icon != null) {

@@ -53,7 +53,7 @@ class FilesClient(private val context: Context) {
     suspend fun importDocument(
         parentDocumentId: String,
         source: Uri,
-        name: String
+        name: String,
     ) = withContext(Dispatchers.IO) {
         val target = buildDocumentUri("$parentDocumentId/$name")
 
@@ -62,7 +62,7 @@ class FilesClient(private val context: Context) {
 
     suspend fun copyDocument(
         documentId: String,
-        source: Uri
+        source: Uri,
     ) {
         val target = buildDocumentUri(documentId)
 
@@ -71,7 +71,7 @@ class FilesClient(private val context: Context) {
 
     suspend fun copyDocument(
         target: Uri,
-        documentId: String
+        documentId: String,
     ) {
         val source = buildDocumentUri(documentId)
 

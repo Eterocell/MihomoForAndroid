@@ -21,14 +21,19 @@ data class LogMessage(
     enum class Level {
         @SerialName("debug")
         Debug,
+
         @SerialName("info")
         Info,
+
         @SerialName("warning")
         Warning,
+
         @SerialName("error")
         Error,
+
         @SerialName("silent")
         Silent,
+
         @SerialName("unknown")
         Unknown,
     }

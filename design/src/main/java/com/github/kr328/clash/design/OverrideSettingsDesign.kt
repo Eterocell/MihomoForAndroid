@@ -20,10 +20,11 @@ import kotlin.coroutines.resume
 
 class OverrideSettingsDesign(
     context: Context,
-    configuration: ConfigurationOverride
+    configuration: ConfigurationOverride,
 ) : Design<OverrideSettingsDesign.Request>(context) {
     enum class Request {
-        ResetOverride, EditSideloadGeoip
+        ResetOverride,
+        EditSideloadGeoip,
     }
 
     private val binding = DesignSettingsOverideBinding
@@ -42,8 +43,9 @@ class OverrideSettingsDesign(
                 .show()
 
             dialog.setOnDismissListener {
-                if (!ctx.isCompleted)
+                if (!ctx.isCompleted) {
                     ctx.resume(false)
+                }
             }
 
             ctx.invokeOnCancellation {
@@ -87,8 +89,9 @@ class OverrideSettingsDesign(
                 }
 
                 dialog.setOnDismissListener {
-                    if (!ctx.isCompleted)
+                    if (!ctx.isCompleted) {
                         ctx.resume(initial)
+                    }
                 }
 
                 dialog.show()
@@ -105,12 +108,12 @@ class OverrideSettingsDesign(
         val booleanValues: Array<Boolean?> = arrayOf(
             null,
             true,
-            false
+            false,
         )
         val booleanValuesText: Array<Int> = arrayOf(
             R.string.dont_modify,
             R.string.enabled,
-            R.string.disabled
+            R.string.disabled,
         )
 
         val screen = preferenceScreen(context) {
@@ -182,7 +185,7 @@ class OverrideSettingsDesign(
                 adapter = NullableTextAdapter.String,
                 title = R.string.bind_address,
                 placeholder = R.string.dont_modify,
-                empty = R.string.default_
+                empty = R.string.default_,
             )
 
             selectableList(
@@ -191,15 +194,15 @@ class OverrideSettingsDesign(
                     null,
                     TunnelState.Mode.Direct,
                     TunnelState.Mode.Global,
-                    TunnelState.Mode.Rule
+                    TunnelState.Mode.Rule,
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
                     R.string.direct_mode,
                     R.string.global_mode,
-                    R.string.rule_mode
+                    R.string.rule_mode,
                 ),
-                title = R.string.mode
+                title = R.string.mode,
             )
 
             selectableList(
@@ -233,7 +236,7 @@ class OverrideSettingsDesign(
 
             clickable(
                 title = R.string.sideload_geoip,
-                summary = R.string.sideload_geoip_summary
+                summary = R.string.sideload_geoip_summary,
             ) {
                 clicked {
                     requests.trySend(Request.EditSideloadGeoip)
@@ -249,14 +252,14 @@ class OverrideSettingsDesign(
                 values = arrayOf(
                     null,
                     true,
-                    false
+                    false,
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
                     R.string.force_enable,
                     R.string.use_built_in,
                 ),
-                title = R.string.strategy
+                title = R.string.strategy,
             ) {
                 listener = OnChangedListener {
                     if (configuration.dns.enable == false) {
@@ -318,13 +321,13 @@ class OverrideSettingsDesign(
                     null,
                     ConfigurationOverride.DnsEnhancedMode.None,
                     ConfigurationOverride.DnsEnhancedMode.FakeIp,
-                    ConfigurationOverride.DnsEnhancedMode.Mapping
+                    ConfigurationOverride.DnsEnhancedMode.Mapping,
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
                     R.string.disabled,
                     R.string.fakeip,
-                    R.string.mapping
+                    R.string.mapping,
                 ),
                 title = R.string.enhanced_mode,
                 configure = dnsDependencies::add,

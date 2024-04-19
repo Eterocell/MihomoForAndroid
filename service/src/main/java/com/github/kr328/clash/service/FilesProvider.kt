@@ -23,7 +23,7 @@ class FilesProvider : DocumentsProvider() {
             D.COLUMN_MIME_TYPE,
             D.COLUMN_LAST_MODIFIED,
             D.COLUMN_SIZE,
-            D.COLUMN_FLAGS
+            D.COLUMN_FLAGS,
         )
         private val DEFAULT_ROOT_COLUMNS = arrayOf(
             Root.COLUMN_ROOT_ID,
@@ -31,7 +31,7 @@ class FilesProvider : DocumentsProvider() {
             Root.COLUMN_ICON,
             Root.COLUMN_TITLE,
             Root.COLUMN_SUMMARY,
-            Root.COLUMN_DOCUMENT_ID
+            Root.COLUMN_DOCUMENT_ID,
         )
 
         private val FLAG_VIRTUAL: Int =
@@ -45,7 +45,7 @@ class FilesProvider : DocumentsProvider() {
     override fun openDocument(
         documentId: String?,
         mode: String?,
-        signal: CancellationSignal?
+        signal: CancellationSignal?,
     ): ParcelFileDescriptor {
         val m = ParcelFileDescriptor.parseMode(mode)
 
@@ -68,8 +68,9 @@ class FilesProvider : DocumentsProvider() {
         runBlocking {
             val path = Paths.resolve(documentPath)
 
-            if (path.relative == null)
+            if (path.relative == null) {
                 throw IllegalArgumentException("invalid path $documentId")
+            }
 
             val document = picker.pick(path, true)
 
@@ -84,14 +85,16 @@ class FilesProvider : DocumentsProvider() {
     override fun renameDocument(documentId: String?, displayName: String?): String {
         val name = displayName ?: ""
 
-        if (!PatternFileName.matches(name))
+        if (!PatternFileName.matches(name)) {
             throw IllegalArgumentException("invalid name $displayName")
+        }
 
         return runBlocking {
             val path = Paths.resolve(documentId ?: "/")
 
-            if (path.relative == null)
+            if (path.relative == null) {
                 throw IllegalArgumentException("unable to rename $documentId")
+            }
 
             val document = picker.pick(path, true)
 
@@ -114,7 +117,7 @@ class FilesProvider : DocumentsProvider() {
     override fun queryChildDocuments(
         parentDocumentId: String?,
         projection: Array<out String>?,
-        sortOrder: String?
+        sortOrder: String?,
     ): Cursor {
         return runBlocking {
             try {
@@ -171,8 +174,9 @@ class FilesProvider : DocumentsProvider() {
     }
 
     override fun isChildDocument(parentDocumentId: String?, documentId: String?): Boolean {
-        if (parentDocumentId == null || documentId == null)
+        if (parentDocumentId == null || documentId == null) {
             return false
+        }
 
         return documentId.startsWith(parentDocumentId)
     }

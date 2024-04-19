@@ -55,7 +55,7 @@ class AppBottomSheetDialog(context: Context) : BottomSheetDialog(context) {
                             0,
                             top * 2 + height,
                             0,
-                            it.bottom
+                            it.bottom,
                         )
                     }
                 }
@@ -70,7 +70,7 @@ class AppBottomSheetDialog(context: Context) : BottomSheetDialog(context) {
 }
 
 class FullScreenDialog(
-    context: Context
+    context: Context,
 ) : Dialog(context, context.resolveThemedResourceId(R.attr.fullScreenDialogTheme)) {
     val surface = Surface()
 
@@ -82,12 +82,13 @@ class FullScreenDialog(
 
             setLayout(
                 WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT
+                WindowManager.LayoutParams.MATCH_PARENT,
             )
 
             decorView.setOnInsertsChangedListener {
-                if (surface.insets != it)
+                if (surface.insets != it) {
                     surface.insets = it
+                }
             }
         }
     }

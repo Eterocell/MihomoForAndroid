@@ -26,7 +26,8 @@ class ProfileReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED,
-            Intent.ACTION_TIMEZONE_CHANGED, Intent.ACTION_TIME_CHANGED -> {
+            Intent.ACTION_TIMEZONE_CHANGED, Intent.ACTION_TIME_CHANGED,
+            -> {
                 Global.launch {
                     reset()
 
@@ -49,8 +50,9 @@ class ProfileReceiver : BroadcastReceiver() {
         private var initialized: Boolean = false
 
         suspend fun rescheduleAll(context: Context) = lock.withLock {
-            if (initialized)
+            if (initialized) {
                 return
+            }
 
             initialized = true
 
@@ -81,8 +83,9 @@ class ProfileReceiver : BroadcastReceiver() {
 
             context.getSystemService<AlarmManager>()?.cancel(intent)
 
-            if (imported.interval < TimeUnit.MINUTES.toMillis(15))
+            if (imported.interval < TimeUnit.MINUTES.toMillis(15)) {
                 return
+            }
 
             val current = System.currentTimeMillis()
             val last = context.importedDir
@@ -91,8 +94,9 @@ class ProfileReceiver : BroadcastReceiver() {
                 .lastModified()
 
             // file not existed
-            if (last < 0)
+            if (last < 0) {
                 return
+            }
 
             val interval = (imported.interval - (current - last)).coerceAtLeast(0)
 
@@ -113,7 +117,7 @@ class ProfileReceiver : BroadcastReceiver() {
                 context,
                 0,
                 intent,
-                pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
+                pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
             )
         }
     }

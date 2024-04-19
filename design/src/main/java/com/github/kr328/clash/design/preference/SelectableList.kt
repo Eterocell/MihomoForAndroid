@@ -76,7 +76,7 @@ private fun <T> PreferenceScreen.popupSelectMenu(
         isModal = true
 
         horizontalOffset = context.getPixels(R.dimen.item_header_component_size) +
-                context.getPixels(R.dimen.item_header_margin) * 2
+            context.getPixels(R.dimen.item_header_margin) * 2
 
         setOnItemClickListener { _, _, position, _ ->
             dismiss()

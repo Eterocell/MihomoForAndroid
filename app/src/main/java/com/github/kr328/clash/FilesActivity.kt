@@ -68,8 +68,8 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                     ActivityResultContracts.StartActivityForResult(),
                                     Intent(Intent.ACTION_VIEW).setDataAndType(
                                         client.buildDocumentUri(it.file.id),
-                                        "text/plain"
-                                    ).grantPermissions()
+                                        "text/plain",
+                                    ).grantPermissions(),
                                 )
                             }
                             is FilesDesign.Request.DeleteFile -> {
@@ -84,7 +84,7 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                                 if (Build.VERSION.SDK_INT >= 23) {
                                     val hasPermission = ContextCompat.checkSelfPermission(
                                         this@FilesActivity,
-                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
                                     ) == PackageManager.PERMISSION_GRANTED
 
                                     if (!hasPermission) {
@@ -101,7 +101,7 @@ class FilesActivity : BaseActivity<FilesDesign>() {
 
                                 val uri: Uri? = startActivityForResult(
                                     ActivityResultContracts.GetContent(),
-                                    "*/*"
+                                    "*/*",
                                 )
 
                                 if (uri != null) {
@@ -117,7 +117,7 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                             is FilesDesign.Request.ExportFile -> {
                                 val uri: Uri? = startActivityForResult(
                                     ActivityResultContracts.CreateDocument("text/plain"),
-                                    it.file.name
+                                    it.file.name,
                                 )
 
                                 if (uri != null) {

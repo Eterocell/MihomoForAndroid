@@ -21,7 +21,7 @@ fun PreferenceScreen.clickable(
     @StringRes title: Int,
     @DrawableRes icon: Int? = null,
     @StringRes summary: Int? = null,
-    configure: ClickablePreference.() -> Unit = {}
+    configure: ClickablePreference.() -> Unit = {},
 ): ClickablePreference {
     val binding = PreferenceClickableBinding
         .inflate(context.layoutInflater, root, false)

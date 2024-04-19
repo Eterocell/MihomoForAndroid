@@ -35,10 +35,11 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
         val network = install(NetworkObserveModule(self))
         val sideload = install(SideloadDatabaseModule(self))
 
-        if (store.dynamicNotification)
+        if (store.dynamicNotification) {
             install(DynamicNotificationModule(self))
-        else
+        } else {
             install(StaticNotificationModule(self))
+        }
 
         install(AppListCacheModule(self))
         install(TimeZoneModule(self))
@@ -63,8 +64,11 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
                         true
                     }
                     network.onEvent { n ->
-                        if (Build.VERSION.SDK_INT in 22..28) @TargetApi(22) {
-                            setUnderlyingNetworks(n?.let { arrayOf(it) })
+                        if (Build.VERSION.SDK_INT in 22..28) {
+                            @TargetApi(22)
+                            {
+                                setUnderlyingNetworks(n?.let { arrayOf(it) })
+                            }
                         }
 
                         false
@@ -89,8 +93,9 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
     override fun onCreate() {
         super.onCreate()
 
-        if (StatusProvider.serviceRunning)
+        if (StatusProvider.serviceRunning) {
             return stopSelf()
+        }
 
         StatusProvider.serviceRunning = true
 
@@ -178,8 +183,8 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
                     self,
                     R.id.nf_vpn_status,
                     Intent().setComponent(Components.MAIN_ACTIVITY),
-                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
-                )
+                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+                ),
             )
 
             // Metered
@@ -194,8 +199,8 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
                         ProxyInfo.buildDirectProxy(
                             it.address.hostAddress,
                             it.port,
-                            HTTP_PROXY_BLACK_LIST + if (store.bypassPrivateNetwork) HTTP_PROXY_LOCAL_LIST else emptyList()
-                        )
+                            HTTP_PROXY_BLACK_LIST + if (store.bypassPrivateNetwork) HTTP_PROXY_LOCAL_LIST else emptyList(),
+                        ),
                     )
                 }
             }
@@ -236,7 +241,7 @@ class TunService : VpnService(), CoroutineScope by CoroutineScope(Dispatchers.De
             "172.2*",
             "172.30.*",
             "172.31.*",
-            "192.168.*"
+            "192.168.*",
         )
         private val HTTP_PROXY_BLACK_LIST: List<String> = listOf(
             "*zhihu.com",

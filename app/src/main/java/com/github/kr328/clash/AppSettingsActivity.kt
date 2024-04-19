@@ -42,16 +42,17 @@ class AppSettingsActivity : BaseActivity<AppSettingsDesign>(), Behavior {
     override var autoRestart: Boolean
         get() {
             val status = packageManager.getComponentEnabledSetting(
-                RestartReceiver::class.componentName
+                RestartReceiver::class.componentName,
             )
 
             return status == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         }
         set(value) {
-            val status = if (value)
+            val status = if (value) {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            else
+            } else {
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            }
 
             packageManager.setComponentEnabledSetting(
                 RestartReceiver::class.componentName,

@@ -28,8 +28,9 @@ class Picker(private val context: Context) {
 
         val parent = pick(path, false)
 
-        if (parent !is FileDocument)
+        if (parent !is FileDocument) {
             return emptyList()
+        }
 
         return (parent.file.list() ?: emptyArray()).map {
             pick(path.copy(relative = (path.relative ?: emptyList()) + it), false)
@@ -56,13 +57,14 @@ class Picker(private val context: Context) {
         val pending = PendingDao().queryByUUID(path.uuid)
 
         if (path.scope == null) {
-            if (writable)
+            if (writable) {
                 throw IllegalArgumentException("invalid open mode")
+            }
 
             return VirtualDocument(
                 id = path.uuid.toString(),
                 name = pending?.name ?: imported?.name
-                ?: throw FileNotFoundException("profile not found"),
+                    ?: throw FileNotFoundException("profile not found"),
                 mimeType = DocumentsContract.Document.MIME_TYPE_DIR,
                 size = 0,
                 updatedAt = 0,
@@ -73,15 +75,17 @@ class Picker(private val context: Context) {
         if (path.relative == null) {
             if (path.scope == Path.Scope.Configuration) {
                 val type = pending?.type ?: imported?.type
-                ?: throw FileNotFoundException("profile not found")
+                    ?: throw FileNotFoundException("profile not found")
 
-                if (writable && type != Profile.Type.File)
+                if (writable && type != Profile.Type.File) {
                     throw IllegalArgumentException("invalid open mode")
+                }
 
-                val flags: Set<Flag> = if (type == Profile.Type.Url)
+                val flags: Set<Flag> = if (type == Profile.Type.Url) {
                     emptySet()
-                else
+                } else {
                     setOf(Flag.Writable)
+                }
 
                 return FileDocument(
                     file = when {
@@ -91,7 +95,7 @@ class Picker(private val context: Context) {
                     }.resolve("config.yaml"),
                     flags = flags,
                     idOverride = Paths.CONFIGURATION_ID,
-                    nameOverride = context.getString(R.string.configuration_yaml)
+                    nameOverride = context.getString(R.string.configuration_yaml),
                 )
             } else {
                 return FileDocument(
@@ -102,13 +106,14 @@ class Picker(private val context: Context) {
                     }.resolve("providers"),
                     idOverride = Paths.PROVIDERS_ID,
                     nameOverride = context.getString(R.string.provider_files),
-                    flags = setOf(Flag.Virtual)
+                    flags = setOf(Flag.Virtual),
                 )
             }
         }
 
-        if (path.scope != Path.Scope.Providers)
+        if (path.scope != Path.Scope.Providers) {
             throw FileNotFoundException("invalid path")
+        }
 
         return FileDocument(
             file = when {
@@ -116,13 +121,14 @@ class Picker(private val context: Context) {
                 imported != null -> context.importedDir.resolve(imported.uuid.toString())
                 else -> throw FileNotFoundException("profile not found")
             }.resolve("providers").resolve(path.relative.joinToString(separator = "/")),
-            flags = setOf(Flag.Writable, Flag.Deletable)
+            flags = setOf(Flag.Writable, Flag.Deletable),
         )
     }
 
     private suspend fun cloneToPending(uuid: UUID) {
-        if (PendingDao().queryByUUID(uuid) != null)
+        if (PendingDao().queryByUUID(uuid) != null) {
             return
+        }
 
         val imported =
             ImportedDao().queryByUUID(uuid) ?: throw FileNotFoundException("profile not found")
@@ -134,8 +140,8 @@ class Picker(private val context: Context) {
                 imported.type,
                 imported.source,
                 imported.interval,
-                0,0,0,0
-            )
+                0, 0, 0, 0,
+            ),
         )
 
         val source = context.importedDir.resolve(uuid.toString())

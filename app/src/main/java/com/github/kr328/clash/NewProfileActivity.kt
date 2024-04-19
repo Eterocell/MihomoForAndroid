@@ -33,7 +33,6 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
         while (isActive) {
             select<Unit> {
                 events.onReceive {
-
                 }
                 design.requests.onReceive {
                     when (it) {
@@ -55,7 +54,7 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                                             create(
                                                 Profile.Type.External,
                                                 initialName ?: name,
-                                                uri.toString()
+                                                uri.toString(),
                                             )
                                         } else {
                                             null
@@ -63,8 +62,9 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                                     }
                                 }
 
-                                if (uuid != null)
+                                if (uuid != null) {
                                     launchProperties(uuid)
+                                }
                             }
                         }
                         is NewProfileDesign.Request.OpenDetail -> {
@@ -80,7 +80,7 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
         val data = Uri.fromParts(
             "package",
             provider.intent.component?.packageName ?: return,
-            null
+            null,
         )
 
         startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(data))
@@ -89,21 +89,23 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
     private suspend fun launchProperties(uuid: UUID) {
         val r = startActivityForResult(
             ActivityResultContracts.StartActivityForResult(),
-            PropertiesActivity::class.intent.setUUID(uuid)
+            PropertiesActivity::class.intent.setUUID(uuid),
         )
 
-        if (r.resultCode == Activity.RESULT_OK)
+        if (r.resultCode == Activity.RESULT_OK) {
             finish()
+        }
     }
 
     private suspend fun ProfileProvider.External.get(): Pair<Uri, String?>? {
         val result = startActivityForResult(
             ActivityResultContracts.StartActivityForResult(),
-            intent
+            intent,
         )
 
-        if (result.resultCode != RESULT_OK)
+        if (result.resultCode != RESULT_OK) {
             return null
+        }
 
         val uri = result.data?.data
         val name = result.data?.getStringExtra(Intents.EXTRA_NAME)
@@ -119,7 +121,7 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
         return withContext(Dispatchers.IO) {
             val providers = packageManager.queryIntentActivities(
                 Intent(Intents.ACTION_PROVIDE_URL),
-                0
+                0,
             ).map {
                 val activity = it.activityInfo
 
@@ -130,8 +132,8 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                     .setComponent(
                         ComponentName(
                             activity.packageName,
-                            activity.name
-                        )
+                            activity.name,
+                        ),
                     )
 
                 ProfileProvider.External(name.toString(), summary.toString(), icon, intent)

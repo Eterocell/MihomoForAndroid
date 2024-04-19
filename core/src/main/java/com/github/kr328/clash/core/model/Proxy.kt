@@ -33,14 +33,13 @@ data class Proxy(
         Tuic(false),
         WireGuard(false),
 
-
         Relay(true),
         Selector(true),
         Fallback(true),
         URLTest(true),
         LoadBalance(true),
 
-        Unknown(false);
+        Unknown(false),
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

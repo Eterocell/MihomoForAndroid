@@ -17,9 +17,11 @@ class LogFileAdapter(
     var logs: List<LogFile> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(ActionLabel(context).apply {
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        })
+        return Holder(
+            ActionLabel(context).apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            },
+        )
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {

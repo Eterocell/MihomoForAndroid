@@ -50,8 +50,8 @@ class ProvidersActivity : BaseActivity<ProvidersDesign>() {
                                         getString(
                                             R.string.format_update_provider_failure,
                                             it.provider.name,
-                                            e.message
-                                        )
+                                            e.message,
+                                        ),
                                     )
 
                                     design.notifyUpdated(it.index)

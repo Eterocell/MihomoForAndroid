@@ -71,8 +71,9 @@ class PropertiesActivity : BaseActivity<PropertiesDesign>() {
         design?.apply {
             launch {
                 if (!progressing) {
-                    if (requestExitWithoutSaving())
+                    if (requestExitWithoutSaving()) {
                         finish()
+                    }
                 }
             }
         } ?: return super.onBackPressed()

@@ -32,12 +32,11 @@ object Remote {
         ApplicationObserver.attach(Global.application)
 
         ApplicationObserver.onVisibleChanged {
-            if(it) {
+            if (it) {
                 Log.d("App becomes visible")
                 service.bind()
                 broadcasts.register()
-            }
-            else {
+            } else {
                 Log.d("App becomes invisible")
                 service.unbind()
                 broadcasts.unregister()

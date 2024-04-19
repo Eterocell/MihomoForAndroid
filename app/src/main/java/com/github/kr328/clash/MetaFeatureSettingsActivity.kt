@@ -17,7 +17,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-
 class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
     override suspend fun main() {
         val configuration = withClash { queryOverride(Clash.OverrideSlot.Persist) }
@@ -30,7 +29,7 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
 
         val design = MetaFeatureSettingsDesign(
             this,
-            configuration
+            configuration,
         )
 
         setContentDesign(design)
@@ -38,7 +37,6 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
         while (isActive) {
             select<Unit> {
                 events.onReceive {
-
                 }
                 design.requests.onReceive {
                     when (it) {
@@ -55,19 +53,22 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
                         MetaFeatureSettingsDesign.Request.ImportGeoIp -> {
                             val uri = startActivityForResult(
                                 ActivityResultContracts.GetContent(),
-                                "*/*")
+                                "*/*",
+                            )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportGeoIp)
                         }
                         MetaFeatureSettingsDesign.Request.ImportGeoSite -> {
                             val uri = startActivityForResult(
                                 ActivityResultContracts.GetContent(),
-                                "*/*")
+                                "*/*",
+                            )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportGeoSite)
                         }
                         MetaFeatureSettingsDesign.Request.ImportCountry -> {
                             val uri = startActivityForResult(
                                 ActivityResultContracts.GetContent(),
-                                "*/*")
+                                "*/*",
+                            )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportCountry)
                         }
                     }
@@ -77,7 +78,7 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
     }
 
     private val validDatabaseExtensions = listOf(
-        ".metadb", ".db", ".dat", ".mmdb"
+        ".metadb", ".db", ".dat", ".mmdb",
     )
 
     private suspend fun importGeoFile(uri: Uri?, importType: MetaFeatureSettingsDesign.Request) {
@@ -88,14 +89,18 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
             if (it.moveToFirst()) {
                 val columnIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
                 val displayName: String =
-                    if (columnIndex != -1) it.getString(columnIndex) else "";
+                    if (columnIndex != -1) it.getString(columnIndex) else ""
                 val ext = "." + displayName.substringAfterLast(".")
 
                 if (!validDatabaseExtensions.contains(ext)) {
                     MaterialAlertDialogBuilder(this)
                         .setTitle(R.string.geofile_unknown_db_format)
-                        .setMessage(getString(R.string.geofile_unknown_db_format_message,
-                            validDatabaseExtensions.joinToString("/")))
+                        .setMessage(
+                            getString(
+                                R.string.geofile_unknown_db_format_message,
+                                validDatabaseExtensions.joinToString("/"),
+                            ),
+                        )
                         .setPositiveButton("OK") { _, _ -> }
                         .show()
                     return
@@ -111,15 +116,17 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
                 }
 
                 withContext(Dispatchers.IO) {
-                    val outputFile = File(clashDir, outputFileName);
+                    val outputFile = File(clashDir, outputFileName)
                     contentResolver.openInputStream(uri).use { ins ->
                         FileOutputStream(outputFile).use { outs ->
                             ins?.copyTo(outs)
                         }
                     }
                 }
-                Toast.makeText(this, getString(R.string.geofile_imported, displayName),
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, getString(R.string.geofile_imported, displayName),
+                    Toast.LENGTH_LONG,
+                ).show()
                 return
             }
         }

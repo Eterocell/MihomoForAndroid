@@ -125,7 +125,7 @@ data class ConfigurationOverride(
     @Serializable
     data class App(
         @SerialName("append-system-dns")
-        var appendSystemDns: Boolean? = null
+        var appendSystemDns: Boolean? = null,
     )
 
     @Serializable
@@ -139,6 +139,7 @@ data class ConfigurationOverride(
         @SerialName("always")
         Always,
     }
+
     @Serializable
     enum class DnsEnhancedMode {
         @SerialName("normal")

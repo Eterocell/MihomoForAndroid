@@ -11,7 +11,7 @@ import kotlin.coroutines.CoroutineContext
 
 suspend fun <T> withClash(
     context: CoroutineContext = Dispatchers.IO,
-    block: suspend IClashManager.() -> T
+    block: suspend IClashManager.() -> T,
 ): T {
     while (true) {
         val remote = Remote.service.remote.get()
@@ -29,7 +29,7 @@ suspend fun <T> withClash(
 
 suspend fun <T> withProfile(
     context: CoroutineContext = Dispatchers.IO,
-    block: suspend IProfileManager.() -> T
+    block: suspend IProfileManager.() -> T,
 ): T {
     while (true) {
         val remote = Remote.service.remote.get()

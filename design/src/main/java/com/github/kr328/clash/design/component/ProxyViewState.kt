@@ -13,7 +13,7 @@ class ProxyViewState(
     val config: ProxyViewConfig,
     val proxy: Proxy,
     private val parent: ProxyState,
-    private val link: ProxyState?
+    private val link: ProxyState?,
 ) {
     val paint = Paint()
     val rect = Rect()
@@ -47,7 +47,7 @@ class ProxyViewState(
 
                     subtitle = "%s(%s)".format(
                         proxy.type.name,
-                        link.now.ifEmpty { "*" }
+                        link.now.ifEmpty { "*" },
                     )
                 }
             }
@@ -95,9 +95,9 @@ class ProxyViewState(
                         dr.absoluteValue,
                         max(
                             dg.absoluteValue,
-                            db.absoluteValue
-                        )
-                    )
+                            db.absoluteValue,
+                        ),
+                    ),
                 )
 
                 val frameOffset = frameTime - lastFrameTime
@@ -112,7 +112,7 @@ class ProxyViewState(
                         (sa + da * colorOffset).toInt(),
                         (sr + dr * colorOffset).toInt(),
                         (sg + dg * colorOffset).toInt(),
-                        (sb + db * colorOffset).toInt()
+                        (sb + db * colorOffset).toInt(),
                     )
                 }
 

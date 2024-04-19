@@ -63,7 +63,7 @@ fun <T : Parcelable> Parcelable.Creator<T>.createListFromParcelSlice(
                     SliceParcelableListBpBinder.TRANSACTION_GET_ITEMS,
                     data,
                     reply,
-                    flags
+                    flags,
                 )
             ) {
                 break
@@ -77,8 +77,9 @@ fun <T : Parcelable> Parcelable.Creator<T>.createListFromParcelSlice(
 
             offset += size
 
-            if (size == 0)
+            if (size == 0) {
                 break
+            }
         } finally {
             data.recycle()
             reply.recycle()

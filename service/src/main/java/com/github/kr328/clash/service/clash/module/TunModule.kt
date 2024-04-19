@@ -28,8 +28,9 @@ class TunModule(private val vpn: VpnService) : Module<Unit>(vpn) {
         source: InetSocketAddress,
         target: InetSocketAddress,
     ): Int {
-        if (Build.VERSION.SDK_INT < 29)
+        if (Build.VERSION.SDK_INT < 29) {
             return -1
+        }
 
         return runCatching { connectivity.getConnectionOwnerUid(protocol, source, target) }
             .getOrElse { -1 }
@@ -60,7 +61,7 @@ class TunModule(private val vpn: VpnService) : Module<Unit>(vpn) {
             portal = device.portal,
             dns = device.dns,
             markSocket = vpn::protect,
-            querySocketUid = this::queryUid
+            querySocketUid = this::queryUid,
         )
     }
 

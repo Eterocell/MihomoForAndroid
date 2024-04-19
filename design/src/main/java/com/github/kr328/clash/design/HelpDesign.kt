@@ -37,7 +37,7 @@ class HelpDesign(
 
             clickable(
                 title = R.string.clash_wiki,
-                summary = R.string.clash_wiki_url
+                summary = R.string.clash_wiki_url,
             ) {
                 clicked {
                     openLink(Uri.parse(context.getString(R.string.clash_wiki_url)))
@@ -46,7 +46,7 @@ class HelpDesign(
 
             clickable(
                 title = R.string.clash_meta_wiki,
-                summary = R.string.clash_meta_wiki_url
+                summary = R.string.clash_meta_wiki_url,
             ) {
                 clicked {
                     openLink(Uri.parse(context.getString(R.string.clash_meta_wiki_url)))
@@ -57,7 +57,7 @@ class HelpDesign(
 
             clickable(
                 title = R.string.clash_meta_core,
-                summary = R.string.clash_meta_core_url
+                summary = R.string.clash_meta_core_url,
             ) {
                 clicked {
                     openLink(Uri.parse(context.getString(R.string.clash_meta_core_url)))
@@ -66,7 +66,7 @@ class HelpDesign(
 
             clickable(
                 title = R.string.clash_meta_for_android,
-                summary = R.string.meta_github_url
+                summary = R.string.meta_github_url,
             ) {
                 clicked {
                     openLink(Uri.parse(context.getString(R.string.meta_github_url)))

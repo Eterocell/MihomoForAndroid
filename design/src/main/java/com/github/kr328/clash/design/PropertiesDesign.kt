@@ -93,7 +93,7 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
                 title = context.getText(R.string.name),
                 hint = context.getText(R.string.properties),
                 error = context.getText(R.string.should_not_be_blank),
-                validator = ValidatorNotBlank
+                validator = ValidatorNotBlank,
             )
 
             if (name != profile.name) {
@@ -103,8 +103,9 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
     }
 
     fun inputUrl() {
-        if (profile.type == Profile.Type.External)
+        if (profile.type == Profile.Type.External) {
             return
+        }
 
         launch {
             val url = context.requestModelTextInput(
@@ -112,7 +113,7 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
                 title = context.getText(R.string.url),
                 hint = context.getText(R.string.profile_url),
                 error = context.getText(R.string.accept_http_content),
-                validator = ValidatorHttpUrl
+                validator = ValidatorHttpUrl,
             )
 
             if (url != profile.source) {
@@ -130,7 +131,7 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
                 title = context.getText(R.string.auto_update),
                 hint = context.getText(R.string.auto_update_minutes),
                 error = context.getText(R.string.at_least_15_minutes),
-                validator = ValidatorAutoUpdateInterval
+                validator = ValidatorAutoUpdateInterval,
             ).toLongOrNull() ?: 0
 
             val interval = TimeUnit.MINUTES.toMillis(minutes)

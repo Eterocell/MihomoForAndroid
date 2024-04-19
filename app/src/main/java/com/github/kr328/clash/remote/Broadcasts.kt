@@ -27,8 +27,9 @@ class Broadcasts(private val context: Application) {
     private val receivers = mutableListOf<Observer>()
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.`package` != context?.packageName)
+            if (intent?.`package` != context?.packageName) {
                 return
+            }
 
             when (intent?.action) {
                 Intents.ACTION_SERVICE_RECREATED -> {
@@ -59,13 +60,15 @@ class Broadcasts(private val context: Application) {
                 Intents.ACTION_PROFILE_UPDATE_COMPLETED ->
                     receivers.forEach {
                         it.onProfileUpdateCompleted(
-                            UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)))
+                            UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
+                        )
                     }
                 Intents.ACTION_PROFILE_UPDATE_FAILED ->
                     receivers.forEach {
                         it.onProfileUpdateFailed(
                             UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
-                            intent.getStringExtra(Intents.EXTRA_FAIL_REASON))
+                            intent.getStringExtra(Intents.EXTRA_FAIL_REASON),
+                        )
                     }
                 Intents.ACTION_PROFILE_LOADED -> {
                     receivers.forEach {
@@ -85,30 +88,38 @@ class Broadcasts(private val context: Application) {
     }
 
     fun register() {
-        if (registered)
+        if (registered) {
             return
+        }
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.registerReceiver(broadcastReceiver, IntentFilter().apply {
-                    addAction(Intents.ACTION_SERVICE_RECREATED)
-                    addAction(Intents.ACTION_CLASH_STARTED)
-                    addAction(Intents.ACTION_CLASH_STOPPED)
-                    addAction(Intents.ACTION_PROFILE_CHANGED)
-                    addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
-                    addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
-                    addAction(Intents.ACTION_PROFILE_LOADED)
-                }, Context.RECEIVER_NOT_EXPORTED)
+                context.registerReceiver(
+                    broadcastReceiver,
+                    IntentFilter().apply {
+                        addAction(Intents.ACTION_SERVICE_RECREATED)
+                        addAction(Intents.ACTION_CLASH_STARTED)
+                        addAction(Intents.ACTION_CLASH_STOPPED)
+                        addAction(Intents.ACTION_PROFILE_CHANGED)
+                        addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
+                        addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
+                        addAction(Intents.ACTION_PROFILE_LOADED)
+                    },
+                    Context.RECEIVER_NOT_EXPORTED,
+                )
             } else {
-                context.registerReceiver(broadcastReceiver, IntentFilter().apply {
-                    addAction(Intents.ACTION_SERVICE_RECREATED)
-                    addAction(Intents.ACTION_CLASH_STARTED)
-                    addAction(Intents.ACTION_CLASH_STOPPED)
-                    addAction(Intents.ACTION_PROFILE_CHANGED)
-                    addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
-                    addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
-                    addAction(Intents.ACTION_PROFILE_LOADED)
-                })
+                context.registerReceiver(
+                    broadcastReceiver,
+                    IntentFilter().apply {
+                        addAction(Intents.ACTION_SERVICE_RECREATED)
+                        addAction(Intents.ACTION_CLASH_STARTED)
+                        addAction(Intents.ACTION_CLASH_STOPPED)
+                        addAction(Intents.ACTION_PROFILE_CHANGED)
+                        addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
+                        addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
+                        addAction(Intents.ACTION_PROFILE_LOADED)
+                    },
+                )
             }
 
             clashRunning = StatusClient(context).currentProfile() != null
@@ -118,8 +129,9 @@ class Broadcasts(private val context: Application) {
     }
 
     fun unregister() {
-        if (!registered)
+        if (!registered) {
             return
+        }
 
         try {
             context.unregisterReceiver(broadcastReceiver)

@@ -26,7 +26,7 @@ class EditableTextMapAdapter<K, V>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterEditableTextMapBinding
-                .inflate(context.layoutInflater, parent, false)
+                .inflate(context.layoutInflater, parent, false),
         )
     }
 

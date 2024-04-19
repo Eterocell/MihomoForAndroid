@@ -23,7 +23,7 @@ class AppAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterAppBinding
-                .inflate(context.layoutInflater, context.root, false)
+                .inflate(context.layoutInflater, context.root, false),
         )
     }
 

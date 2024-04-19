@@ -8,14 +8,16 @@ import java.util.*
 
 @Entity(
     tableName = "selections",
-    foreignKeys = [ForeignKey(
-        entity = Imported::class,
-        childColumns = ["uuid"],
-        parentColumns = ["uuid"],
-        onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE
-    )],
-    primaryKeys = ["uuid", "proxy"]
+    foreignKeys = [
+        ForeignKey(
+            entity = Imported::class,
+            childColumns = ["uuid"],
+            parentColumns = ["uuid"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE,
+        ),
+    ],
+    primaryKeys = ["uuid", "proxy"],
 )
 @TypeConverters(Converters::class)
 data class Selection(

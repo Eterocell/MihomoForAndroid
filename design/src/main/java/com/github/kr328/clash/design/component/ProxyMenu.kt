@@ -94,7 +94,7 @@ class ProxyMenu(
         menu.menu.apply {
             findItem(R.id.not_selectable).isChecked = uiStore.proxyExcludeNotSelectable
 
-            when (uiStore.proxyLine){
+            when (uiStore.proxyLine) {
                 1 -> findItem(R.id.single).isChecked = true
                 2 -> findItem(R.id.doubles).isChecked = true
                 3 -> findItem(R.id.multiple).isChecked = true

@@ -83,8 +83,9 @@ class LogcatService : Service(), CoroutineScope by CoroutineScope(Dispatchers.De
     }
 
     private fun startObserver(binder: IBinder) {
-        if (!binder.isBinderAlive)
+        if (!binder.isBinderAlive) {
             return stopSelf()
+        }
 
         launch(Dispatchers.IO) {
             val service = binder.unwrap(IRemoteService::class).clash()
@@ -129,8 +130,8 @@ class LogcatService : Service(), CoroutineScope by CoroutineScope(Dispatchers.De
             .createNotificationChannel(
                 NotificationChannelCompat.Builder(
                     CHANNEL_ID,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT
-                ).setName(getString(R.string.clash_logcat)).build()
+                    NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                ).setName(getString(R.string.clash_logcat)).build(),
             )
     }
 
@@ -147,8 +148,8 @@ class LogcatService : Service(), CoroutineScope by CoroutineScope(Dispatchers.De
                     R.id.nf_logcat_status,
                     LogcatActivity::class.intent
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
-                )
+                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+                ),
             )
             .build()
 

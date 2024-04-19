@@ -1,15 +1,10 @@
 package com.github.kr328.clash
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.setUUID
 import com.github.kr328.clash.common.util.ticker
 import com.github.kr328.clash.design.ProfilesDesign
 import com.github.kr328.clash.design.ui.ToastDuration
-import com.github.kr328.clash.R
 import com.github.kr328.clash.service.model.Profile
 import com.github.kr328.clash.util.withProfile
 import kotlinx.coroutines.Dispatchers
@@ -46,13 +41,13 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
                             withProfile {
                                 try {
                                     queryAll().forEach { p ->
-                                        if (p.imported && p.type != Profile.Type.File)
+                                        if (p.imported && p.type != Profile.Type.File) {
                                             update(p.uuid)
+                                        }
                                     }
-                                }
-                                finally {
+                                } finally {
                                     withContext(Dispatchers.Main) {
-                                        design.finishUpdateAll();
+                                        design.finishUpdateAll()
                                     }
                                 }
                             }
@@ -64,10 +59,11 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
                             startActivity(PropertiesActivity::class.intent.setUUID(it.profile.uuid))
                         is ProfilesDesign.Request.Active -> {
                             withProfile {
-                                if (it.profile.imported)
+                                if (it.profile.imported) {
                                     setActive(it.profile)
-                                else
+                                } else {
                                     design.requestSave(it.profile)
+                                }
                             }
                         }
                         is ProfilesDesign.Request.Duplicate -> {
@@ -93,31 +89,33 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
     }
 
     override fun onProfileUpdateCompleted(uuid: UUID?) {
-        if(uuid == null)
-            return;
+        if (uuid == null) {
+            return
+        }
         launch {
-            var name: String? = null;
+            var name: String? = null
             withProfile {
                 name = queryByUUID(uuid)?.name
             }
             design?.showToast(
                 getString(R.string.toast_profile_updated_complete, name),
-                ToastDuration.Long
+                ToastDuration.Long,
             )
         }
     }
     override fun onProfileUpdateFailed(uuid: UUID?, reason: String?) {
-        if(uuid == null)
-            return;
+        if (uuid == null) {
+            return
+        }
         launch {
-            var name: String? = null;
+            var name: String? = null
             withProfile {
                 name = queryByUUID(uuid)?.name
             }
             design?.showToast(
                 getString(R.string.toast_profile_updated_failed, name, reason),
-                ToastDuration.Long
-            ){
+                ToastDuration.Long,
+            ) {
                 setAction(R.string.edit) {
                     startActivity(PropertiesActivity::class.intent.setUUID(uuid))
                 }

@@ -42,9 +42,8 @@ abstract class BaseActivity<D : Design<*>> :
         ProfileLoaded,
         ProfileChanged,
         ProfileUpdateCompleted,
-        ProfileUpdateFailed
+        ProfileUpdateFailed,
     }
-
 
     protected val uiStore by lazy { UiStore(this) }
     protected val events = Channel<Event>(Channel.UNLIMITED)
@@ -75,7 +74,7 @@ abstract class BaseActivity<D : Design<*>> :
 
     suspend fun <I, O> startActivityForResult(
         contracts: ActivityResultContract<I, O>,
-        input: I
+        input: I,
     ): O = withContext(Dispatchers.Main) {
         val requestKey = nextRequestKey.getAndIncrement().toString()
 
@@ -213,10 +212,11 @@ abstract class BaseActivity<D : Design<*>> :
     private fun queryDayNight(config: Configuration = resources.configuration): DayNight {
         return when (uiStore.darkMode) {
             DarkMode.Auto -> {
-                if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES)
+                if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
                     DayNight.Night
-                else
+                } else {
                     DayNight.Day
+                }
             }
             DarkMode.ForceLight -> {
                 DayNight.Day

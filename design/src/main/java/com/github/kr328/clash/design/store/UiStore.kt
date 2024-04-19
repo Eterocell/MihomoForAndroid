@@ -11,18 +11,18 @@ class UiStore(context: Context) {
     private val store = Store(
         context
             .getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-            .asStoreProvider()
+            .asStoreProvider(),
     )
 
     var enableVpn: Boolean by store.boolean(
         key = "enable_vpn",
-        defaultValue = true
+        defaultValue = true,
     )
 
     var darkMode: DarkMode by store.enum(
         key = "dark_mode",
         defaultValue = DarkMode.Auto,
-        values = DarkMode.values()
+        values = DarkMode.values(),
     )
 
     var proxyExcludeNotSelectable by store.boolean(
@@ -32,18 +32,18 @@ class UiStore(context: Context) {
 
     var proxyLine: Int by store.int(
         key = "proxy_line",
-        defaultValue = 2
+        defaultValue = 2,
     )
 
     var proxySort: ProxySort by store.enum(
         key = "proxy_sort",
         defaultValue = ProxySort.Default,
-        values = ProxySort.values()
+        values = ProxySort.values(),
     )
 
     var proxyLastGroup: String by store.string(
         key = "proxy_last_group",
-        defaultValue = ""
+        defaultValue = "",
     )
 
     var accessControlSort: AppInfoSort by store.enum(
@@ -54,7 +54,7 @@ class UiStore(context: Context) {
 
     var accessControlReverse: Boolean by store.boolean(
         key = "access_control_reverse",
-        defaultValue = false
+        defaultValue = false,
     )
 
     var accessControlSystemApp: Boolean by store.boolean(

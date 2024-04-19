@@ -13,7 +13,7 @@ private fun fileNotFound(file: Uri): FileNotFoundException {
 @Suppress("BlockingMethodInNonBlockingContext")
 suspend fun ContentResolver.copyContentTo(
     source: Uri,
-    target: Uri
+    target: Uri,
 ) {
     withContext(Dispatchers.IO) {
         (openInputStream(source) ?: throw fileNotFound(source)).use { input ->

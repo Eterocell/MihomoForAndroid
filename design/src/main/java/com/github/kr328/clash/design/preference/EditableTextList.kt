@@ -63,7 +63,7 @@ fun <T> PreferenceScreen.editableTextList(
                     impl.list,
                     context,
                     adapter,
-                    impl.title
+                    impl.title,
                 )
 
                 withContext(Dispatchers.IO) {
@@ -87,14 +87,14 @@ private suspend fun <T> requestEditTextList(
     val recyclerAdapter = EditableTextListAdapter(
         context,
         initialValue?.toMutableList() ?: mutableListOf(),
-        adapter
+        adapter,
     )
 
     val result = requestEditableListOverlay(context, recyclerAdapter, title) {
         val text = context.requestModelTextInput(
             initial = "",
             title = title,
-            hint = title
+            hint = title,
         )
 
         if (text.isNotBlank()) {

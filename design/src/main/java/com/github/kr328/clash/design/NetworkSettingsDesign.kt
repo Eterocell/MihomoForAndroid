@@ -22,7 +22,7 @@ class NetworkSettingsDesign(
     running: Boolean,
 ) : Design<NetworkSettingsDesign.Request>(context) {
     enum class Request {
-        StartAccessControlList
+        StartAccessControlList,
     }
 
     private val binding = DesignSettingsCommonBinding
@@ -45,7 +45,7 @@ class NetworkSettingsDesign(
                 value = uiStore::enableVpn,
                 icon = R.drawable.ic_baseline_vpn_lock,
                 title = R.string.route_system_traffic,
-                summary = R.string.routing_via_vpn_service
+                summary = R.string.routing_via_vpn_service,
             ) {
                 listener = OnChangedListener {
                     vpnDependencies.forEach {
@@ -92,7 +92,7 @@ class NetworkSettingsDesign(
                 valuesText = arrayOf(
                     R.string.allow_all_apps,
                     R.string.allow_selected_apps,
-                    R.string.deny_selected_apps
+                    R.string.deny_selected_apps,
                 ),
                 title = R.string.access_control_mode,
                 configure = vpnDependencies::add,

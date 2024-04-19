@@ -10,10 +10,6 @@ import com.github.kr328.clash.service.util.sendServiceRecreated
 import com.github.kr328.clash.util.clashDir
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
-
 
 @Suppress("unused")
 class MainApplication : Application() {
@@ -39,19 +35,19 @@ class MainApplication : Application() {
     }
 
     private fun extractGeoFiles() {
-        clashDir.mkdirs();
+        clashDir.mkdirs()
 
         val geoipFile = File(clashDir, "geoip.metadb")
-        if(!geoipFile.exists()) {
+        if (!geoipFile.exists()) {
             FileOutputStream(geoipFile).use {
-                assets.open("geoip.metadb").copyTo(it);
+                assets.open("geoip.metadb").copyTo(it)
             }
         }
 
         val geositeFile = File(clashDir, "geosite.dat")
-        if(!geositeFile.exists()) {
+        if (!geositeFile.exists()) {
             FileOutputStream(geositeFile).use {
-                assets.open("geosite.dat").copyTo(it);
+                assets.open("geosite.dat").copyTo(it)
             }
         }
     }

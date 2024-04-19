@@ -24,7 +24,7 @@ class ProxyActivity : BaseActivity<ProxyDesign>() {
             this,
             mode,
             names,
-            uiStore
+            uiStore,
         )
 
         setContentDesign(design)
@@ -77,7 +77,7 @@ class ProxyActivity : BaseActivity<ProxyDesign>() {
                                     group.proxies,
                                     group.type == Proxy.Type.Selector,
                                     state,
-                                    unorderedStates
+                                    unorderedStates,
                                 )
                             }
                         }

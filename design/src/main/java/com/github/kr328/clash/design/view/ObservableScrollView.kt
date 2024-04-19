@@ -10,7 +10,7 @@ class ObservableScrollView @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : ScrollView(context, attributeSet, defStyleAttr, defStyleRes) {
     fun interface OnScrollChangedListener {
         fun onChanged(scrollView: ObservableScrollView, x: Int, y: Int, oldl: Int, oldt: Int)

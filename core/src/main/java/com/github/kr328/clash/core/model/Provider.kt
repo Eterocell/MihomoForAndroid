@@ -10,14 +10,17 @@ data class Provider(
     val name: String,
     val type: Type,
     val vehicleType: VehicleType,
-    val updatedAt: Long
+    val updatedAt: Long,
 ) : Parcelable, Comparable<Provider> {
     enum class Type {
-        Proxy, Rule
+        Proxy,
+        Rule,
     }
 
     enum class VehicleType {
-        HTTP, File, Compatible
+        HTTP,
+        File,
+        Compatible,
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

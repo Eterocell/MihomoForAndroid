@@ -39,15 +39,17 @@ suspend fun Context.requestModelTextInput(
             .setPositiveButton(R.string.ok) { _, _ ->
                 val text = binding.textField.text?.toString() ?: ""
 
-                if (validator(text))
+                if (validator(text)) {
                     it.resume(text)
-                else
+                } else {
                     it.resume(initial)
+                }
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
             .setOnDismissListener { _ ->
-                if (!it.isCompleted)
+                if (!it.isCompleted) {
                     it.resume(initial)
+                }
             }
 
         if (reset != null) {
@@ -63,21 +65,24 @@ suspend fun Context.requestModelTextInput(
         }
 
         dialog.setOnShowListener {
-            if (hint != null)
+            if (hint != null) {
                 binding.textLayout.hint = hint
+            }
 
             binding.textField.apply {
                 binding.textLayout.isErrorEnabled = error != null
 
                 doOnTextChanged { text, _, _, _ ->
                     if (!validator(text?.toString() ?: "")) {
-                        if (error != null)
+                        if (error != null) {
                             binding.textLayout.error = error
+                        }
 
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     } else {
-                        if (error != null)
+                        if (error != null) {
                             binding.textLayout.error = null
+                        }
 
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
                     }

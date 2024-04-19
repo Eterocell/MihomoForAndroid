@@ -21,7 +21,7 @@ class AppSettingsDesign(
     running: Boolean,
 ) : Design<AppSettingsDesign.Request>(context) {
     enum class Request {
-        ReCreateAllActivities
+        ReCreateAllActivities,
     }
 
     private val binding = DesignSettingsCommonBinding
@@ -55,10 +55,10 @@ class AppSettingsDesign(
                 valuesText = arrayOf(
                     R.string.follow_system_android_10,
                     R.string.always_light,
-                    R.string.always_dark
+                    R.string.always_dark,
                 ),
                 icon = R.drawable.ic_baseline_brightness_4,
-                title = R.string.dark_mode
+                title = R.string.dark_mode,
             ) {
                 listener = OnChangedListener {
                     requests.trySend(Request.ReCreateAllActivities)
@@ -71,7 +71,7 @@ class AppSettingsDesign(
                 value = srvStore::dynamicNotification,
                 icon = R.drawable.ic_baseline_domain,
                 title = R.string.show_traffic,
-                summary = R.string.show_traffic_summary
+                summary = R.string.show_traffic_summary,
             ) {
                 enabled = !running
             }

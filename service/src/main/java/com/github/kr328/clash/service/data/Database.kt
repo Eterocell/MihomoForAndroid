@@ -35,7 +35,7 @@ abstract class Database : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 Database::class.java,
-                "profiles"
+                "profiles",
             ).addMigrations(*MIGRATIONS).build()
         }
 

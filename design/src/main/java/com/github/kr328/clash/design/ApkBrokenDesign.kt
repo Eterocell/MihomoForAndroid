@@ -35,7 +35,7 @@ class ApkBrokenDesign(context: Context) : Design<ApkBrokenDesign.Request>(contex
 
             clickable(
                 title = R.string.github_releases,
-                summary = R.string.meta_github_url
+                summary = R.string.meta_github_url,
             ) {
                 clicked {
                     requests.trySend(Request(context.getString(R.string.meta_github_url)))

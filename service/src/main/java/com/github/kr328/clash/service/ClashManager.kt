@@ -13,7 +13,8 @@ import com.github.kr328.clash.service.util.sendOverrideChanged
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 
-class ClashManager(private val context: Context) : IClashManager,
+class ClashManager(private val context: Context) :
+    IClashManager,
     CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private val store = ServiceStore(context)
     private var logReceiver: ReceiveChannel<LogMessage>? = null

@@ -27,7 +27,7 @@ class OverrideSettingsActivity : BaseActivity<OverrideSettingsDesign>() {
 
         val design = OverrideSettingsDesign(
             this,
-            configuration
+            configuration,
         )
 
         setContentDesign(design)
@@ -35,7 +35,6 @@ class OverrideSettingsActivity : BaseActivity<OverrideSettingsDesign>() {
         while (isActive) {
             select<Unit> {
                 events.onReceive {
-
                 }
                 design.requests.onReceive {
                     when (it) {
@@ -83,7 +82,7 @@ class OverrideSettingsActivity : BaseActivity<OverrideSettingsDesign>() {
                 icon = getDrawableCompat(R.drawable.ic_baseline_work)!!,
                 installTime = 0,
                 updateDate = 0,
-            )
+            ),
         ) + apps
     }
 }

@@ -39,7 +39,6 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
         while (isActive) {
             select<Unit> {
                 events.onReceive {
-
                 }
                 design.requests.onReceive {
                     when (it) {
@@ -90,7 +89,7 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
 
                             val data = ClipData.newPlainText(
                                 "packages",
-                                selected.joinToString("\n")
+                                selected.joinToString("\n"),
                             )
 
                             clipboard?.setPrimaryClip(data)

@@ -20,7 +20,9 @@ class LogcatDesign(
     private val streaming: Boolean,
 ) : Design<LogcatDesign.Request>(context) {
     enum class Request {
-        Close, Delete, Export
+        Close,
+        Delete,
+        Export,
     }
 
     private val binding = DesignLogcatBinding

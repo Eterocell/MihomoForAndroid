@@ -12,7 +12,7 @@ class ActivityBarLayout @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attributeSet, defStyleAttr, defStyleRes) {
     init {
         alpha = 0.96f

@@ -7,11 +7,13 @@ import java.util.*
 fun Intent.grantPermissions(read: Boolean = true, write: Boolean = true): Intent {
     var flags = 0
 
-    if (read)
+    if (read) {
         flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
+    }
 
-    if (write)
+    if (write) {
         flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+    }
 
     addFlags(flags)
 

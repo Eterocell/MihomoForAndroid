@@ -77,6 +77,6 @@ fun Double.toProgress(): Int {
     return this.toInt()
 }
 fun Long.toDateStr(): String {
-    val simpleDateFormat =SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     return simpleDateFormat.format(Date(this))
 }

@@ -40,7 +40,7 @@ android {
         all {
             externalNativeBuild {
                 cmake {
-                    arguments("-DGO_SOURCE:STRING=${golangSource}")
+                    arguments("-DGO_SOURCE:STRING=$golangSource")
                     arguments("-DGO_OUTPUT:STRING=${GolangPlugin.outputDirOf(project, null, null)}")
                     arguments("-DFLAVOR_NAME:STRING=$name")
                 }

@@ -29,10 +29,11 @@ class ClashService : BaseService() {
         val network = install(NetworkObserveModule(self))
         val sideload = install(SideloadDatabaseModule(self))
 
-        if (store.dynamicNotification)
+        if (store.dynamicNotification) {
             install(DynamicNotificationModule(self))
-        else
+        } else {
             install(StaticNotificationModule(self))
+        }
 
         install(AppListCacheModule(self))
         install(TimeZoneModule(self))
@@ -75,8 +76,9 @@ class ClashService : BaseService() {
     override fun onCreate() {
         super.onCreate()
 
-        if (StatusProvider.serviceRunning)
+        if (StatusProvider.serviceRunning) {
             return stopSelf()
+        }
 
         StatusProvider.serviceRunning = true
 

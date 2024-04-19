@@ -47,7 +47,7 @@ class TileService : TileService() {
                 },
                 Permissions.RECEIVE_SELF_BROADCASTS,
                 null,
-                Context.RECEIVER_NOT_EXPORTED
+                Context.RECEIVER_NOT_EXPORTED,
             )
         } else {
             registerReceiver(
@@ -59,7 +59,7 @@ class TileService : TileService() {
                     addAction(Intents.ACTION_SERVICE_RECREATED)
                 },
                 Permissions.RECEIVE_SELF_BROADCASTS,
-                null
+                null,
             )
         }
 
@@ -80,10 +80,11 @@ class TileService : TileService() {
     private fun updateTile() {
         val tile = qsTile ?: return
 
-        tile.state = if (clashRunning)
+        tile.state = if (clashRunning) {
             Tile.STATE_ACTIVE
-        else
+        } else {
             Tile.STATE_INACTIVE
+        }
 
         tile.label = currentProfile.ifEmpty { getText(R.string.launch_name) }
 

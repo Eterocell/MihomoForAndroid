@@ -19,12 +19,12 @@ class PreferenceProvider : PreferenceProvider() {
                 is BaseService, is TunService ->
                     context.getSharedPreferences(
                         FILE_NAME,
-                        Context.MODE_PRIVATE
+                        Context.MODE_PRIVATE,
                     )
                 else ->
                     MultiProcessPreference(
                         context,
-                        Authorities.SETTINGS_PROVIDER
+                        Authorities.SETTINGS_PROVIDER,
                     )
             }
         }

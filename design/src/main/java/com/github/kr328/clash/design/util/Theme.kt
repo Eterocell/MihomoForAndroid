@@ -31,7 +31,7 @@ fun Context.resolveClickableAttrs(
         attributeSet,
         R.styleable.Clickable,
         defaultAttrRes,
-        defaultStyleRes
+        defaultStyleRes,
     ).apply {
         val impl = object : ClickableScope {
             override fun focusable(defaultValue: Boolean): Boolean {
@@ -49,7 +49,6 @@ fun Context.resolveClickableAttrs(
             override fun foreground(): Drawable? {
                 return getDrawable(R.styleable.Clickable_android_focusable)
             }
-
         }
 
         impl.apply(block)

@@ -25,7 +25,7 @@ fun <K, V> PreferenceScreen.editableTextMap(
     @StringRes title: Int,
     @DrawableRes icon: Int? = null,
     @StringRes placeholder: Int? = null,
-    configure: EditableTextMapPreference<K, V>.() -> Unit = {}
+    configure: EditableTextMapPreference<K, V>.() -> Unit = {},
 ): EditableTextMapPreference<K, V> {
     val impl =
         object : EditableTextMapPreference<K, V>, ClickablePreference by clickable(title, icon) {
@@ -68,7 +68,7 @@ fun <K, V> PreferenceScreen.editableTextMap(
                     context,
                     keyAdapter,
                     valueAdapter,
-                    impl.title
+                    impl.title,
                 )
 
                 withContext(Dispatchers.IO) {
@@ -88,7 +88,7 @@ private suspend fun <K, V> requestEditTextMap(
     context: Context,
     keyAdapter: TextAdapter<K>,
     valueAdapter: TextAdapter<V>,
-    title: CharSequence
+    title: CharSequence,
 ): Map<K, V>? {
     val editableValue = withContext(Dispatchers.Default) {
         initialValue?.map { it.key to it.value }?.toMutableList() ?: mutableListOf()
@@ -118,7 +118,7 @@ private suspend fun <K, V> requestEditTextMap(
 
 private suspend fun requestModelInputEntry(
     context: Context,
-    title: CharSequence
+    title: CharSequence,
 ): Pair<String, String>? {
     return suspendCancellableCoroutine { ctx ->
         val binding = DialogEditableMapTextFieldBinding

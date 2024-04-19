@@ -9,7 +9,7 @@ import java.util.*
 fun Context.sendBroadcastSelf(intent: Intent) {
     sendBroadcast(
         intent.setPackage(this.packageName),
-        Permissions.RECEIVE_SELF_BROADCASTS
+        Permissions.RECEIVE_SELF_BROADCASTS,
     )
 }
 
@@ -60,7 +60,7 @@ fun Context.sendClashStopped(reason: String?) {
     sendBroadcastSelf(
         Intent(Intents.ACTION_CLASH_STOPPED).putExtra(
             Intents.EXTRA_STOP_REASON,
-            reason
-        )
+            reason,
+        ),
     )
 }

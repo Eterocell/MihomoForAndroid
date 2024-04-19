@@ -4,8 +4,8 @@ import android.content.ComponentName
 import com.github.kr328.clash.common.util.packageName
 
 object Components {
-    private const val componentsPackageName = "com.github.kr328.clash"
+    private const val COMPONENTS_PACKAGE_NAME = "com.github.kr328.clash"
 
-    val MAIN_ACTIVITY = ComponentName(packageName, "$componentsPackageName.MainActivity")
-    val PROPERTIES_ACTIVITY = ComponentName(packageName, "$componentsPackageName.PropertiesActivity")
+    val MAIN_ACTIVITY = ComponentName(packageName, "$COMPONENTS_PACKAGE_NAME.MainActivity")
+    val PROPERTIES_ACTIVITY = ComponentName(packageName, "$COMPONENTS_PACKAGE_NAME.PropertiesActivity")
 }

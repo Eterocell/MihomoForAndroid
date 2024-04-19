@@ -25,7 +25,7 @@ class EditableTextListAdapter<T>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterEditableTextListBinding
-                .inflate(context.layoutInflater, parent, false)
+                .inflate(context.layoutInflater, parent, false),
         )
     }
 

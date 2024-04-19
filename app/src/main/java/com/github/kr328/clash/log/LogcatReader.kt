@@ -27,13 +27,13 @@ class LogcatReader(context: Context, file: LogFile) : AutoCloseable {
                     LogMessage(
                         time = time,
                         level = LogMessage.Level.valueOf(it[1]),
-                        message = it[2]
+                        message = it[2],
                     )
                 } else {
                     LogMessage(
                         time = time,
                         level = LogMessage.Level.Warning, // or any default level
-                        message = it.joinToString(":")
+                        message = it.joinToString(":"),
                     )
                 }
                 lastTime = time

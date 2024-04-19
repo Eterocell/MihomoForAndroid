@@ -17,7 +17,7 @@ class LargeActionLabel @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attributeSet, defStyleAttr, defStyleRes) {
     private val binding = ComponentLargeActionLabelBinding
         .inflate(context.layoutInflater, this, true)
@@ -50,7 +50,7 @@ class LargeActionLabel @JvmOverloads constructor(
         context.resolveClickableAttrs(
             attributeSet,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ) {
             isFocusable = focusable(true)
             isClickable = clickable(true)
@@ -61,7 +61,7 @@ class LargeActionLabel @JvmOverloads constructor(
             attributeSet,
             R.styleable.LargeActionLabel,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ).apply {
             try {
                 icon = getDrawable(R.styleable.LargeActionLabel_icon)

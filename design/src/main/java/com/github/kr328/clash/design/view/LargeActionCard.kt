@@ -12,7 +12,7 @@ import com.google.android.material.card.MaterialCardView
 class LargeActionCard @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
-    @AttrRes defStyleAttr: Int = 0
+    @AttrRes defStyleAttr: Int = 0,
 ) : MaterialCardView(context, attributeSet, defStyleAttr) {
     private val binding = ComponentLargeActionLabelBinding
         .inflate(context.layoutInflater, this, true)
@@ -46,7 +46,7 @@ class LargeActionCard @JvmOverloads constructor(
             attributeSet,
             R.styleable.LargeActionCard,
             defStyleAttr,
-            0
+            0,
         ).apply {
             try {
                 icon = getDrawable(R.styleable.LargeActionCard_icon)

@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.view.View
 import com.github.kr328.clash.common.compat.getDrawableCompat
-import com.github.kr328.clash.design.store.UiStore
 
 class ProxyView(
     context: Context,
@@ -40,10 +39,12 @@ class ProxyView(
         }
 
         val textHeight = state.rect.height()
-        val exceptHeight = (state.config.layoutPadding * 2 +
+        val exceptHeight = (
+            state.config.layoutPadding * 2 +
                 state.config.contentPadding * 2 +
                 textHeight * 2 +
-                state.config.textMargin).toInt()
+                state.config.textMargin
+            ).toInt()
 
         val height = when (MeasureSpec.getMode(heightMeasureSpec)) {
             MeasureSpec.UNSPECIFIED ->
@@ -60,8 +61,9 @@ class ProxyView(
     override fun draw(canvas: Canvas) {
         val state = state ?: return super.draw(canvas)
 
-        if (state.update(false))
+        if (state.update(false)) {
             postInvalidate()
+        }
 
         val width = width.toFloat()
         val height = height.toFloat()
@@ -75,7 +77,7 @@ class ProxyView(
 
         // draw background
         canvas.apply {
-            if (state.config.proxyLine==1) {
+            if (state.config.proxyLine == 1) {
                 drawRect(0f, 0f, width, height, paint)
             } else {
                 val path = state.path
@@ -96,7 +98,7 @@ class ProxyView(
                     state.config.cardRadius,
                     state.config.cardOffset,
                     state.config.cardOffset,
-                    state.config.shadow
+                    state.config.shadow,
                 )
 
                 drawPath(path, paint)
@@ -126,19 +128,20 @@ class ProxyView(
             false,
             (width - state.config.layoutPadding * 2 - state.config.contentPadding * 2)
                 .coerceAtLeast(0f),
-            null
+            null,
         )
 
         state.paint.getTextBounds(state.delayText, 0, delayCount, state.rect)
 
         val delayWidth = state.rect.width()
 
-        val mainTextWidth = (width -
+        val mainTextWidth = (
+            width -
                 state.config.layoutPadding * 2 -
                 state.config.contentPadding * 2 -
                 delayWidth -
                 state.config.textMargin * 2
-                )
+            )
             .coerceAtLeast(0f)
 
         // measure title text bounds
@@ -178,7 +181,7 @@ class ProxyView(
         canvas.apply {
             val x = state.config.layoutPadding + state.config.contentPadding
             val y = state.config.layoutPadding +
-                    (height - state.config.layoutPadding * 2) / 3f - textOffset
+                (height - state.config.layoutPadding * 2) / 3f - textOffset
 
             drawText(state.title, 0, titleCount, x, y, paint)
         }
@@ -187,7 +190,7 @@ class ProxyView(
         canvas.apply {
             val x = state.config.layoutPadding + state.config.contentPadding
             val y = state.config.layoutPadding +
-                    (height - state.config.layoutPadding * 2) / 3f * 2 - textOffset
+                (height - state.config.layoutPadding * 2) / 3f * 2 - textOffset
 
             drawText(state.subtitle, 0, subtitleCount, x, y, paint)
         }

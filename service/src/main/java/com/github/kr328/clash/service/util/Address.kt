@@ -22,8 +22,8 @@ private fun numericToTextFormat(src: ByteArray): String {
         sb.append(
             Integer.toHexString(
                 src[i shl 1].toInt() shl 8 and 0xff00
-                        or (src[(i shl 1) + 1].toInt() and 0xff)
-            )
+                    or (src[(i shl 1) + 1].toInt() and 0xff),
+            ),
         )
         if (i < INADDRSZ / INT16SZ - 1) {
             sb.append(":")
@@ -31,4 +31,3 @@ private fun numericToTextFormat(src: ByteArray): String {
     }
     return sb.toString()
 }
-

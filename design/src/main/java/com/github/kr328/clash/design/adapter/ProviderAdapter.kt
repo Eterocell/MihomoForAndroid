@@ -46,7 +46,7 @@ class ProviderAdapter(
         return Holder(
             AdapterProviderBinding
                 .inflate(context.layoutInflater, parent, false)
-                .also { it.currentTime = currentTime }
+                .also { it.currentTime = currentTime },
         )
     }
 

@@ -14,7 +14,8 @@ import java.net.InetSocketAddress
 
 object Clash {
     enum class OverrideSlot {
-        Persist, Session
+        Persist,
+        Session,
     }
 
     private val ConfigurationOverrideJson = Json {
@@ -68,21 +69,24 @@ object Clash {
         portal: String,
         dns: String,
         markSocket: (Int) -> Boolean,
-        querySocketUid: (protocol: Int, source: InetSocketAddress, target: InetSocketAddress) -> Int
+        querySocketUid: (protocol: Int, source: InetSocketAddress, target: InetSocketAddress) -> Int,
     ) {
-        Bridge.nativeStartTun(fd, gateway, portal, dns, object : TunInterface {
-            override fun markSocket(fd: Int) {
-                markSocket(fd)
-            }
+        Bridge.nativeStartTun(
+            fd, gateway, portal, dns,
+            object : TunInterface {
+                override fun markSocket(fd: Int) {
+                    markSocket(fd)
+                }
 
-            override fun querySocketUid(protocol: Int, source: String, target: String): Int {
-                return querySocketUid(
-                    protocol,
-                    parseInetSocketAddress(source),
-                    parseInetSocketAddress(target)
-                )
-            }
-        })
+                override fun querySocketUid(protocol: Int, source: String, target: String): Int {
+                    return querySocketUid(
+                        protocol,
+                        parseInetSocketAddress(source),
+                        parseInetSocketAddress(target),
+                    )
+                }
+            },
+        )
     }
 
     fun stopTun() {
@@ -100,7 +104,7 @@ object Clash {
     fun queryGroupNames(excludeNotSelectable: Boolean): List<String> {
         val names = Json.Default.decodeFromString(
             JsonArray.serializer(),
-            Bridge.nativeQueryGroupNames(excludeNotSelectable)
+            Bridge.nativeQueryGroupNames(excludeNotSelectable),
         )
 
         return names.map {
@@ -134,7 +138,7 @@ object Clash {
         path: File,
         url: String,
         force: Boolean,
-        reportStatus: (FetchStatus) -> Unit
+        reportStatus: (FetchStatus) -> Unit,
     ): CompletableDeferred<Unit> {
         return CompletableDeferred<Unit>().apply {
             Bridge.nativeFetchAndValid(
@@ -143,21 +147,22 @@ object Clash {
                         reportStatus(
                             Json.Default.decodeFromString(
                                 FetchStatus.serializer(),
-                                statusJson
-                            )
+                                statusJson,
+                            ),
                         )
                     }
 
                     override fun complete(error: String?) {
-                        if (error != null)
+                        if (error != null) {
                             completeExceptionally(ClashException(error))
-                        else
+                        } else {
                             complete(Unit)
+                        }
                     }
                 },
                 path.absolutePath,
                 url,
-                force
+                force,
             )
         }
     }
@@ -187,7 +192,7 @@ object Clash {
         return try {
             ConfigurationOverrideJson.decodeFromString(
                 ConfigurationOverride.serializer(),
-                Bridge.nativeReadOverride(slot.ordinal)
+                Bridge.nativeReadOverride(slot.ordinal),
             )
         } catch (e: Exception) {
             ConfigurationOverride()
@@ -199,8 +204,8 @@ object Clash {
             slot.ordinal,
             ConfigurationOverrideJson.encodeToString(
                 ConfigurationOverride.serializer(),
-                configuration
-            )
+                configuration,
+            ),
         )
     }
 
@@ -215,7 +220,7 @@ object Clash {
     fun queryConfiguration(): UiConfiguration {
         return Json.Default.decodeFromString(
             UiConfiguration.serializer(),
-            Bridge.nativeQueryConfiguration()
+            Bridge.nativeQueryConfiguration(),
         )
     }
 

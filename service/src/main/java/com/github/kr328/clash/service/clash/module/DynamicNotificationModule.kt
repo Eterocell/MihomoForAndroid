@@ -36,8 +36,8 @@ class DynamicNotificationModule(service: Service) : Module<Unit>(service) {
                 R.id.nf_clash_status,
                 Intent().setComponent(Components.MAIN_ACTIVITY)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
-            )
+                pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+            ),
         )
 
     private fun update() {
@@ -53,14 +53,14 @@ class DynamicNotificationModule(service: Service) : Module<Unit>(service) {
             .setContentText(
                 service.getString(
                     R.string.clash_notification_content,
-                    "$uploading/s", "$downloading/s"
-                )
+                    "$uploading/s", "$downloading/s",
+                ),
             )
             .setSubText(
                 service.getString(
                     R.string.clash_notification_content,
-                    uploaded, downloaded
-                )
+                    uploaded, downloaded,
+                ),
             )
             .build()
 

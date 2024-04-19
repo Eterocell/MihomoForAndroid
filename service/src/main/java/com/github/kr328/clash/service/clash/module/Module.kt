@@ -28,7 +28,7 @@ abstract class Module<E>(val service: Service) {
     protected fun receiveBroadcast(
         requireSelf: Boolean = true,
         capacity: Int = Channel.UNLIMITED,
-        configure: IntentFilter.() -> Unit
+        configure: IntentFilter.() -> Unit,
     ): ReceiveChannel<Intent> {
         val filter = IntentFilter().apply(configure)
         val channel = Channel<Intent>(capacity)
@@ -51,14 +51,14 @@ abstract class Module<E>(val service: Service) {
                     filter,
                     Permissions.RECEIVE_SELF_BROADCASTS,
                     null,
-                    Context.RECEIVER_NOT_EXPORTED
+                    Context.RECEIVER_NOT_EXPORTED,
                 )
             } else {
                 service.registerReceiver(
                     receiver,
                     filter,
                     Permissions.RECEIVE_SELF_BROADCASTS,
-                    null
+                    null,
                 )
             }
         } else {

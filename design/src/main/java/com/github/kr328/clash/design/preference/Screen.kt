@@ -15,7 +15,7 @@ interface PreferenceScreen : CoroutineScope {
 
 fun CoroutineScope.preferenceScreen(
     context: Context,
-    configure: PreferenceScreen.() -> Unit
+    configure: PreferenceScreen.() -> Unit,
 ): PreferenceScreen {
     val root = LinearLayout(context).apply {
         orientation = LinearLayout.VERTICAL

@@ -45,8 +45,8 @@ class PopupListAdapter(
                     200,
                     Color.red(colorPrimary),
                     Color.green(colorPrimary),
-                    Color.blue(colorPrimary)
-                )
+                    Color.blue(colorPrimary),
+                ),
             )
             text.setTextColor(colorOnPrimary)
         } else {

@@ -1,9 +1,12 @@
 package com.github.kr328.clash.service
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.IBinder
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -99,17 +102,17 @@ class ProfileWorker : BaseService() {
             listOf(
                 NotificationChannelCompat.Builder(
                     SERVICE_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_LOW
+                    NotificationManagerCompat.IMPORTANCE_LOW,
                 ).setName(getString(R.string.profile_service_status)).build(),
                 NotificationChannelCompat.Builder(
                     STATUS_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_LOW
+                    NotificationManagerCompat.IMPORTANCE_LOW,
                 ).setName(getString(R.string.profile_process_status)).build(),
                 NotificationChannelCompat.Builder(
                     RESULT_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT
-                ).setName(getString(R.string.profile_process_result)).build()
-            )
+                    NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                ).setName(getString(R.string.profile_process_result)).build(),
+            ),
         )
     }
 
@@ -156,7 +159,7 @@ class ProfileWorker : BaseService() {
             this,
             id,
             Intent().setComponent(Components.PROPERTIES_ACTIVITY).setUUID(uuid),
-            pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
+            pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
         )
 
         return NotificationCompat.Builder(this, RESULT_CHANNEL)
@@ -193,8 +196,10 @@ class ProfileWorker : BaseService() {
             .setStyle(NotificationCompat.BigTextStyle().bigText(content))
             .build()
 
-        NotificationManagerCompat.from(this)
-            .notify(id, notification)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat.from(this)
+                .notify(id, notification)
+        }
 
         sendProfileUpdateFailed(uuid, reason)
     }

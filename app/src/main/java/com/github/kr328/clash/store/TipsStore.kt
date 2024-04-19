@@ -8,7 +8,7 @@ class TipsStore(context: Context) {
     private val store = Store(
         context
             .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-            .asStoreProvider()
+            .asStoreProvider(),
     )
 
     var requestDonate: Boolean by store.boolean(

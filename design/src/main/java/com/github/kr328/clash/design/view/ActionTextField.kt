@@ -14,7 +14,7 @@ class ActionTextField @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attributeSet, defStyleAttr, defStyleRes) {
     private val binding = ComponentActionTextFieldBinding
         .inflate(context.layoutInflater, this, true)
@@ -34,10 +34,11 @@ class ActionTextField @JvmOverloads constructor(
     var text: CharSequence?
         get() = binding.textView.text
         set(value) {
-            if (isEnabled)
+            if (isEnabled) {
                 binding.textView.text = value
-            else
+            } else {
                 binding.textView.text = context.getText(R.string.unavailable)
+            }
         }
 
     var placeholder: CharSequence?
@@ -71,7 +72,7 @@ class ActionTextField @JvmOverloads constructor(
             attributeSet,
             R.styleable.ActionTextField,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ).apply {
             try {
                 isEnabled = getBoolean(R.styleable.ActionTextField_enabled, true)

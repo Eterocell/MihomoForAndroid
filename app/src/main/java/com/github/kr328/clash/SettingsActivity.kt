@@ -14,7 +14,6 @@ class SettingsActivity : BaseActivity<SettingsDesign>() {
         while (isActive) {
             select<Unit> {
                 events.onReceive {
-
                 }
                 design.requests.onReceive {
                     when (it) {

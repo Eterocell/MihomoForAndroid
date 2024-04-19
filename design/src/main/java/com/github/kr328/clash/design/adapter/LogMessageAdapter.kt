@@ -19,7 +19,7 @@ class LogMessageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterLogMessageBinding
-                .inflate(context.layoutInflater, parent, false)
+                .inflate(context.layoutInflater, parent, false),
         )
     }
 

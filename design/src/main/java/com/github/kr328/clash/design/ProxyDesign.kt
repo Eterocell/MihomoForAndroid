@@ -68,7 +68,7 @@ class ProxyDesign(
         proxies: List<Proxy>,
         selectable: Boolean,
         parent: ProxyState,
-        links: Map<String, ProxyState>
+        links: Map<String, ProxyState>,
     ) {
         adapter.updateAdapter(position, proxies, selectable, parent, links)
 
@@ -108,7 +108,7 @@ class ProxyDesign(
             binding.urlTestFloatView.visibility = View.GONE
         } else {
             binding.urlTestFloatView.supportImageTintList = ColorStateList.valueOf(
-                context.resolveThemedColor(R.attr.colorOnPrimary)
+                context.resolveThemedColor(R.attr.colorOnPrimary),
             )
 
             binding.pagesView.apply {
@@ -119,10 +119,11 @@ class ProxyDesign(
                         ProxyAdapter(config) { name ->
                             requests.trySend(Request.Select(index, name))
                         }
-                    }
+                    },
                 ) {
-                    if (it == currentItem)
+                    if (it == currentItem) {
                         updateUrlTestButtonStatus()
+                    }
                 }
 
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -145,8 +146,9 @@ class ProxyDesign(
             val initialPosition = groupNames.indexOf(uiStore.proxyLastGroup)
 
             binding.pagesView.post {
-                if (initialPosition > 0)
+                if (initialPosition > 0) {
                     binding.pagesView.setCurrentItem(initialPosition, false)
+                }
             }
         }
     }

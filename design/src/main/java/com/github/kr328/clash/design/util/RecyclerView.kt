@@ -21,7 +21,7 @@ fun RecyclerView.applyLinearAdapter(context: Context, adapter: RecyclerView.Adap
 suspend fun <H : RecyclerView.ViewHolder, T> RecyclerView.Adapter<H>.swapDataSet(
     property: KMutableProperty0<List<T>>,
     newDataset: List<T>,
-    compareEquals: Boolean = true
+    compareEquals: Boolean = true,
 ) {
     val ignore = withContext(Dispatchers.Default) {
         compareEquals && property.get() == newDataset
@@ -48,7 +48,7 @@ suspend fun <H : RecyclerView.ViewHolder, T> RecyclerView.Adapter<H>.patchDataSe
     property: KMutableProperty0<List<T>>,
     newDataset: List<T>,
     detectMove: Boolean = false,
-    id: (T) -> Any? = { it }
+    id: (T) -> Any? = { it },
 ) {
     val result = withContext(Dispatchers.Default) {
         property.get().diffWith(newDataset, detectMove, id)
@@ -115,7 +115,7 @@ val RecyclerView.isBottom: Boolean
         return when (val mgr = layoutManager) {
             is GridLayoutManager -> {
                 mgr.findFirstVisibleItemPosition() != 0 &&
-                        mgr.findLastVisibleItemPosition() == adapter!!.itemCount - 1
+                    mgr.findLastVisibleItemPosition() == adapter!!.itemCount - 1
             }
             else -> {
                 throw UnsupportedOperationException("unsupported layout manager")

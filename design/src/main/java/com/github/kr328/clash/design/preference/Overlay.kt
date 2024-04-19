@@ -13,14 +13,16 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 internal enum class EditableListOverlayResult {
-    Cancel, Apply, Reset
+    Cancel,
+    Apply,
+    Reset,
 }
 
 internal suspend fun requestEditableListOverlay(
     context: Context,
     adapter: RecyclerView.Adapter<*>,
     title: CharSequence,
-    addNewItem: suspend () -> Unit
+    addNewItem: suspend () -> Unit,
 ): EditableListOverlayResult {
     return coroutineScope {
         suspendCancellableCoroutine { ctx ->

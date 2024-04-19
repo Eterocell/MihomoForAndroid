@@ -9,8 +9,9 @@ import com.github.kr328.clash.common.log.Log
 
 val Application.currentProcessName: String
     get() {
-        if (Build.VERSION.SDK_INT >= 28)
+        if (Build.VERSION.SDK_INT >= 28) {
             return Application.getProcessName()
+        }
 
         return try {
             ActivityThread.currentProcessName()

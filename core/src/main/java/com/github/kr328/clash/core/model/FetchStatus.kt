@@ -10,7 +10,7 @@ data class FetchStatus(
     val action: Action,
     val args: List<String>,
     val progress: Int,
-    val max: Int
+    val max: Int,
 ) : Parcelable {
     enum class Action {
         FetchConfiguration,

@@ -10,6 +10,7 @@ max_line_length = 100
 tab_width = 4
 
 [*.{kt,kts}]
+max_line_length = off
 ktlint_code_style = ktlint_official
 ktlint_function_signature_body_expression_wrapping = default
 ij_kotlin_allow_trailing_comma = true

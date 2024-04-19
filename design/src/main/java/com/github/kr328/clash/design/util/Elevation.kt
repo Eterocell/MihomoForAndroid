@@ -7,14 +7,15 @@ import com.github.kr328.clash.design.view.ActivityBarLayout
 import com.github.kr328.clash.design.view.ObservableScrollView
 
 private class AppBarElevationController(
-    private val activityBar: ActivityBarLayout
+    private val activityBar: ActivityBarLayout,
 ) {
     private var animator: ValueAnimator? = null
 
     var elevated: Boolean = false
         set(value) {
-            if (field == value)
+            if (field == value) {
                 return
+            }
 
             field = value
 
@@ -23,12 +24,12 @@ private class AppBarElevationController(
             animator = if (value) {
                 ValueAnimator.ofFloat(
                     activityBar.elevation,
-                    activityBar.context.getPixels(R.dimen.toolbar_elevation).toFloat()
+                    activityBar.context.getPixels(R.dimen.toolbar_elevation).toFloat(),
                 )
             } else {
                 ValueAnimator.ofFloat(
                     activityBar.elevation,
-                    0f
+                    0f,
                 )
             }.apply {
                 addUpdateListener {

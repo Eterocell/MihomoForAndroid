@@ -4,13 +4,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.ticker
+import com.github.kr328.clash.core.bridge.*
 import com.github.kr328.clash.design.MainDesign
 import com.github.kr328.clash.design.ui.ToastDuration
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
 import com.github.kr328.clash.util.withClash
 import com.github.kr328.clash.util.withProfile
-import com.github.kr328.clash.core.bridge.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
@@ -34,17 +34,19 @@ class MainActivity : BaseActivity<MainDesign>() {
                         Event.ActivityStart,
                         Event.ServiceRecreated,
                         Event.ClashStop, Event.ClashStart,
-                        Event.ProfileLoaded, Event.ProfileChanged -> design.fetch()
+                        Event.ProfileLoaded, Event.ProfileChanged,
+                        -> design.fetch()
                         else -> Unit
                     }
                 }
                 design.requests.onReceive {
                     when (it) {
                         MainDesign.Request.ToggleStatus -> {
-                            if (clashRunning)
+                            if (clashRunning) {
                                 stopClashService()
-                            else
+                            } else {
                                 design.startClash()
+                            }
                         }
                         MainDesign.Request.OpenProxy ->
                             startActivity(ProxyActivity::class.intent)
@@ -114,11 +116,12 @@ class MainActivity : BaseActivity<MainDesign>() {
             if (vpnRequest != null) {
                 val result = startActivityForResult(
                     ActivityResultContracts.StartActivityForResult(),
-                    vpnRequest
+                    vpnRequest,
                 )
 
-                if (result.resultCode == RESULT_OK)
+                if (result.resultCode == RESULT_OK) {
                     startClashService()
+                }
             }
         } catch (e: Exception) {
             design?.showToast(R.string.unable_to_start_vpn, ToastDuration.Long)

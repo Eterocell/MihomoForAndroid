@@ -35,5 +35,4 @@ class NetworkSettingsActivity : BaseActivity<NetworkSettingsDesign>() {
             }
         }
     }
-
 }

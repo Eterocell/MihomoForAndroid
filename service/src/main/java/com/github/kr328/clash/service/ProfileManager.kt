@@ -25,13 +25,14 @@ import java.io.FileNotFoundException
 import java.math.BigDecimal
 import java.util.*
 
-class ProfileManager(private val context: Context) : IProfileManager,
+class ProfileManager(private val context: Context) :
+    IProfileManager,
     CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private val store = ServiceStore(context)
 
     init {
         launch {
-            Database.database //.init
+            Database.database // .init
 
             ProfileReceiver.rescheduleAll(context)
         }
@@ -110,7 +111,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
                     total = 0,
                     download = 0,
                     expire = 0,
-                )
+                ),
             )
         } else {
             val newPending = pending.copy(
@@ -130,7 +131,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
     override suspend fun update(uuid: UUID) {
         scheduleUpdate(uuid, true)
         ImportedDao().queryByUUID(uuid)?.let {
-            if (it.type == Profile.Type.Url && it.source.startsWith("https://",true)) {
+            if (it.type == Profile.Type.Url && it.source.startsWith("https://", true)) {
                 updateFlow(it)
             }
         }
@@ -154,23 +155,25 @@ class ProfileManager(private val context: Context) : IProfileManager,
 
                 val userinfo = response.headers["subscription-userinfo"]
                 if (response.isSuccessful && userinfo != null) {
-
                     val flags = userinfo.split(";")
                     for (flag in flags) {
                         val info = flag.split("=")
                         when {
-                            info[0].contains("upload") && info[1].isNotEmpty() -> upload =
-                                BigDecimal(info[1]).longValueExact()
+                            info[0].contains("upload") && info[1].isNotEmpty() ->
+                                upload =
+                                    BigDecimal(info[1]).longValueExact()
 
-                            info[0].contains("download") && info[1].isNotEmpty() -> download =
-                                BigDecimal(info[1]).longValueExact()
+                            info[0].contains("download") && info[1].isNotEmpty() ->
+                                download =
+                                    BigDecimal(info[1]).longValueExact()
 
-                            info[0].contains("total") && info[1].isNotEmpty() ->  total =
-                                BigDecimal(info[1]).longValueExact()
+                            info[0].contains("total") && info[1].isNotEmpty() ->
+                                total =
+                                    BigDecimal(info[1]).longValueExact()
 
                             info[0].contains("expire") && info[1].isNotEmpty() -> {
                                 if (info[1].isNotEmpty()) {
-                                    expire = (info[1].toDouble()*1000).toLong()
+                                    expire = (info[1].toDouble() * 1000).toLong()
                                 }
                             }
                         }
@@ -187,7 +190,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
                     download,
                     total,
                     expire,
-                    old?.createdAt ?: System.currentTimeMillis()
+                    old?.createdAt ?: System.currentTimeMillis(),
                 )
 
                 if (old != null) {
@@ -200,7 +203,6 @@ class ProfileManager(private val context: Context) : IProfileManager,
                 context.sendProfileChanged(new.uuid)
                 // println(response.body!!.string())
             }
-
         } catch (e: Exception) {
             System.out.println(e)
         }
@@ -277,7 +279,7 @@ class ProfileManager(private val context: Context) : IProfileManager,
             expire,
             resolveUpdatedAt(uuid),
             imported != null,
-            pending != null
+            pending != null,
         )
     }
 
@@ -291,8 +293,9 @@ class ProfileManager(private val context: Context) : IProfileManager,
         val s = context.importedDir.resolve(source.toString())
         val t = context.pendingDir.resolve(target.toString())
 
-        if (!s.exists())
+        if (!s.exists()) {
             throw FileNotFoundException("profile $source not found")
+        }
 
         t.deleteRecursively()
 

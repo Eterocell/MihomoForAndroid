@@ -12,10 +12,13 @@ import kotlin.coroutines.resume
 
 class MetaFeatureSettingsDesign(
     context: Context,
-    configuration: ConfigurationOverride
+    configuration: ConfigurationOverride,
 ) : Design<MetaFeatureSettingsDesign.Request>(context) {
     enum class Request {
-        ResetOverride, ImportGeoIp, ImportGeoSite, ImportCountry
+        ResetOverride,
+        ImportGeoIp,
+        ImportGeoSite,
+        ImportCountry,
     }
 
     private val binding = DesignSettingsMetaFeatureBinding
@@ -34,8 +37,9 @@ class MetaFeatureSettingsDesign(
                 .show()
 
             dialog.setOnDismissListener {
-                if (!ctx.isCompleted)
+                if (!ctx.isCompleted) {
                     ctx.resume(false)
+                }
             }
 
             ctx.invokeOnCancellation {
@@ -54,12 +58,12 @@ class MetaFeatureSettingsDesign(
         val booleanValues: Array<Boolean?> = arrayOf(
             null,
             true,
-            false
+            false,
         )
         val booleanValuesText: Array<Int> = arrayOf(
             R.string.dont_modify,
             R.string.enabled,
-            R.string.disabled
+            R.string.disabled,
         )
 
         val screen = preferenceScreen(context) {
@@ -92,7 +96,7 @@ class MetaFeatureSettingsDesign(
                     null,
                     ConfigurationOverride.FindProcessMode.Off,
                     ConfigurationOverride.FindProcessMode.Strict,
-                    ConfigurationOverride.FindProcessMode.Always
+                    ConfigurationOverride.FindProcessMode.Always,
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
@@ -102,7 +106,6 @@ class MetaFeatureSettingsDesign(
                 ),
                 title = R.string.find_process_mode,
             ) {
-
             }
 
             category(R.string.sniffer_setting)
@@ -114,14 +117,14 @@ class MetaFeatureSettingsDesign(
                 values = arrayOf(
                     null,
                     true,
-                    false
+                    false,
                 ),
                 valuesText = arrayOf(
                     R.string.dont_modify,
                     R.string.enabled,
-                    R.string.disabled
+                    R.string.disabled,
                 ),
-                title = R.string.strategy
+                title = R.string.strategy,
             ) {
                 listener = OnChangedListener {
                     if (configuration.sniffer.enable == false) {
@@ -225,32 +228,32 @@ class MetaFeatureSettingsDesign(
                 empty = R.string.geosite_url,
                 configure = geoxUrlDependencies::add,
             )
-            */
+             */
 
             category(R.string.geox_files)
 
-            clickable (
+            clickable(
                 title = R.string.import_geoip_file,
                 summary = R.string.press_to_import,
-            ){
+            ) {
                 clicked {
                     requests.trySend(Request.ImportGeoIp)
                 }
             }
 
-            clickable (
+            clickable(
                 title = R.string.import_geosite_file,
                 summary = R.string.press_to_import,
-            ){
+            ) {
                 clicked {
                     requests.trySend(Request.ImportGeoSite)
                 }
             }
 
-            clickable (
+            clickable(
                 title = R.string.import_country_file,
                 summary = R.string.press_to_import,
-            ){
+            ) {
                 clicked {
                     requests.trySend(Request.ImportCountry)
                 }

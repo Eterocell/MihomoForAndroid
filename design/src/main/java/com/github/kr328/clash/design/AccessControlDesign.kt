@@ -120,7 +120,7 @@ class AccessControlDesign(
                     withContext(Dispatchers.Default) {
                         apps.filter {
                             it.label.contains(keyword, ignoreCase = true) ||
-                                    it.packageName.contains(keyword, ignoreCase = true)
+                                it.packageName.contains(keyword, ignoreCase = true)
                         }
                     }
                 }

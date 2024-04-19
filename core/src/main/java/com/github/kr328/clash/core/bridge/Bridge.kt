@@ -33,7 +33,7 @@ object Bridge {
         completable: FetchCallback,
         path: String,
         url: String,
-        force: Boolean
+        force: Boolean,
     )
 
     external fun nativeLoad(completable: CompletableDeferred<Unit>, path: String)
@@ -41,7 +41,7 @@ object Bridge {
     external fun nativeUpdateProvider(
         completable: CompletableDeferred<Unit>,
         type: String,
-        name: String
+        name: String,
     )
 
     external fun nativeReadOverride(slot: Int): String

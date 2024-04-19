@@ -33,10 +33,11 @@ class ConfigurationModule(service: Service) : Module<ConfigurationModule.LoadExc
         while (true) {
             val changed: UUID? = select {
                 broadcasts.onReceive {
-                    if (it.action == Intents.ACTION_PROFILE_CHANGED)
+                    if (it.action == Intents.ACTION_PROFILE_CHANGED) {
                         UUID.fromString(it.getStringExtra(Intents.EXTRA_UUID))
-                    else
+                    } else {
                         null
+                    }
                 }
                 reload.onReceive {
                     null
@@ -47,8 +48,9 @@ class ConfigurationModule(service: Service) : Module<ConfigurationModule.LoadExc
                 val current = store.activeProfile
                     ?: throw NullPointerException("No profile selected")
 
-                if (current == loaded && changed != null && changed != loaded)
+                if (current == loaded && changed != null && changed != loaded) {
                     continue
+                }
 
                 loaded = current
 

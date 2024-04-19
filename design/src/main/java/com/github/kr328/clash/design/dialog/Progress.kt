@@ -46,7 +46,6 @@ suspend fun Context.withModelProgressBar(block: suspend ModelProgressBarScope.()
             set(value) {
                 view.progressIndicator.max = value
             }
-
     }
 
     val scopeImpl = object : ModelProgressBarScope {

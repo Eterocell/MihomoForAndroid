@@ -32,11 +32,11 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
     private val adapter = ProfileAdapter(context, this::requestActive, this::showMenu)
 
     private var allUpdating: Boolean
-        get() = adapter.states.allUpdating;
+        get() = adapter.states.allUpdating
         set(value) {
             adapter.states.allUpdating = value
         }
-    private val rotateAnimation : Animation = AnimationUtils.loadAnimation(context, R.anim.rotate_infinite)
+    private val rotateAnimation: Animation = AnimationUtils.loadAnimation(context, R.anim.rotate_infinite)
 
     override val root: View
         get() = binding.root
@@ -93,13 +93,13 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
     }
 
     fun requestUpdateAll() {
-        allUpdating = true;
+        allUpdating = true
         changeUpdateAllButtonStatus()
         requests.trySend(Request.UpdateAll)
     }
 
     fun finishUpdateAll() {
-        allUpdating = false;
+        allUpdating = false
         changeUpdateAllButtonStatus()
     }
 

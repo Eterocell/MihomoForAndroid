@@ -21,8 +21,8 @@ class ProfileProviderAdapter(
             AdapterProfileProviderBinding.inflate(
                 context.layoutInflater,
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 

@@ -11,7 +11,7 @@ import com.github.kr328.clash.design.util.root
 class SideloadProviderAdapter(
     private val context: Context,
     private val apps: List<AppInfo>,
-    var selectedPackageName: String
+    var selectedPackageName: String,
 ) : RecyclerView.Adapter<SideloadProviderAdapter.Holder>() {
     class Holder(val binding: AdapterSideloadProviderBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -19,7 +19,7 @@ class SideloadProviderAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             AdapterSideloadProviderBinding
-                .inflate(context.layoutInflater, context.root, false)
+                .inflate(context.layoutInflater, context.root, false),
         )
     }
 
@@ -35,8 +35,9 @@ class SideloadProviderAdapter(
 
             selectedPackageName = current.packageName
 
-            if (index >= 0)
+            if (index >= 0) {
                 notifyItemChanged(index)
+            }
 
             notifyItemChanged(position)
         }

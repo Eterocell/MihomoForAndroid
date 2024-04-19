@@ -21,7 +21,7 @@ class StatusClient(private val context: Context) {
                 uri,
                 StatusProvider.METHOD_CURRENT_PROFILE,
                 null,
-                null
+                null,
             )
 
             result?.getString("name")

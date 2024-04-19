@@ -15,7 +15,7 @@ class ActionLabel @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0
+    @StyleRes defStyleRes: Int = 0,
 ) : FrameLayout(context, attributeSet, defStyleAttr, defStyleRes) {
     private val binding = ComponentActionLabelBinding
         .inflate(context.layoutInflater, this, true)
@@ -48,7 +48,7 @@ class ActionLabel @JvmOverloads constructor(
             attributeSet,
             R.styleable.ActionLabel,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ).apply {
             try {
                 icon = getDrawable(R.styleable.ActionLabel_icon)

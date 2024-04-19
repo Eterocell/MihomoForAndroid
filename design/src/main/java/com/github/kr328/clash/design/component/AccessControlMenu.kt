@@ -23,8 +23,9 @@ class AccessControlMenu(
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (item.isCheckable)
+        if (item.isCheckable) {
             item.isChecked = !item.isChecked
+        }
 
         when (item.itemId) {
             R.id.select_all ->

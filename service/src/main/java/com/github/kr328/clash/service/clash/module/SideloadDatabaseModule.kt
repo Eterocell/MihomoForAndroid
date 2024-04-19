@@ -59,8 +59,9 @@ class SideloadDatabaseModule(service: Service) :
             val pkg = store.sideloadGeoip
 
             try {
-                if (!force && pkg == current)
+                if (!force && pkg == current) {
                     continue
+                }
 
                 current = pkg
 
