@@ -25,7 +25,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.20"
+          go-version: "1.22"
 
       - uses: actions/cache@v4
         with:
@@ -57,7 +57,7 @@ jobs:
           arguments: --no-daemon app:assembleMeta-AlphaRelease
 
       # Delete old Prerelease-alpha
-      - uses: dev-drprasad/delete-tag-and-release@v1.0
+      - uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
           tag_name: Prerelease-alpha
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,7 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Alpha
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{  success() }}
         with:
           tag_name: Prerelease-alpha
@@ -80,4 +80,4 @@ jobs:
           generate_release_notes: true
 
       - name: Release Changelog Builder
-        uses: mikepenz/release-changelog-builder-action@v4.1.1
+        uses: mikepenz/release-changelog-builder-action@v4
