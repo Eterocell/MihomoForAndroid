@@ -1,9 +1,13 @@
 name: Build Pre-Release
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 jobs:
   BuildPreRelease:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
