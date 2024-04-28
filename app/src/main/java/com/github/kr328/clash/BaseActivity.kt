@@ -29,31 +29,18 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-abstract class BaseActivity<D : Design<*>> :
-    AppCompatActivity(),
+abstract class BaseActivity<D : Design<*>> : AppCompatActivity(),
     CoroutineScope by MainScope(),
     Broadcasts.Observer {
-    enum class Event {
-        ServiceRecreated,
-        ActivityStart,
-        ActivityStop,
-        ClashStop,
-        ClashStart,
-        ProfileLoaded,
-        ProfileChanged,
-        ProfileUpdateCompleted,
-        ProfileUpdateFailed,
-    }
-
+    
     protected val uiStore by lazy { UiStore(this) }
     protected val events = Channel<Event>(Channel.UNLIMITED)
     protected var activityStarted: Boolean = false
     protected val clashRunning: Boolean
         get() = Remote.broadcasts.clashRunning
     protected var design: D? = null
-        private set(value) {
+        set(value) {
             field = value
-
             if (value != null) {
                 setContentView(value.root)
             } else {
@@ -81,7 +68,7 @@ abstract class BaseActivity<D : Design<*>> :
         ActivityResultLifecycle().use { lifecycle, start ->
             suspendCoroutine { c ->
                 activityResultRegistry.register(requestKey, lifecycle, contracts) {
-                    c.resumeWith(Result.success(it))
+                    c.resume(it)
                 }.apply { start() }.launch(input)
             }
         }
@@ -91,7 +78,6 @@ abstract class BaseActivity<D : Design<*>> :
         suspendCoroutine<Unit> {
             window.decorView.post {
                 this.design = design
-
                 it.resume(Unit)
             }
         }
@@ -99,49 +85,35 @@ abstract class BaseActivity<D : Design<*>> :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         applyDayNight()
 
         launch {
             main()
-
-            finish()
         }
     }
 
     override fun onStart() {
         super.onStart()
-
         activityStarted = true
-
         Remote.broadcasts.addObserver(this)
-
         events.trySend(Event.ActivityStart)
     }
 
     override fun onStop() {
         super.onStop()
-
         activityStarted = false
-
         Remote.broadcasts.removeObserver(this)
-
         events.trySend(Event.ActivityStop)
     }
 
     override fun onDestroy() {
         design?.cancel()
-
         cancel()
-
         super.onDestroy()
     }
 
     override fun finish() {
-        if (deferRunning) {
-            return
-        }
-
+        if (deferRunning) return
         deferRunning = true
 
         launch {
@@ -171,7 +143,6 @@ abstract class BaseActivity<D : Design<*>> :
 
     override fun onSupportNavigateUp(): Boolean {
         this.onBackPressed()
-
         return true
     }
 
@@ -211,50 +182,45 @@ abstract class BaseActivity<D : Design<*>> :
 
     private fun queryDayNight(config: Configuration = resources.configuration): DayNight {
         return when (uiStore.darkMode) {
-            DarkMode.Auto -> {
-                if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
-                    DayNight.Night
-                } else {
-                    DayNight.Day
-                }
-            }
-            DarkMode.ForceLight -> {
-                DayNight.Day
-            }
-            DarkMode.ForceDark -> {
-                DayNight.Night
-            }
+            DarkMode.Auto -> if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) DayNight.Night else DayNight.Day
+            DarkMode.ForceLight -> DayNight.Day
+            DarkMode.ForceDark -> DayNight.Night
         }
     }
 
     private fun applyDayNight(config: Configuration = resources.configuration) {
         val dayNight = queryDayNight(config)
-
         when (dayNight) {
-            DayNight.Night -> {
-                theme.applyStyle(R.style.AppThemeDark, true)
-            }
-            DayNight.Day -> {
-                theme.applyStyle(R.style.AppThemeLight, true)
-            }
+            DayNight.Night -> theme.applyStyle(R.style.AppThemeDark, true)
+            DayNight.Day -> theme.applyStyle(R.style.AppThemeLight, true)
         }
 
         window.isAllowForceDarkCompat = false
         window.isSystemBarsTranslucentCompat = true
-
+        
         window.statusBarColor = resolveThemedColor(android.R.attr.statusBarColor)
         window.navigationBarColor = resolveThemedColor(android.R.attr.navigationBarColor)
 
         if (Build.VERSION.SDK_INT >= 23) {
-            window.isLightStatusBarsCompat =
-                resolveThemedBoolean(android.R.attr.windowLightStatusBar)
+            window.isLightStatusBarsCompat = resolveThemedBoolean(android.R.attr.windowLightStatusBar)
         }
 
         if (Build.VERSION.SDK_INT >= 27) {
-            window.isLightNavigationBarCompat =
-                resolveThemedBoolean(android.R.attr.windowLightNavigationBar)
+            window.isLightNavigationBarCompat = resolveThemedBoolean(android.R.attr.windowLightNavigationBar)
         }
 
         this.dayNight = dayNight
+    }
+
+    enum class Event {
+        ServiceRecreated,
+        ActivityStart,
+        ActivityStop,
+        ClashStop,
+        ClashStart,
+        ProfileLoaded,
+        ProfileChanged,
+        ProfileUpdateCompleted,
+        ProfileUpdateFailed,
     }
 }
