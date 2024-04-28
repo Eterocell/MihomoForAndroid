@@ -25,9 +25,9 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild("golangAndroidPlugin")
+includeBuild("golang-android-plugin")
 
-rootProject.name = "ClashMetaForAndroid"
+rootProject.name = "MihomoForAndroid"
 
 include(":app")
 include(":core")
