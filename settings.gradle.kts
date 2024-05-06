@@ -17,7 +17,7 @@ dependencyResolutionManagement {
                 includeGroup("androidx.compose.compiler")
             }
         }
-        maven("https://maven.kr328.app/releases") {
+        maven("https://raw.githubusercontent.com/MetaCubeX/maven-backup/main/releases") {
             content {
                 includeGroupAndSubgroups("com.github.kr328")
             }
