@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/Kr328/tun2socket v0.0.0-20220414050025-d07c78d06d34
 	github.com/dlclark/regexp2 v1.11.0
-	github.com/metacubex/mihomo v1.7.0
+	github.com/metacubex/mihomo v1.18.5
 	github.com/miekg/dns v1.1.59
 	github.com/oschwald/maxminddb-golang v1.12.0
 	golang.org/x/sync v0.7.0
@@ -58,7 +58,7 @@ require (
 	github.com/metacubex/sing-quic v0.0.0-20240518034124-7696d3f7da72 // indirect
 	github.com/metacubex/sing-shadowsocks v0.2.6 // indirect
 	github.com/metacubex/sing-shadowsocks2 v0.2.0 // indirect
-	github.com/metacubex/sing-tun v0.2.7-0.20240512075008-89e7c6208eec // indirect
+	github.com/metacubex/sing-tun v0.2.7-0.20240521155100-e8316a45a414 // indirect
 	github.com/metacubex/sing-vmess v0.1.9-0.20231207122118-72303677451f // indirect
 	github.com/metacubex/sing-wireguard v0.0.0-20240321042214-224f96122a63 // indirect
 	github.com/metacubex/tfo-go v0.0.0-20240228025757-be1269474a66 // indirect
