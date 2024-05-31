@@ -54,7 +54,7 @@ jobs:
         if: success()
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: --no-daemon app:assembleMetaRelease
+          arguments: --no-daemon app:assembleAlphaRelease
 
       # Delete old Prerelease-alpha
       - uses: dev-drprasad/delete-tag-and-release@v1.1
