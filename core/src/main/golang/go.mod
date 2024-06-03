@@ -7,7 +7,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.0
 	github.com/metacubex/mihomo v1.18.5
 	github.com/miekg/dns v1.1.59
-	github.com/oschwald/maxminddb-golang v1.12.0
+	github.com/oschwald/maxminddb-golang v1.13.0
 	golang.org/x/sync v0.7.0
 	gopkg.in/yaml.v2 v2.4.0
 )
