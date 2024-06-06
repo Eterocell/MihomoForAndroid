@@ -32,10 +32,4 @@ dependencyResolutionManagement {
     }
 }
 
-buildCache {
-    local {
-        removeUnusedEntriesAfterDays = 1
-    }
-}
-
 include(":convention")
