@@ -1,4 +1,5 @@
 import java.net.URL
+import java.nio.file.Paths
 
 plugins {
     id("build-logic.root-project.base")
@@ -6,10 +7,10 @@ plugins {
 }
 
 val wrapper: Wrapper by tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "8.7"
+    gradleVersion = "8.8"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
-        val sha256 = URL("$distributionUrl.sha256").openStream()
+        val sha256 = Paths.get("$distributionUrl.sha256").toUri().toURL().openStream()
             .use { it.reader().readText().trim() }
 
         file("gradle/wrapper/gradle-wrapper.properties")
