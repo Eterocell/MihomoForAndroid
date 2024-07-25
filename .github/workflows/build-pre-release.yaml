@@ -75,7 +75,7 @@ jobs:
         if: ${{  success() }}
         with:
           tag_name: Prerelease-alpha
-          files: app/build/outputs/apk/meta/release/*
+          files: app/build/outputs/apk/alpha/release/*
           prerelease: true
           generate_release_notes: true
 

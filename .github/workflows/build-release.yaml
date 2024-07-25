@@ -106,7 +106,7 @@ jobs:
         if: ${{ success() }}
         with:
           tag_name: ${{ inputs.release-tag }}
-          files: app/build/outputs/apk/meta/release/*
+          files: app/build/outputs/apk/alpha/release/*
           generate_release_notes: true
 
       - name: Release Changelog Builder
