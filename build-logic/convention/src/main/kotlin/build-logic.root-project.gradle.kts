@@ -1,4 +1,3 @@
-import java.net.URL
 import java.nio.file.Paths
 
 plugins {
@@ -7,7 +6,7 @@ plugins {
 }
 
 val wrapper: Wrapper by tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "8.8"
+    gradleVersion = "8.9"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         val sha256 = Paths.get("$distributionUrl.sha256").toUri().toURL().openStream()
