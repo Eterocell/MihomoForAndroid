@@ -50,11 +50,14 @@ jobs:
           echo "cat signing.properties"
           cat signing.properties
 
-      - name: Pre-release Build
+      - name: Setup Gradle
         if: success()
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
-          arguments: --no-daemon app:assembleAlphaRelease
+          gradle-home-cache-cleanup: true
+
+      - name: Release Build
+        run: ./gradlew --no-daemon app:assembleAlphaRelease
 
       # Delete old Prerelease-alpha
       - uses: dev-drprasad/delete-tag-and-release@v1.1

@@ -51,12 +51,14 @@ jobs:
       #     echo "cat signing.properties"
       #     cat signing.properties
 
-      - name: Build
+      - name: Setup Gradle
         if: success()
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
-          arguments: --no-daemon app:assembleAlphaDebug
+          gradle-home-cache-cleanup: true
 
+      - name: Debug Build
+        run: ./gradlew --no-daemon app:assembleAlphaDebug
           
       - name: Upload Aritfact (universal)
         uses: actions/upload-artifact@v4
