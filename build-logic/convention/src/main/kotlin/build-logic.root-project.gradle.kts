@@ -1,4 +1,5 @@
-import java.nio.file.Paths
+import java.net.URL
+import java.util.Properties
 
 plugins {
     id("build-logic.root-project.base")
@@ -6,15 +7,11 @@ plugins {
 }
 
 val wrapper: Wrapper by tasks.named<Wrapper>("wrapper") {
-    gradleVersion = "8.9"
+    gradleVersion = "8.10"
     distributionType = Wrapper.DistributionType.ALL
-    doLast {
-        val sha256 = Paths.get("$distributionUrl.sha256").toUri().toURL().openStream()
-            .use { it.reader().readText().trim() }
-
-        file("gradle/wrapper/gradle-wrapper.properties")
-            .appendText("distributionSha256Sum=$sha256")
-    }
+    val sha256 = URL("$distributionUrl.sha256").openStream()
+        .use { it.reader().readText().trim() }
+    distributionSha256Sum = sha256
 }
 
 tasks.clean {
