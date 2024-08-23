@@ -1,4 +1,4 @@
-import java.net.URL
+import java.net.URI
 
 plugins {
     id("build-logic.root-project.base")
@@ -8,7 +8,7 @@ plugins {
 val wrapper: Wrapper by tasks.named<Wrapper>("wrapper") {
     gradleVersion = "8.10"
     distributionType = Wrapper.DistributionType.ALL
-    val sha256 = URL("$distributionUrl.sha256").openStream()
+    val sha256 = URI("$distributionUrl.sha256").toURL().openStream()
         .use { it.reader().readText().trim() }
     distributionSha256Sum = sha256
 }
