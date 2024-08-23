@@ -1,5 +1,4 @@
 import java.net.URL
-import java.util.Properties
 
 plugins {
     id("build-logic.root-project.base")
