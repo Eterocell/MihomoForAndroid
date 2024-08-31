@@ -1,12 +1,12 @@
 package config
 
 import (
-	"io/ioutil"
+	"os"
 	P "path"
 	"runtime"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"cfa/native/app"
 
@@ -33,7 +33,7 @@ func logDns(cfg *config.RawConfig) {
 func UnmarshalAndPatch(profilePath string) (*config.RawConfig, error) {
 	configPath := P.Join(profilePath, "config.yaml")
 
-	configData, err := ioutil.ReadFile(configPath)
+	configData, err := os.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}
