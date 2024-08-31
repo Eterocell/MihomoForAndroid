@@ -13,6 +13,7 @@ import (
 
 	"github.com/metacubex/mihomo/config"
 	"github.com/metacubex/mihomo/hub/executor"
+	"github.com/metacubex/mihomo/hub/route"
 )
 
 func logDns(cfg *config.RawConfig) {
@@ -74,6 +75,17 @@ func Load(path string) error {
 		log.Errorln("Load %s: %s", path, err.Error())
 
 		return err
+	}
+
+	// Start the external controller like in hub.Parse(), but we have set its
+	// default override value to end with ":0" for security.
+	//
+	// It would be difficult to update configurations for external controller
+	// inbound, so changes will require a restart after a profile is loaded.
+	if cfg.Controller.ExternalController != "" && !strings.HasSuffix(cfg.Controller.ExternalController, ":0") {
+		go route.Start(cfg.Controller.ExternalController, cfg.Controller.ExternalControllerTLS,
+			cfg.Controller.Secret, cfg.TLS.Certificate, cfg.TLS.PrivateKey, cfg.Controller.ExternalDohServer,
+			cfg.General.LogLevel == log.DEBUG)
 	}
 
 	executor.ApplyConfig(cfg, true)
