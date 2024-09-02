@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/Kr328/tun2socket v0.0.0-20220414050025-d07c78d06d34
 	github.com/dlclark/regexp2 v1.11.4
-	github.com/metacubex/mihomo v1.18.7
+	github.com/metacubex/mihomo v1.18.8
 	github.com/miekg/dns v1.1.62
 	github.com/oschwald/maxminddb-golang v1.12.0
 	golang.org/x/sync v0.8.0
