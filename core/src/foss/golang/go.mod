@@ -11,6 +11,7 @@ require (
 	github.com/Kr328/tun2socket v0.0.0-20220414050025-d07c78d06d34 // indirect
 	github.com/RyuaNerin/go-krypto v1.2.4 // indirect
 	github.com/Yawning/aez v0.0.0-20211027044916-e49e68abd344 // indirect
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/brotli v1.0.6 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
@@ -23,6 +24,9 @@ require (
 	github.com/ericlagergren/subtle v0.0.0-20220507045147-890d697da010 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
+	github.com/go-chi/chi/v5 v5.1.0 // indirect
+	github.com/go-chi/cors v1.2.1 // indirect
+	github.com/go-chi/render v1.0.3 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
@@ -46,7 +50,7 @@ require (
 	github.com/metacubex/chacha v0.1.0 // indirect
 	github.com/metacubex/gopacket v1.1.20-0.20230608035415-7e2f98a3e759 // indirect
 	github.com/metacubex/gvisor v0.0.0-20240320004321-933faba989ec // indirect
-	github.com/metacubex/mihomo v1.18.7 // indirect
+	github.com/metacubex/mihomo v1.18.8 // indirect
 	github.com/metacubex/quic-go v0.46.1-0.20240807232329-1c6cb2d67f58 // indirect
 	github.com/metacubex/randv2 v0.2.0 // indirect
 	github.com/metacubex/sing-quic v0.0.0-20240827003841-cd97758ed8b4 // indirect
@@ -103,7 +107,6 @@ require (
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.24.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/blake3 v1.3.0 // indirect
 )
