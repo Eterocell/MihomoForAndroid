@@ -108,6 +108,8 @@ public abstract class GolangBuildTask extends Exec {
             commands.add(String.join(",", prependTags));
         }
 
+        commands.add("-ldflags");
+        commands.add("-extldflags '-Wl,-z,max-page-size=16384'");
         if (!variant.getBuildType().isDebuggable()) {
             commands.add("-ldflags");
             commands.add("-s -w");
