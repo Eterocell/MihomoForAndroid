@@ -56,6 +56,11 @@ class ServiceStore(context: Context) {
         defaultValue = false
     )
 
+    var tunStackMode by store.string(
+        key = "tun_stack_mode",
+        defaultValue = "system"
+    )
+
     var dynamicNotification by store.boolean(
         key = "dynamic_notification",
         defaultValue = true

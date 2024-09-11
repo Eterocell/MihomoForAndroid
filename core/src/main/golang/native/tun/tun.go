@@ -14,8 +14,13 @@ import (
 	"github.com/metacubex/mihomo/tunnel"
 )
 
-func Start(fd int, gateway, portal, dns string) (io.Closer, error) {
-	log.Debugln("TUN: fd = %d, gateway = %s, portal = %s, dns = %s", fd, gateway, portal, dns)
+func Start(fd int, stack, gateway, portal, dns string) (io.Closer, error) {
+	log.Debugln("TUN: fd = %d, stack = %s, gateway = %s, portal = %s, dns = %s", fd, stack, gateway, portal, dns)
+
+	tunStack, ok := C.StackTypeMapping[strings.ToLower(stack)]
+	if !ok {
+		tunStack = C.TunSystem
+	}
 
 	var prefix4 []netip.Prefix
 	var prefix6 []netip.Prefix
@@ -49,7 +54,7 @@ func Start(fd int, gateway, portal, dns string) (io.Closer, error) {
 	options := LC.Tun{
 		Enable:         true,
 		Device:         sing_tun.InterfaceName,
-		Stack:          C.TunSystem,
+		Stack:          tunStack,
 		DNSHijack:      dnsHijack,
 		Inet4Address:   prefix4,
 		Inet6Address:   prefix6,
