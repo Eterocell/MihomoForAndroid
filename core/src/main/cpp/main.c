@@ -287,33 +287,6 @@ Java_com_github_kr328_clash_core_bridge_Bridge_nativeClearOverride(JNIEnv *env, 
     clearOverride(slot);
 }
 
-JNIEXPORT void JNICALL
-Java_com_github_kr328_clash_core_bridge_Bridge_nativeInstallSideloadGeoip(JNIEnv *env, jobject thiz,
-                                                                          jbyteArray data) {
-    TRACE_METHOD();
-
-    if (data == NULL) {
-        installSideloadGeoip(NULL, 0);
-
-        return;
-    }
-
-    jbyte *bytes = (*env)->GetByteArrayElements(env, data, NULL);
-    int size = (*env)->GetArrayLength(env, data);
-
-    scoped_string err = installSideloadGeoip(bytes, size);
-
-    (*env)->ReleaseByteArrayElements(env, data, bytes, JNI_ABORT);
-
-    if (err != NULL) {
-        (*env)->ThrowNew(
-                env,
-                find_class("com/github/kr328/clash/core/bridge/ClashException"),
-                err
-        );
-    }
-}
-
 JNIEXPORT jstring JNICALL
 Java_com_github_kr328_clash_core_bridge_Bridge_nativeQueryConfiguration(JNIEnv *env, jobject thiz) {
     TRACE_METHOD();

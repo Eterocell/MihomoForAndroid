@@ -208,10 +208,6 @@ object Clash {
         Bridge.nativeClearOverride(slot.ordinal)
     }
 
-    fun installSideloadGeoip(data: ByteArray?) {
-        Bridge.nativeInstallSideloadGeoip(data)
-    }
-
     fun queryConfiguration(): UiConfiguration {
         return Json.Default.decodeFromString(
             UiConfiguration.serializer(),

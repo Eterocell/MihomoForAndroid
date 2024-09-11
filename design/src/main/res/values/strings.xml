@@ -149,8 +149,6 @@
     <string name="external_controller">External Controller</string>
     <string name="secret">Secret</string>
     <string name="hosts">Hosts</string>
-    <string name="sideload_geoip">Sideload GEOIP</string>
-    <string name="sideload_geoip_summary">External GEOIP database</string>
     <string name="_new">New</string>
     <string name="value">Value</string>
 
