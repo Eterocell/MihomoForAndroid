@@ -17,6 +17,7 @@ import (
 )
 
 var processors = []processor{
+	patchExternalController, // must before patchOverride, so we only apply ExternalController in Override settings
 	patchOverride,
 	patchGeneral,
 	patchProfile,
@@ -39,9 +40,19 @@ func patchOverride(cfg *config.RawConfig, _ string) error {
 	return nil
 }
 
-func patchGeneral(cfg *config.RawConfig, _ string) error {
+func patchExternalController(cfg *config.RawConfig, _ string) error {
+	cfg.ExternalController = ""
+	cfg.ExternalControllerTLS = ""
+
+	return nil
+}
+
+func patchGeneral(cfg *config.RawConfig, profileDir string) error {
 	cfg.Interface = ""
-	cfg.ExternalUI = ""
+	cfg.RoutingMark = 0
+	if cfg.ExternalController != "" || cfg.ExternalControllerTLS != "" {
+		cfg.ExternalUI = profileDir + "/ui"
+	}
 
 	return nil
 }

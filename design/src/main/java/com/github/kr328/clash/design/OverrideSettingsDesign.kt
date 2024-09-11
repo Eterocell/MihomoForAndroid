@@ -150,6 +150,14 @@ class OverrideSettingsDesign(
             )
 
             editableText(
+                value = configuration::externalControllerTLS,
+                adapter = NullableTextAdapter.String,
+                title = R.string.external_controller_tls,
+                placeholder = R.string.dont_modify,
+                empty = R.string.default_
+            )
+
+            editableText(
                 value = configuration::secret,
                 adapter = NullableTextAdapter.String,
                 title = R.string.secret,
