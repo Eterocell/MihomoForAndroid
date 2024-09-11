@@ -26,7 +26,10 @@ jobs:
           java-version: 17
 
       - name: Setup Gradle
+        if: success()
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Setup Go
         uses: actions/setup-go@v5
@@ -77,6 +80,12 @@ jobs:
             git push --follow-tags
           fi
 
+      - name: Extract KeyStore
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+        run: |
+          echo $KEYSTORE_B64 | base64 -d > ${{ github.workspace }}/keystore.jks
+
       - name: Signing properties
         env:
           SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
@@ -84,18 +93,10 @@ jobs:
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: |
           touch signing.properties
-          echo keystore.password="$SIGNING_STORE_PASSWORD" > signing.properties
+          echo keystore.path=${{ github.workspace }}/keystore.jks > signing.properties
+          echo keystore.password="$SIGNING_STORE_PASSWORD" >> signing.properties
           echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
           echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
-            
-          echo "cat signing.properties"
-          cat signing.properties
-
-      - name: Setup Gradle
-        if: success()
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-home-cache-cleanup: true
 
       - name: Release Build
         run: ./gradlew --no-daemon app:assembleAlphaRelease
