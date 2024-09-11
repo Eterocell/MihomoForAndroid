@@ -51,6 +51,11 @@ class ServiceStore(context: Context) {
         defaultValue = true
     )
 
+    var allowIpv6 by store.boolean(
+        key = "allow_ipv6",
+        defaultValue = false
+    )
+
     var dynamicNotification by store.boolean(
         key = "dynamic_notification",
         defaultValue = true
