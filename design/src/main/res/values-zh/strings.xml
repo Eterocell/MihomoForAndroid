@@ -217,6 +217,8 @@
     <string name="geoip_fallback_code">GeoIP Fallback 区域代码</string>
     <string name="allow_bypass">允许应用绕过</string>
     <string name="allow_bypass_summary">允许其他应用绕过 VPN</string>
+    <string name="allow_ipv6">允许Ipv6</string>
+    <string name="allow_ipv6_summary">通过 VpnService 代理Ipv6流量</string>
     <string name="clash_meta_wiki">Clash Meta Wiki</string>
     <string name="meta_features">Meta Features</string>
     <string name="unified_delay">Unified Delay</string>

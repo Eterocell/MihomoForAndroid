@@ -77,6 +77,13 @@ class NetworkSettingsDesign(
                 configure = vpnDependencies::add,
             )
 
+            switch(
+                value = srvStore::allowIpv6,
+                title = R.string.allow_ipv6,
+                summary = R.string.allow_ipv6_summary,
+                configure = vpnDependencies::add,
+            )
+
             if (Build.VERSION.SDK_INT >= 29) {
                 switch(
                     value = srvStore::systemProxy,
