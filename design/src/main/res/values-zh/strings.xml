@@ -127,11 +127,14 @@
     <string name="fallback">Fallback Name Server</string>
     <string name="default_name_server">Default Name Server</string>
     <string name="fakeip_filter">FakeIP 过滤器</string>
+    <string name="fakeip_filter_mode">FakeIP 过滤器模式</string>
     <string name="geoip_fallback">GeoIP Fallback</string>
     <string name="ipcidr_fallback">IPCIDR Fallback</string>
     <string name="use_built_in">使用内置</string>
     <string name="mapping">Real-IP 至 域名映射</string>
     <string name="fakeip">Fake-IP 至 域名映射</string>
+    <string name="blacklist">黑名单</string>
+    <string name="whitelist">白名单</string>
     <string name="off">OFF</string>
     <string name="strict">Strict</string>
     <string name="always">Always</string>
