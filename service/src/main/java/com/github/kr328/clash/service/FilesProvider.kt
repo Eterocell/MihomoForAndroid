@@ -118,44 +118,38 @@ class FilesProvider : DocumentsProvider() {
         parentDocumentId: String?,
         projection: Array<out String>?,
         sortOrder: String?,
-    ): Cursor {
-        return runBlocking {
-            try {
-                val doc = parentDocumentId ?: "/"
-                val path = Paths.resolve(doc)
-                val documents = picker.list(path)
+    ): Cursor = runBlocking {
+        try {
+            val doc = parentDocumentId ?: "/"
+            val path = Paths.resolve(doc)
+            val documents = picker.list(path)
 
-                MatrixCursor(resolveDocumentProjection(projection)).apply {
-                    documents.forEach {
-                        newRow().applyDocument(it)
-                            .add(D.COLUMN_DOCUMENT_ID, "$doc/${it.id}")
-                    }
+            MatrixCursor(resolveDocumentProjection(projection)).apply {
+                documents.forEach {
+                    newRow().applyDocument(it)
+                        .add(D.COLUMN_DOCUMENT_ID, "$doc/${it.id}")
                 }
-            } catch (e: Exception) {
-                MatrixCursor(resolveDocumentProjection(projection))
             }
+        } catch (e: Exception) {
+            MatrixCursor(resolveDocumentProjection(projection))
         }
     }
 
-    override fun queryDocument(documentId: String?, projection: Array<out String>?): Cursor {
-        return runBlocking {
-            try {
-                val doc = documentId ?: "/"
-                val path = Paths.resolve(doc)
-                val document = picker.pick(path, false)
+    override fun queryDocument(documentId: String?, projection: Array<out String>?): Cursor = runBlocking {
+        try {
+            val doc = documentId ?: "/"
+            val path = Paths.resolve(doc)
+            val document = picker.pick(path, false)
 
-                MatrixCursor(resolveDocumentProjection(projection)).apply {
-                    newRow().applyDocument(document).add(D.COLUMN_DOCUMENT_ID, doc)
-                }
-            } catch (e: Exception) {
-                MatrixCursor(resolveDocumentProjection(projection))
+            MatrixCursor(resolveDocumentProjection(projection)).apply {
+                newRow().applyDocument(document).add(D.COLUMN_DOCUMENT_ID, doc)
             }
+        } catch (e: Exception) {
+            MatrixCursor(resolveDocumentProjection(projection))
         }
     }
 
-    override fun onCreate(): Boolean {
-        return true
-    }
+    override fun onCreate(): Boolean = true
 
     override fun queryRoots(projection: Array<out String>?): Cursor {
         val flags = Root.FLAG_LOCAL_ONLY or Root.FLAG_SUPPORTS_IS_CHILD
@@ -201,9 +195,7 @@ class FilesProvider : DocumentsProvider() {
         return this
     }
 
-    private fun resolveDocumentProjection(projection: Array<out String>?): Array<out String> {
-        return projection ?: DEFAULT_DOCUMENT_COLUMNS
-    }
+    private fun resolveDocumentProjection(projection: Array<out String>?): Array<out String> = projection ?: DEFAULT_DOCUMENT_COLUMNS
 
     private val String.requestWrite: Boolean
         get() {

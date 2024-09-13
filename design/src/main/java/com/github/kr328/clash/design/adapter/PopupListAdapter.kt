@@ -19,17 +19,11 @@ class PopupListAdapter(
     private val colorOnPrimary = context.resolveThemedColor(R.attr.colorOnPrimary)
     private val colorControlNormal = context.resolveThemedColor(R.attr.colorControlNormal)
 
-    override fun getCount(): Int {
-        return texts.size
-    }
+    override fun getCount(): Int = texts.size
 
-    override fun getItem(position: Int): Any {
-        return texts[position]
-    }
+    override fun getItem(position: Int): Any = texts[position]
 
-    override fun getItemId(position: Int): Long {
-        return texts[position].hashCode().toLong()
-    }
+    override fun getItemId(position: Int): Long = texts[position].hashCode().toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: context.layoutInflater

@@ -8,63 +8,43 @@ class Store(val provider: StoreProvider) {
         operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T)
     }
 
-    fun int(key: String, defaultValue: Int): Delegate<Int> {
-        return object : Delegate<Int> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): Int {
-                return provider.getInt(key, defaultValue)
-            }
+    fun int(key: String, defaultValue: Int): Delegate<Int> = object : Delegate<Int> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Int = provider.getInt(key, defaultValue)
 
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) {
-                provider.setInt(key, value)
-            }
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) {
+            provider.setInt(key, value)
         }
     }
 
-    fun long(key: String, defaultValue: Long): Delegate<Long> {
-        return object : Delegate<Long> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): Long {
-                return provider.getLong(key, defaultValue)
-            }
+    fun long(key: String, defaultValue: Long): Delegate<Long> = object : Delegate<Long> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Long = provider.getLong(key, defaultValue)
 
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) {
-                provider.setLong(key, value)
-            }
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: Long) {
+            provider.setLong(key, value)
         }
     }
 
-    fun string(key: String, defaultValue: String): Delegate<String> {
-        return object : Delegate<String> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-                return provider.getString(key, defaultValue)
-            }
+    fun string(key: String, defaultValue: String): Delegate<String> = object : Delegate<String> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): String = provider.getString(key, defaultValue)
 
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-                provider.setString(key, value)
-            }
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
+            provider.setString(key, value)
         }
     }
 
-    fun stringSet(key: String, defaultValue: Set<String>): Delegate<Set<String>> {
-        return object : Delegate<Set<String>> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): Set<String> {
-                return provider.getStringSet(key, defaultValue)
-            }
+    fun stringSet(key: String, defaultValue: Set<String>): Delegate<Set<String>> = object : Delegate<Set<String>> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Set<String> = provider.getStringSet(key, defaultValue)
 
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: Set<String>) {
-                provider.setStringSet(key, value)
-            }
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: Set<String>) {
+            provider.setStringSet(key, value)
         }
     }
 
-    fun boolean(key: String, defaultValue: Boolean): Delegate<Boolean> {
-        return object : Delegate<Boolean> {
-            override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean {
-                return provider.getBoolean(key, defaultValue)
-            }
+    fun boolean(key: String, defaultValue: Boolean): Delegate<Boolean> = object : Delegate<Boolean> {
+        override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean = provider.getBoolean(key, defaultValue)
 
-            override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
-                provider.setBoolean(key, value)
-            }
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: Boolean) {
+            provider.setBoolean(key, value)
         }
     }
 

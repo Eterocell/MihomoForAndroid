@@ -11,17 +11,11 @@ class UiConfiguration : Parcelable {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<UiConfiguration> {
-        override fun createFromParcel(parcel: Parcel): UiConfiguration {
-            return Parcelizer.decodeFromParcel(serializer(), parcel)
-        }
+        override fun createFromParcel(parcel: Parcel): UiConfiguration = Parcelizer.decodeFromParcel(serializer(), parcel)
 
-        override fun newArray(size: Int): Array<UiConfiguration?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int): Array<UiConfiguration?> = arrayOfNulls(size)
     }
 }

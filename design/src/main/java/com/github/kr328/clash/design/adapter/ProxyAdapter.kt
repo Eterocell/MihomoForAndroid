@@ -15,9 +15,7 @@ class ProxyAdapter(
     var selectable: Boolean = false
     var states: List<ProxyViewState> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(ProxyView(config.context, config))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(ProxyView(config.context, config))
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = states[position]
@@ -38,7 +36,5 @@ class ProxyAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return states.size
-    }
+    override fun getItemCount(): Int = states.size
 }

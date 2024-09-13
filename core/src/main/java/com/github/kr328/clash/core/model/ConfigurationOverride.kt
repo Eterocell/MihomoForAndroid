@@ -42,7 +42,10 @@ data class ConfigurationOverride(
     var ipv6: Boolean? = null,
 
     @SerialName("external-controller")
-    var externalController: String? = "127.0.0.1:0",
+    var externalController: String? = null,
+
+    @SerialName("external-controller-tls")
+    var externalControllerTLS: String? = null,
 
     @SerialName("secret")
     var secret: String? = null,
@@ -106,6 +109,9 @@ data class ConfigurationOverride(
         @SerialName("fake-ip-filter")
         var fakeIpFilter: List<String>? = null,
 
+        @SerialName("fake-ip-filter-mode")
+        var fakeIPFilterMode: FilterMode? = null,
+
         @SerialName("fallback-filter")
         val fallbackFilter: DnsFallbackFilter = DnsFallbackFilter(),
 
@@ -159,6 +165,15 @@ data class ConfigurationOverride(
     }
 
     @Serializable
+    enum class FilterMode {
+        @SerialName("blacklist")
+        BlackList,
+
+        @SerialName("whitelist")
+        WhiteList,
+    }
+
+    @Serializable
     data class Sniffer(
         @SerialName("enable")
         var enable: Boolean? = null,
@@ -201,17 +216,11 @@ data class ConfigurationOverride(
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<ConfigurationOverride> {
-        override fun createFromParcel(parcel: Parcel): ConfigurationOverride {
-            return Parcelizer.decodeFromParcel(serializer(), parcel)
-        }
+        override fun createFromParcel(parcel: Parcel): ConfigurationOverride = Parcelizer.decodeFromParcel(serializer(), parcel)
 
-        override fun newArray(size: Int): Array<ConfigurationOverride?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int): Array<ConfigurationOverride?> = arrayOfNulls(size)
     }
 }

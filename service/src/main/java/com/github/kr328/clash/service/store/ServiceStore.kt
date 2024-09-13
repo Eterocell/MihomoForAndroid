@@ -53,7 +53,12 @@ class ServiceStore(context: Context) {
 
     var allowIpv6 by store.boolean(
         key = "allow_ipv6",
-        defaultValue = false
+        defaultValue = false,
+    )
+
+    var tunStackMode by store.string(
+        key = "tun_stack_mode",
+        defaultValue = "system",
     )
 
     var dynamicNotification by store.boolean(

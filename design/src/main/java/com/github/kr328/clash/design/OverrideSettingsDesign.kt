@@ -6,15 +6,10 @@ import com.github.kr328.clash.core.model.ConfigurationOverride
 import com.github.kr328.clash.core.model.LogMessage
 import com.github.kr328.clash.core.model.TunnelState
 import com.github.kr328.clash.design.databinding.DesignSettingsOverideBinding
-import com.github.kr328.clash.design.databinding.DialogPreferenceListBinding
-import com.github.kr328.clash.design.dialog.FullScreenDialog
-import com.github.kr328.clash.design.model.AppInfo
 import com.github.kr328.clash.design.preference.*
 import com.github.kr328.clash.design.util.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
 class OverrideSettingsDesign(
@@ -22,7 +17,7 @@ class OverrideSettingsDesign(
     configuration: ConfigurationOverride,
 ) : Design<OverrideSettingsDesign.Request>(context) {
     enum class Request {
-        ResetOverride
+        ResetOverride,
     }
 
     private val binding = DesignSettingsOverideBinding
@@ -31,24 +26,22 @@ class OverrideSettingsDesign(
     override val root: View
         get() = binding.root
 
-    suspend fun requestResetConfirm(): Boolean {
-        return suspendCancellableCoroutine { ctx ->
-            val dialog = MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.reset_override_settings)
-                .setMessage(R.string.reset_override_settings_message)
-                .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .show()
+    suspend fun requestResetConfirm(): Boolean = suspendCancellableCoroutine { ctx ->
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.reset_override_settings)
+            .setMessage(R.string.reset_override_settings_message)
+            .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
 
-            dialog.setOnDismissListener {
-                if (!ctx.isCompleted) {
-                    ctx.resume(false)
-                }
+        dialog.setOnDismissListener {
+            if (!ctx.isCompleted) {
+                ctx.resume(false)
             }
+        }
 
-            ctx.invokeOnCancellation {
-                dialog.dismiss()
-            }
+        ctx.invokeOnCancellation {
+            dialog.dismiss()
         }
     }
 
@@ -147,7 +140,15 @@ class OverrideSettingsDesign(
                 adapter = NullableTextAdapter.String,
                 title = R.string.external_controller,
                 placeholder = R.string.dont_modify,
-                empty = R.string.default_
+                empty = R.string.default_,
+            )
+
+            editableText(
+                value = configuration::externalControllerTLS,
+                adapter = NullableTextAdapter.String,
+                title = R.string.external_controller_tls,
+                placeholder = R.string.dont_modify,
+                empty = R.string.default_,
             )
 
             editableText(
@@ -155,7 +156,7 @@ class OverrideSettingsDesign(
                 adapter = NullableTextAdapter.String,
                 title = R.string.secret,
                 placeholder = R.string.dont_modify,
-                empty = R.string.default_
+                empty = R.string.default_,
             )
 
             selectableList(
@@ -323,6 +324,22 @@ class OverrideSettingsDesign(
                 adapter = TextAdapter.String,
                 title = R.string.fakeip_filter,
                 placeholder = R.string.dont_modify,
+                configure = dnsDependencies::add,
+            )
+
+            selectableList(
+                value = configuration.dns::fakeIPFilterMode,
+                values = arrayOf(
+                    null,
+                    ConfigurationOverride.FilterMode.BlackList,
+                    ConfigurationOverride.FilterMode.WhiteList,
+                ),
+                valuesText = arrayOf(
+                    R.string.dont_modify,
+                    R.string.blacklist,
+                    R.string.whitelist,
+                ),
+                title = R.string.fakeip_filter_mode,
                 configure = dnsDependencies::add,
             )
 

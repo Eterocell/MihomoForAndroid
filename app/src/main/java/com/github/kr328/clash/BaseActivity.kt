@@ -29,10 +29,11 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-abstract class BaseActivity<D : Design<*>> : AppCompatActivity(),
+abstract class BaseActivity<D : Design<*>> :
+    AppCompatActivity(),
     CoroutineScope by MainScope(),
     Broadcasts.Observer {
-    
+
     protected val uiStore by lazy { UiStore(this) }
     protected val events = Channel<Event>(Channel.UNLIMITED)
     protected var activityStarted: Boolean = false
@@ -137,9 +138,7 @@ abstract class BaseActivity<D : Design<*>> : AppCompatActivity(),
         }
     }
 
-    open fun shouldDisplayHomeAsUpEnabled(): Boolean {
-        return true
-    }
+    open fun shouldDisplayHomeAsUpEnabled(): Boolean = true
 
     override fun onSupportNavigateUp(): Boolean {
         this.onBackPressed()
@@ -180,12 +179,10 @@ abstract class BaseActivity<D : Design<*>> : AppCompatActivity(),
         }
     }
 
-    private fun queryDayNight(config: Configuration = resources.configuration): DayNight {
-        return when (uiStore.darkMode) {
-            DarkMode.Auto -> if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) DayNight.Night else DayNight.Day
-            DarkMode.ForceLight -> DayNight.Day
-            DarkMode.ForceDark -> DayNight.Night
-        }
+    private fun queryDayNight(config: Configuration = resources.configuration): DayNight = when (uiStore.darkMode) {
+        DarkMode.Auto -> if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) DayNight.Night else DayNight.Day
+        DarkMode.ForceLight -> DayNight.Day
+        DarkMode.ForceDark -> DayNight.Night
     }
 
     private fun applyDayNight(config: Configuration = resources.configuration) {
@@ -197,7 +194,7 @@ abstract class BaseActivity<D : Design<*>> : AppCompatActivity(),
 
         window.isAllowForceDarkCompat = false
         window.isSystemBarsTranslucentCompat = true
-        
+
         window.statusBarColor = resolveThemedColor(android.R.attr.statusBarColor)
         window.navigationBarColor = resolveThemedColor(android.R.attr.navigationBarColor)
 

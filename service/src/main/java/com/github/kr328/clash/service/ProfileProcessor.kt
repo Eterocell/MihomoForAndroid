@@ -220,13 +220,11 @@ object ProfileProcessor {
         }
     }
 
-    suspend fun release(context: Context, uuid: UUID): Boolean {
-        return withContext(NonCancellable) {
-            profileLock.withLock {
-                PendingDao().remove(uuid)
+    suspend fun release(context: Context, uuid: UUID): Boolean = withContext(NonCancellable) {
+        profileLock.withLock {
+            PendingDao().remove(uuid)
 
-                context.pendingDir.resolve(uuid.toString()).deleteRecursively()
-            }
+            context.pendingDir.resolve(uuid.toString()).deleteRecursively()
         }
     }
 

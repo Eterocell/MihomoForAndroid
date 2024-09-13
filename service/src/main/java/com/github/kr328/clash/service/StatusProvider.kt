@@ -23,9 +23,7 @@ class StatusProvider : ContentProvider() {
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        throw IllegalArgumentException("Stub!")
-    }
+    override fun insert(uri: Uri, values: ContentValues?): Uri? = throw IllegalArgumentException("Stub!")
 
     override fun query(
         uri: Uri,
@@ -33,30 +31,20 @@ class StatusProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?,
         sortOrder: String?,
-    ): Cursor? {
-        throw IllegalArgumentException("Stub!")
-    }
+    ): Cursor? = throw IllegalArgumentException("Stub!")
 
     override fun update(
         uri: Uri,
         values: ContentValues?,
         selection: String?,
         selectionArgs: Array<out String>?,
-    ): Int {
-        throw IllegalArgumentException("Stub!")
-    }
+    ): Int = throw IllegalArgumentException("Stub!")
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
-        throw IllegalArgumentException("Stub!")
-    }
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = throw IllegalArgumentException("Stub!")
 
-    override fun getType(uri: Uri): String? {
-        throw IllegalArgumentException("Stub!")
-    }
+    override fun getType(uri: Uri): String? = throw IllegalArgumentException("Stub!")
 
-    override fun onCreate(): Boolean {
-        return true
-    }
+    override fun onCreate(): Boolean = true
 
     companion object {
         const val METHOD_CURRENT_PROFILE = "currentProfile"

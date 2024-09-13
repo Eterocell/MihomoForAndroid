@@ -15,20 +15,18 @@ class StatusClient(private val context: Context) {
                 .build()
         }
 
-    fun currentProfile(): String? {
-        return try {
-            val result = context.contentResolver.call(
-                uri,
-                StatusProvider.METHOD_CURRENT_PROFILE,
-                null,
-                null,
-            )
+    fun currentProfile(): String? = try {
+        val result = context.contentResolver.call(
+            uri,
+            StatusProvider.METHOD_CURRENT_PROFILE,
+            null,
+            null,
+        )
 
-            result?.getString("name")
-        } catch (e: Exception) {
-            Log.w("Query current profile: $e", e)
+        result?.getString("name")
+    } catch (e: Exception) {
+        Log.w("Query current profile: $e", e)
 
-            null
-        }
+        null
     }
 }

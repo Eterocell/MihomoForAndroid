@@ -23,12 +23,10 @@ class EditableTextMapAdapter<K, V>(
         values.add(keyValue to valueValue)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterEditableTextMapBinding
-                .inflate(context.layoutInflater, parent, false),
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterEditableTextMapBinding
+            .inflate(context.layoutInflater, parent, false),
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = values[position]
@@ -45,7 +43,5 @@ class EditableTextMapAdapter<K, V>(
         }
     }
 
-    override fun getItemCount(): Int {
-        return values.size
-    }
+    override fun getItemCount(): Int = values.size
 }

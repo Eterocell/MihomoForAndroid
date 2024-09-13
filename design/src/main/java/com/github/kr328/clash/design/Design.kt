@@ -12,8 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 
-abstract class Design<R>(val context: Context) :
-    CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
+abstract class Design<R>(val context: Context) : CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
     abstract val root: View
 
     val surface = Surface()
@@ -23,9 +22,7 @@ abstract class Design<R>(val context: Context) :
         resId: Int,
         duration: ToastDuration,
         configure: Snackbar.() -> Unit = {},
-    ) {
-        return showToast(context.getString(resId), duration, configure)
-    }
+    ) = showToast(context.getString(resId), duration, configure)
 
     suspend fun showToast(
         message: CharSequence,

@@ -67,7 +67,5 @@ object Remote {
         }
     }
 
-    private fun getLastUpdated(context: Context): Long {
-        return context.packageManager.getPackageInfoCompat(context.packageName, 0).lastUpdateTime
-    }
+    private fun getLastUpdated(context: Context): Long = context.packageManager.getPackageInfoCompat(context.packageName, 0).lastUpdateTime
 }

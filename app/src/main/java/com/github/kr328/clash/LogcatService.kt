@@ -29,7 +29,10 @@ import kotlinx.coroutines.channels.Channel
 import java.io.IOException
 import java.util.*
 
-class LogcatService : Service(), CoroutineScope by CoroutineScope(Dispatchers.Default), IInterface {
+class LogcatService :
+    Service(),
+    CoroutineScope by CoroutineScope(Dispatchers.Default),
+    IInterface {
     private val cache = LogcatCache()
 
     private val connection = object : ServiceConnection {
@@ -66,21 +69,13 @@ class LogcatService : Service(), CoroutineScope by CoroutineScope(Dispatchers.De
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return this.asBinder()
+    override fun onBind(intent: Intent?): IBinder = this.asBinder()
+
+    override fun asBinder(): IBinder = object : Binder() {
+        override fun queryLocalInterface(descriptor: String): IInterface = this@LogcatService
     }
 
-    override fun asBinder(): IBinder {
-        return object : Binder() {
-            override fun queryLocalInterface(descriptor: String): IInterface {
-                return this@LogcatService
-            }
-        }
-    }
-
-    suspend fun snapshot(full: Boolean): LogcatCache.Snapshot? {
-        return cache.snapshot(full)
-    }
+    suspend fun snapshot(full: Boolean): LogcatCache.Snapshot? = cache.snapshot(full)
 
     private fun startObserver(binder: IBinder) {
         if (!binder.isBinderAlive) {

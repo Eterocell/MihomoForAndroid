@@ -6,22 +6,14 @@ import java.util.*
 
 class Converters {
     @TypeConverter
-    fun fromUUID(uuid: UUID): String {
-        return uuid.toString()
-    }
+    fun fromUUID(uuid: UUID): String = uuid.toString()
 
     @TypeConverter
-    fun toUUID(uuid: String): UUID {
-        return UUID.fromString(uuid)
-    }
+    fun toUUID(uuid: String): UUID = UUID.fromString(uuid)
 
     @TypeConverter
-    fun fromProfileType(type: Profile.Type): String {
-        return type.name
-    }
+    fun fromProfileType(type: Profile.Type): String = type.name
 
     @TypeConverter
-    fun toProfileType(type: String): Profile.Type {
-        return Profile.Type.valueOf(type)
-    }
+    fun toProfileType(type: String): Profile.Type = Profile.Type.valueOf(type)
 }

@@ -128,9 +128,7 @@ class MainActivity : BaseActivity<MainDesign>() {
         }
     }
 
-    private suspend fun queryAppVersionName(): String {
-        return withContext(Dispatchers.IO) {
-            packageManager.getPackageInfoCompat(packageName, 0).versionName + "\n" + Bridge.nativeCoreVersion().replace("_", "-")
-        }
+    private suspend fun queryAppVersionName(): String = withContext(Dispatchers.IO) {
+        packageManager.getPackageInfoCompat(packageName, 0).versionName + "\n" + Bridge.nativeCoreVersion().replace("_", "-")
     }
 }

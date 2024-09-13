@@ -19,33 +19,19 @@ class ClashManager(private val context: Context) :
     private val store = ServiceStore(context)
     private var logReceiver: ReceiveChannel<LogMessage>? = null
 
-    override fun queryTunnelState(): TunnelState {
-        return Clash.queryTunnelState()
-    }
+    override fun queryTunnelState(): TunnelState = Clash.queryTunnelState()
 
-    override fun queryTrafficTotal(): Long {
-        return Clash.queryTrafficTotal()
-    }
+    override fun queryTrafficTotal(): Long = Clash.queryTrafficTotal()
 
-    override fun queryProxyGroupNames(excludeNotSelectable: Boolean): List<String> {
-        return Clash.queryGroupNames(excludeNotSelectable)
-    }
+    override fun queryProxyGroupNames(excludeNotSelectable: Boolean): List<String> = Clash.queryGroupNames(excludeNotSelectable)
 
-    override fun queryProxyGroup(name: String, proxySort: ProxySort): ProxyGroup {
-        return Clash.queryGroup(name, proxySort)
-    }
+    override fun queryProxyGroup(name: String, proxySort: ProxySort): ProxyGroup = Clash.queryGroup(name, proxySort)
 
-    override fun queryConfiguration(): UiConfiguration {
-        return Clash.queryConfiguration()
-    }
+    override fun queryConfiguration(): UiConfiguration = Clash.queryConfiguration()
 
-    override fun queryProviders(): ProviderList {
-        return ProviderList(Clash.queryProviders())
-    }
+    override fun queryProviders(): ProviderList = ProviderList(Clash.queryProviders())
 
-    override fun queryOverride(slot: Clash.OverrideSlot): ConfigurationOverride {
-        return Clash.queryOverride(slot)
-    }
+    override fun queryOverride(slot: Clash.OverrideSlot): ConfigurationOverride = Clash.queryOverride(slot)
 
     override fun patchSelector(group: String, name: String): Boolean {
         return Clash.patchSelector(group, name).also {
@@ -69,13 +55,9 @@ class ClashManager(private val context: Context) :
         Clash.clearOverride(slot)
     }
 
-    override suspend fun healthCheck(group: String) {
-        return Clash.healthCheck(group).await()
-    }
+    override suspend fun healthCheck(group: String) = Clash.healthCheck(group).await()
 
-    override suspend fun updateProvider(type: Provider.Type, name: String) {
-        return Clash.updateProvider(type, name).await()
-    }
+    override suspend fun updateProvider(type: Provider.Type, name: String) = Clash.updateProvider(type, name).await()
 
     override fun setLogObserver(observer: ILogObserver?) {
         synchronized(this) {

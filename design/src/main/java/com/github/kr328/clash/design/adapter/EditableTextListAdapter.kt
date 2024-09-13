@@ -12,8 +12,7 @@ class EditableTextListAdapter<T>(
     val values: MutableList<T>,
     private val adapter: TextAdapter<T>,
 ) : RecyclerView.Adapter<EditableTextListAdapter.Holder>() {
-    class Holder(val binding: AdapterEditableTextListBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class Holder(val binding: AdapterEditableTextListBinding) : RecyclerView.ViewHolder(binding.root)
 
     fun addElement(text: String) {
         val value = adapter.to(text)
@@ -22,12 +21,10 @@ class EditableTextListAdapter<T>(
         values.add(value)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterEditableTextListBinding
-                .inflate(context.layoutInflater, parent, false),
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterEditableTextListBinding
+            .inflate(context.layoutInflater, parent, false),
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = values[position]
@@ -43,7 +40,5 @@ class EditableTextListAdapter<T>(
         }
     }
 
-    override fun getItemCount(): Int {
-        return values.size
-    }
+    override fun getItemCount(): Int = values.size
 }

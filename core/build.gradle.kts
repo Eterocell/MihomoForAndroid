@@ -1,9 +1,6 @@
 import com.github.kr328.golang.GolangBuildTask
 import com.github.kr328.golang.GolangPlugin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.io.FileOutputStream
-import java.net.URL
-import java.time.Duration
 
 plugins {
     alias(libs.plugins.android.library)

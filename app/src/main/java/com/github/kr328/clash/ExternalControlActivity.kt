@@ -17,7 +17,9 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class ExternalControlActivity : Activity(), CoroutineScope by MainScope() {
+class ExternalControlActivity :
+    Activity(),
+    CoroutineScope by MainScope() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

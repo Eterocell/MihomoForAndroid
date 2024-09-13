@@ -12,21 +12,19 @@ object SystemLogcat {
         "LwIP",
     )
 
-    fun dumpCrash(): String {
-        return try {
-            val process = Runtime.getRuntime().exec(command)
+    fun dumpCrash(): String = try {
+        val process = Runtime.getRuntime().exec(command)
 
-            val result = process.inputStream.use { stream ->
-                stream.reader().readLines()
-                    .filterNot { it.startsWith("------") }
-                    .joinToString("\n")
-            }
-
-            process.waitFor()
-
-            result.trim()
-        } catch (e: Exception) {
-            ""
+        val result = process.inputStream.use { stream ->
+            stream.reader().readLines()
+                .filterNot { it.startsWith("------") }
+                .joinToString("\n")
         }
+
+        process.waitFor()
+
+        result.trim()
+    } catch (e: Exception) {
+        ""
     }
 }

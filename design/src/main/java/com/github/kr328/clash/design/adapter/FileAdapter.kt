@@ -23,13 +23,11 @@ class FileAdapter(
         currentTime.update()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterFileBinding
-                .inflate(context.layoutInflater, parent, false)
-                .also { it.currentTime = currentTime },
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterFileBinding
+            .inflate(context.layoutInflater, parent, false)
+            .also { it.currentTime = currentTime },
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = files[position]
@@ -47,7 +45,5 @@ class FileAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return files.size
-    }
+    override fun getItemCount(): Int = files.size
 }

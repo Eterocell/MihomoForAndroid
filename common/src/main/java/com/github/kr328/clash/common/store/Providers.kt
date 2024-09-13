@@ -4,9 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class SharedPreferenceProvider(private val preferences: SharedPreferences) : StoreProvider {
-    override fun getInt(key: String, defaultValue: Int): Int {
-        return preferences.getInt(key, defaultValue)
-    }
+    override fun getInt(key: String, defaultValue: Int): Int = preferences.getInt(key, defaultValue)
 
     override fun setInt(key: String, value: Int) {
         preferences.edit {
@@ -14,9 +12,7 @@ class SharedPreferenceProvider(private val preferences: SharedPreferences) : Sto
         }
     }
 
-    override fun getLong(key: String, defaultValue: Long): Long {
-        return preferences.getLong(key, defaultValue)
-    }
+    override fun getLong(key: String, defaultValue: Long): Long = preferences.getLong(key, defaultValue)
 
     override fun setLong(key: String, value: Long) {
         preferences.edit {
@@ -24,9 +20,7 @@ class SharedPreferenceProvider(private val preferences: SharedPreferences) : Sto
         }
     }
 
-    override fun getString(key: String, defaultValue: String): String {
-        return preferences.getString(key, defaultValue)!!
-    }
+    override fun getString(key: String, defaultValue: String): String = preferences.getString(key, defaultValue)!!
 
     override fun setString(key: String, value: String) {
         preferences.edit {
@@ -34,9 +28,7 @@ class SharedPreferenceProvider(private val preferences: SharedPreferences) : Sto
         }
     }
 
-    override fun getStringSet(key: String, defaultValue: Set<String>): Set<String> {
-        return preferences.getStringSet(key, defaultValue)!!
-    }
+    override fun getStringSet(key: String, defaultValue: Set<String>): Set<String> = preferences.getStringSet(key, defaultValue)!!
 
     override fun setStringSet(key: String, value: Set<String>) {
         preferences.edit {
@@ -44,9 +36,7 @@ class SharedPreferenceProvider(private val preferences: SharedPreferences) : Sto
         }
     }
 
-    override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
-        return preferences.getBoolean(key, defaultValue)
-    }
+    override fun getBoolean(key: String, defaultValue: Boolean): Boolean = preferences.getBoolean(key, defaultValue)
 
     override fun setBoolean(key: String, value: Boolean) {
         preferences.edit {
@@ -55,6 +45,4 @@ class SharedPreferenceProvider(private val preferences: SharedPreferences) : Sto
     }
 }
 
-fun SharedPreferences.asStoreProvider(): StoreProvider {
-    return SharedPreferenceProvider(this)
-}
+fun SharedPreferences.asStoreProvider(): StoreProvider = SharedPreferenceProvider(this)

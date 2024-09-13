@@ -78,9 +78,7 @@ class FilesClient(private val context: Context) {
         context.contentResolver.copyContentTo(source, target)
     }
 
-    fun buildDocumentUri(documentId: String): Uri {
-        return DC.buildDocumentUri(Authorities.FILES_PROVIDER, documentId)
-    }
+    fun buildDocumentUri(documentId: String): Uri = DC.buildDocumentUri(Authorities.FILES_PROVIDER, documentId)
 
     companion object {
         private val FilesProjection = arrayOf(

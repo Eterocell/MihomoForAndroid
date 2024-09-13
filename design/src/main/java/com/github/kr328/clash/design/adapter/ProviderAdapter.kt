@@ -42,13 +42,11 @@ class ProviderAdapter(
         notifyItemChanged(index)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterProviderBinding
-                .inflate(context.layoutInflater, parent, false)
-                .also { it.currentTime = currentTime },
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterProviderBinding
+            .inflate(context.layoutInflater, parent, false)
+            .also { it.currentTime = currentTime },
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val state = states[position]
@@ -62,7 +60,5 @@ class ProviderAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return states.size
-    }
+    override fun getItemCount(): Int = states.size
 }

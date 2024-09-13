@@ -226,9 +226,7 @@ class ProfileManager(private val context: Context) :
         ProfileProcessor.delete(context, uuid)
     }
 
-    override suspend fun queryByUUID(uuid: UUID): Profile? {
-        return resolveProfile(uuid)
-    }
+    override suspend fun queryByUUID(uuid: UUID): Profile? = resolveProfile(uuid)
 
     override suspend fun queryAll(): List<Profile> {
         val uuids = withContext(Dispatchers.IO) {
@@ -283,11 +281,9 @@ class ProfileManager(private val context: Context) :
         )
     }
 
-    private fun resolveUpdatedAt(uuid: UUID): Long {
-        return context.pendingDir.resolve(uuid.toString()).directoryLastModified
-            ?: context.importedDir.resolve(uuid.toString()).directoryLastModified
-            ?: -1
-    }
+    private fun resolveUpdatedAt(uuid: UUID): Long = context.pendingDir.resolve(uuid.toString()).directoryLastModified
+        ?: context.importedDir.resolve(uuid.toString()).directoryLastModified
+        ?: -1
 
     private fun cloneImportedFiles(source: UUID, target: UUID = source) {
         val s = context.importedDir.resolve(source.toString())

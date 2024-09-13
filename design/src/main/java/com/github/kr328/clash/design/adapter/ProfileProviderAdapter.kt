@@ -16,15 +16,13 @@ class ProfileProviderAdapter(
 
     var providers: List<ProfileProvider> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterProfileProviderBinding.inflate(
-                context.layoutInflater,
-                parent,
-                false,
-            ),
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterProfileProviderBinding.inflate(
+            context.layoutInflater,
+            parent,
+            false,
+        ),
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = providers[position]
@@ -42,7 +40,5 @@ class ProfileProviderAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return providers.size
-    }
+    override fun getItemCount(): Int = providers.size
 }

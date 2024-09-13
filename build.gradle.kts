@@ -74,10 +74,16 @@ subprojects {
 
             create("alpha") {
 
+                isDefault = true
                 dimension = flavorDimensionList[0]
                 versionNameSuffix = ".Meta.Alpha"
 
                 buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
+
+                if (project.name != "hideapi" && project.name != "common" && project.name != "core" && project.name != "service") {
+                    resValue("string", "launch_name", "@string/launch_name_meta")
+                    resValue("string", "application_name", "@string/application_name_meta")
+                }
 
                 if (isApp) {
                     applicationIdSuffix = ".meta"

@@ -8,7 +8,9 @@ import com.github.kr328.clash.service.remote.IRemoteService
 import com.github.kr328.clash.service.remote.wrap
 import com.github.kr328.clash.service.util.cancelAndJoinBlocking
 
-class RemoteService : BaseService(), IRemoteService {
+class RemoteService :
+    BaseService(),
+    IRemoteService {
     private val binder = this.wrap()
 
     private var clash: ClashManager? = null
@@ -32,15 +34,9 @@ class RemoteService : BaseService(), IRemoteService {
         profile?.cancelAndJoinBlocking()
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return binder
-    }
+    override fun onBind(intent: Intent?): IBinder = binder
 
-    override fun clash(): IClashManager {
-        return clashBinder!!
-    }
+    override fun clash(): IClashManager = clashBinder!!
 
-    override fun profile(): IProfileManager {
-        return profileBinder!!
-    }
+    override fun profile(): IProfileManager = profileBinder!!
 }

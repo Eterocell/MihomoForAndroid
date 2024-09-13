@@ -19,6 +19,7 @@ class MetaFeatureSettingsDesign(
         ImportGeoIp,
         ImportGeoSite,
         ImportCountry,
+        ImportASN,
     }
 
     private val binding = DesignSettingsMetaFeatureBinding
@@ -27,24 +28,22 @@ class MetaFeatureSettingsDesign(
     override val root: View
         get() = binding.root
 
-    suspend fun requestResetConfirm(): Boolean {
-        return suspendCancellableCoroutine { ctx ->
-            val dialog = MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.reset_override_settings)
-                .setMessage(R.string.reset_override_settings_message)
-                .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .show()
+    suspend fun requestResetConfirm(): Boolean = suspendCancellableCoroutine { ctx ->
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.reset_override_settings)
+            .setMessage(R.string.reset_override_settings_message)
+            .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
 
-            dialog.setOnDismissListener {
-                if (!ctx.isCompleted) {
-                    ctx.resume(false)
-                }
+        dialog.setOnDismissListener {
+            if (!ctx.isCompleted) {
+                ctx.resume(false)
             }
+        }
 
-            ctx.invokeOnCancellation {
-                dialog.dismiss()
-            }
+        ctx.invokeOnCancellation {
+            dialog.dismiss()
         }
     }
 
@@ -256,6 +255,15 @@ class MetaFeatureSettingsDesign(
             ) {
                 clicked {
                     requests.trySend(Request.ImportCountry)
+                }
+            }
+
+            clickable(
+                title = R.string.import_asn_file,
+                summary = R.string.press_to_import,
+            ) {
+                clicked {
+                    requests.trySend(Request.ImportASN)
                 }
             }
         }

@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PluralsCandidate">
-    <string name="launch_name">Clash Meta</string>
-    <string name="application_name">Clash Meta for Android</string>
+    <string name="launch_name_meta">Clash Meta</string>
+    <string name="launch_name_alpha">Clash Meta Alpha</string>
+    <string name="application_name_meta">Clash Meta for Android</string>
+    <string name="application_name_alpha">Clash Meta for Android Alpha</string>
 
     <string name="stopped">Stopped</string>
     <string name="tap_to_start">Tap to start</string>
@@ -147,6 +149,7 @@
     <string name="log_level">Log Level</string>
     <string name="ipv6">IPv6</string>
     <string name="external_controller">External Controller</string>
+    <string name="external_controller_tls">External Controller TLS</string>
     <string name="secret">Secret</string>
     <string name="hosts">Hosts</string>
     <string name="_new">New</string>
@@ -161,6 +164,7 @@
     <string name="fallback">Fallback Name Server</string>
     <string name="default_name_server">Default Name Server</string>
     <string name="fakeip_filter">Fake-IP Filter</string>
+    <string name="fakeip_filter_mode">Fake-IP Filter Mode</string>
     <string name="geoip_fallback">GeoIP Fallback</string>
     <string name="geoip_fallback_code">GeoIP Fallback Code</string>
     <string name="ipcidr_fallback">IPCIDR Fallback</string>
@@ -182,6 +186,9 @@
 
     <string name="mapping">Real-IP to domain mapping</string>
     <string name="fakeip">Fake-IP to domain mapping</string>
+
+    <string name="blacklist">Black List</string>
+    <string name="whitelist">White List</string>
 
     <string name="off">OFF</string>
     <string name="strict">Strict</string>
@@ -230,6 +237,11 @@
     <string name="follow_system_android_10">Follow System (Android 10+)</string>
     <string name="always_dark">Always Dark</string>
     <string name="always_light">Always Light</string>
+
+    <string name="tun_stack_mode">Stack Mode</string>
+    <string name="tun_stack_system">System Stack</string>
+    <string name="tun_stack_gvisor">Gvisor Stack</string>
+    <string name="tun_stack_mixed">Mixed Stack</string>
 
     <string name="allow_all_apps">Allow all apps</string>
     <string name="allow_selected_apps">Allow selected apps</string>
@@ -310,6 +322,7 @@
     <string name="press_to_import">Press to import...</string>
     <string name="import_geosite_file">Import GeoSite Database</string>
     <string name="import_country_file">Import Country Database</string>
+    <string name="import_asn_file">Import ASN Database</string>
     <string name="geofile_import_failed">Import failed</string>
     <string name="geofile_unknown_db_format">Unknown Database format</string>
     <string name="geofile_unknown_db_format_message">Only %1$s are supported</string>

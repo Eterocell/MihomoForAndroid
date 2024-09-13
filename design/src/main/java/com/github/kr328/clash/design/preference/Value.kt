@@ -20,13 +20,9 @@ interface NullableTextAdapter<T> {
         }
 
         val String = object : NullableTextAdapter<String?> {
-            override fun from(value: String?): String? {
-                return value
-            }
+            override fun from(value: String?): String? = value
 
-            override fun to(text: String?): String? {
-                return text
-            }
+            override fun to(text: String?): String? = text
         }
     }
 }
@@ -37,13 +33,9 @@ interface TextAdapter<T> {
 
     companion object {
         val String = object : TextAdapter<String> {
-            override fun from(value: String): String {
-                return value
-            }
+            override fun from(value: String): String = value
 
-            override fun to(text: String): String {
-                return text
-            }
+            override fun to(text: String): String = text
         }
     }
 }

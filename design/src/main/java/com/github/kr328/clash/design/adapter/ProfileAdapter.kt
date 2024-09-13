@@ -25,13 +25,11 @@ class ProfileAdapter(
         currentTime.update()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterProfileBinding
-                .inflate(context.layoutInflater, parent, false)
-                .also { it.currentTime = currentTime },
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterProfileBinding
+            .inflate(context.layoutInflater, parent, false)
+            .also { it.currentTime = currentTime },
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = profiles[position]
@@ -50,7 +48,5 @@ class ProfileAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return profiles.size
-    }
+    override fun getItemCount(): Int = profiles.size
 }

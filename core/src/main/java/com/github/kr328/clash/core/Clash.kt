@@ -41,13 +41,9 @@ object Clash {
         return Json.decodeFromString(TunnelState.serializer(), json)
     }
 
-    fun queryTrafficNow(): Traffic {
-        return Bridge.nativeQueryTrafficNow()
-    }
+    fun queryTrafficNow(): Traffic = Bridge.nativeQueryTrafficNow()
 
-    fun queryTrafficTotal(): Traffic {
-        return Bridge.nativeQueryTrafficTotal()
-    }
+    fun queryTrafficTotal(): Traffic = Bridge.nativeQueryTrafficTotal()
 
     fun notifyDnsChanged(dns: List<String>) {
         Bridge.nativeNotifyDnsChanged(dns.joinToString(separator = ","))
@@ -65,6 +61,7 @@ object Clash {
 
     fun startTun(
         fd: Int,
+        stack: String,
         gateway: String,
         portal: String,
         dns: String,
@@ -72,19 +69,17 @@ object Clash {
         querySocketUid: (protocol: Int, source: InetSocketAddress, target: InetSocketAddress) -> Int,
     ) {
         Bridge.nativeStartTun(
-            fd, gateway, portal, dns,
+            fd, stack, gateway, portal, dns,
             object : TunInterface {
                 override fun markSocket(fd: Int) {
                     markSocket(fd)
                 }
 
-                override fun querySocketUid(protocol: Int, source: String, target: String): Int {
-                    return querySocketUid(
-                        protocol,
-                        parseInetSocketAddress(source),
-                        parseInetSocketAddress(target),
-                    )
-                }
+                override fun querySocketUid(protocol: Int, source: String, target: String): Int = querySocketUid(
+                    protocol,
+                    parseInetSocketAddress(source),
+                    parseInetSocketAddress(target),
+                )
             },
         )
     }
@@ -93,9 +88,7 @@ object Clash {
         Bridge.nativeStopTun()
     }
 
-    fun startHttp(listenAt: String): String? {
-        return Bridge.nativeStartHttp(listenAt)
-    }
+    fun startHttp(listenAt: String): String? = Bridge.nativeStartHttp(listenAt)
 
     fun stopHttp() {
         Bridge.nativeStopHttp()
@@ -114,63 +107,53 @@ object Clash {
         }
     }
 
-    fun queryGroup(name: String, sort: ProxySort): ProxyGroup {
-        return Bridge.nativeQueryGroup(name, sort.name)
-            ?.let { Json.Default.decodeFromString(ProxyGroup.serializer(), it) }
-            ?: ProxyGroup(Proxy.Type.Unknown, emptyList(), "")
-    }
+    fun queryGroup(name: String, sort: ProxySort): ProxyGroup = Bridge.nativeQueryGroup(name, sort.name)
+        ?.let { Json.Default.decodeFromString(ProxyGroup.serializer(), it) }
+        ?: ProxyGroup(Proxy.Type.Unknown, emptyList(), "")
 
-    fun healthCheck(name: String): CompletableDeferred<Unit> {
-        return CompletableDeferred<Unit>().apply {
-            Bridge.nativeHealthCheck(this, name)
-        }
+    fun healthCheck(name: String): CompletableDeferred<Unit> = CompletableDeferred<Unit>().apply {
+        Bridge.nativeHealthCheck(this, name)
     }
 
     fun healthCheckAll() {
         Bridge.nativeHealthCheckAll()
     }
 
-    fun patchSelector(selector: String, name: String): Boolean {
-        return Bridge.nativePatchSelector(selector, name)
-    }
+    fun patchSelector(selector: String, name: String): Boolean = Bridge.nativePatchSelector(selector, name)
 
     fun fetchAndValid(
         path: File,
         url: String,
         force: Boolean,
         reportStatus: (FetchStatus) -> Unit,
-    ): CompletableDeferred<Unit> {
-        return CompletableDeferred<Unit>().apply {
-            Bridge.nativeFetchAndValid(
-                object : FetchCallback {
-                    override fun report(statusJson: String) {
-                        reportStatus(
-                            Json.Default.decodeFromString(
-                                FetchStatus.serializer(),
-                                statusJson,
-                            ),
-                        )
-                    }
+    ): CompletableDeferred<Unit> = CompletableDeferred<Unit>().apply {
+        Bridge.nativeFetchAndValid(
+            object : FetchCallback {
+                override fun report(statusJson: String) {
+                    reportStatus(
+                        Json.Default.decodeFromString(
+                            FetchStatus.serializer(),
+                            statusJson,
+                        ),
+                    )
+                }
 
-                    override fun complete(error: String?) {
-                        if (error != null) {
-                            completeExceptionally(ClashException(error))
-                        } else {
-                            complete(Unit)
-                        }
+                override fun complete(error: String?) {
+                    if (error != null) {
+                        completeExceptionally(ClashException(error))
+                    } else {
+                        complete(Unit)
                     }
-                },
-                path.absolutePath,
-                url,
-                force,
-            )
-        }
+                }
+            },
+            path.absolutePath,
+            url,
+            force,
+        )
     }
 
-    fun load(path: File): CompletableDeferred<Unit> {
-        return CompletableDeferred<Unit>().apply {
-            Bridge.nativeLoad(this, path.absolutePath)
-        }
+    fun load(path: File): CompletableDeferred<Unit> = CompletableDeferred<Unit>().apply {
+        Bridge.nativeLoad(this, path.absolutePath)
     }
 
     fun queryProviders(): List<Provider> {
@@ -182,21 +165,17 @@ object Clash {
         }
     }
 
-    fun updateProvider(type: Provider.Type, name: String): CompletableDeferred<Unit> {
-        return CompletableDeferred<Unit>().apply {
-            Bridge.nativeUpdateProvider(this, type.toString(), name)
-        }
+    fun updateProvider(type: Provider.Type, name: String): CompletableDeferred<Unit> = CompletableDeferred<Unit>().apply {
+        Bridge.nativeUpdateProvider(this, type.toString(), name)
     }
 
-    fun queryOverride(slot: OverrideSlot): ConfigurationOverride {
-        return try {
-            ConfigurationOverrideJson.decodeFromString(
-                ConfigurationOverride.serializer(),
-                Bridge.nativeReadOverride(slot.ordinal),
-            )
-        } catch (e: Exception) {
-            ConfigurationOverride()
-        }
+    fun queryOverride(slot: OverrideSlot): ConfigurationOverride = try {
+        ConfigurationOverrideJson.decodeFromString(
+            ConfigurationOverride.serializer(),
+            Bridge.nativeReadOverride(slot.ordinal),
+        )
+    } catch (e: Exception) {
+        ConfigurationOverride()
     }
 
     fun patchOverride(slot: OverrideSlot, configuration: ConfigurationOverride) {
@@ -213,20 +192,16 @@ object Clash {
         Bridge.nativeClearOverride(slot.ordinal)
     }
 
-    fun queryConfiguration(): UiConfiguration {
-        return Json.Default.decodeFromString(
-            UiConfiguration.serializer(),
-            Bridge.nativeQueryConfiguration(),
-        )
-    }
+    fun queryConfiguration(): UiConfiguration = Json.Default.decodeFromString(
+        UiConfiguration.serializer(),
+        Bridge.nativeQueryConfiguration(),
+    )
 
-    fun subscribeLogcat(): ReceiveChannel<LogMessage> {
-        return Channel<LogMessage>(32).apply {
-            Bridge.nativeSubscribeLogcat(object : LogcatInterface {
-                override fun received(jsonPayload: String) {
-                    trySend(Json.decodeFromString(LogMessage.serializer(), jsonPayload))
-                }
-            })
-        }
+    fun subscribeLogcat(): ReceiveChannel<LogMessage> = Channel<LogMessage>(32).apply {
+        Bridge.nativeSubscribeLogcat(object : LogcatInterface {
+            override fun received(jsonPayload: String) {
+                trySend(Json.decodeFromString(LogMessage.serializer(), jsonPayload))
+            }
+        })
     }
 }

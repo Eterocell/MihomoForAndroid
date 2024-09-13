@@ -9,7 +9,9 @@ import com.github.kr328.clash.util.ApplicationObserver
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 
-class AppSettingsActivity : BaseActivity<AppSettingsDesign>(), Behavior {
+class AppSettingsActivity :
+    BaseActivity<AppSettingsDesign>(),
+    Behavior {
     override suspend fun main() {
         val design = AppSettingsDesign(
             this,

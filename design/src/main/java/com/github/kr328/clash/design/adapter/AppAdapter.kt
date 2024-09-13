@@ -20,12 +20,10 @@ class AppAdapter(
         notifyItemRangeChanged(0, itemCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            AdapterAppBinding
-                .inflate(context.layoutInflater, context.root, false),
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        AdapterAppBinding
+            .inflate(context.layoutInflater, context.root, false),
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = apps[position]
@@ -43,7 +41,5 @@ class AppAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return apps.size
-    }
+    override fun getItemCount(): Int = apps.size
 }

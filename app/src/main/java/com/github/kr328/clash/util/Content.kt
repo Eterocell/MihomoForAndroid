@@ -6,9 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.FileNotFoundException
 
-private fun fileNotFound(file: Uri): FileNotFoundException {
-    return FileNotFoundException("$file not found")
-}
+private fun fileNotFound(file: Uri): FileNotFoundException = FileNotFoundException("$file not found")
 
 @Suppress("BlockingMethodInNonBlockingContext")
 suspend fun ContentResolver.copyContentTo(

@@ -59,20 +59,18 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
         }
     }
 
-    suspend fun requestExitWithoutSaving(): Boolean {
-        return withContext(Dispatchers.Main) {
-            suspendCancellableCoroutine { ctx ->
-                val dialog = MaterialAlertDialogBuilder(context)
-                    .setTitle(R.string.exit_without_save)
-                    .setMessage(R.string.exit_without_save_warning)
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-                    .setNegativeButton(R.string.cancel) { _, _ -> }
-                    .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
-                    .show()
+    suspend fun requestExitWithoutSaving(): Boolean = withContext(Dispatchers.Main) {
+        suspendCancellableCoroutine { ctx ->
+            val dialog = MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.exit_without_save)
+                .setMessage(R.string.exit_without_save_warning)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+                .setNegativeButton(R.string.cancel) { _, _ -> }
+                .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
+                .show()
 
-                ctx.invokeOnCancellation { dialog.dismiss() }
-            }
+            ctx.invokeOnCancellation { dialog.dismiss() }
         }
     }
 

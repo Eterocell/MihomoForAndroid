@@ -16,13 +16,11 @@ class LogFileAdapter(
 
     var logs: List<LogFile> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(
-            ActionLabel(context).apply {
-                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-            },
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
+        ActionLabel(context).apply {
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        },
+    )
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val current = logs[position]
@@ -34,7 +32,5 @@ class LogFileAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return logs.size
-    }
+    override fun getItemCount(): Int = logs.size
 }

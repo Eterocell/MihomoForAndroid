@@ -60,7 +60,8 @@ jobs:
           echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
           echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
 
-      - name: Release Build
+      - name: Pre-release Build
+        if: success()
         run: ./gradlew --no-daemon app:assembleAlphaRelease
 
       # Delete old Prerelease-alpha

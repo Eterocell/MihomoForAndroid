@@ -214,7 +214,5 @@ class ProfileWorker : BaseService() {
         private const val RESULT_CHANNEL = "profile_result_channel"
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return Binder()
-    }
+    override fun onBind(intent: Intent?): IBinder = Binder()
 }

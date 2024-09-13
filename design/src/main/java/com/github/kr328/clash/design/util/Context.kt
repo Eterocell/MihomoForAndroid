@@ -24,10 +24,6 @@ val Context.root: ViewGroup?
         }
     }
 
-fun Context.getPixels(@DimenRes resId: Int): Int {
-    return resources.getDimensionPixelSize(resId)
-}
+fun Context.getPixels(@DimenRes resId: Int): Int = resources.getDimensionPixelSize(resId)
 
-fun Context.getHtml(@StringRes resId: Int): Spanned {
-    return fromHtmlCompat(getString(resId))
-}
+fun Context.getHtml(@StringRes resId: Int): Spanned = fromHtmlCompat(getString(resId))

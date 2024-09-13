@@ -88,9 +88,7 @@ class ClashService : BaseService() {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent?): IBinder {
-        return Binder()
-    }
+    override fun onBind(intent: Intent?): IBinder = Binder()
 
     override fun onDestroy() {
         StatusProvider.serviceRunning = false

@@ -55,7 +55,5 @@ class ProxyPageFactory(private val config: ProxyViewConfig) {
         }
     }
 
-    fun fromRoot(root: View): Holder {
-        return root.tag!! as Holder
-    }
+    fun fromRoot(root: View): Holder = root.tag!! as Holder
 }

@@ -18,21 +18,15 @@ data class FetchStatus(
         Verifying,
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         Parcelizer.encodeToParcel(serializer(), dest, this)
     }
 
     companion object CREATOR : Parcelable.Creator<FetchStatus> {
-        override fun createFromParcel(parcel: Parcel): FetchStatus {
-            return Parcelizer.decodeFromParcel(serializer(), parcel)
-        }
+        override fun createFromParcel(parcel: Parcel): FetchStatus = Parcelizer.decodeFromParcel(serializer(), parcel)
 
-        override fun newArray(size: Int): Array<FetchStatus?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int): Array<FetchStatus?> = arrayOfNulls(size)
     }
 }
