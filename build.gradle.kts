@@ -80,7 +80,7 @@ subprojects {
 
                 buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
 
-                if (project.name != "hideapi" && project.name != "common" && project.name != "core" && project.name != "service") {
+                if (project.name == "app" || project.name == "design") {
                     resValue("string", "launch_name", "@string/launch_name_meta")
                     resValue("string", "application_name", "@string/application_name_meta")
                 }
