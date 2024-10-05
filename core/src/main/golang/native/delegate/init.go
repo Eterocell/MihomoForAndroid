@@ -17,6 +17,7 @@ import (
 var errBlocked = errors.New("blocked")
 
 func Init(home, versionName string, platformVersion int) {
+	log.Infoln("Init core, home: %s, versionName: %s, platformVersion: %d", home, versionName, platformVersion)
 	constant.SetHomeDir(home)
 	app.ApplyVersionName(versionName)
 	app.ApplyPlatformVersion(platformVersion)
