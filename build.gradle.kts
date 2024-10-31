@@ -27,7 +27,7 @@ subprojects {
 
             minSdk = 21
             targetSdk = 34
-            buildToolsVersion = "34.0.0"
+            buildToolsVersion = "35.0.0"
 
             versionName = "2.12.0-alpha02"
             versionCode = "02120002".toInt()
@@ -57,9 +57,9 @@ subprojects {
             }
         }
 
-        ndkVersion = "27.1.12297006"
+        ndkVersion = "27.2.12479018"
 
-        compileSdkVersion(defaultConfig.targetSdk!!)
+        compileSdkVersion(35)
 
         if (isApp) {
             packagingOptions {

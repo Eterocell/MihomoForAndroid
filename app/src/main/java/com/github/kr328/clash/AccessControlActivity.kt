@@ -131,6 +131,6 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
 
     private val PackageInfo.isSystemApp: Boolean
         get() {
-            return applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
+            return applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM != 0
         }
 }
