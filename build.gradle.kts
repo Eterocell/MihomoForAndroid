@@ -155,6 +155,6 @@ subprojects {
             }
         }
 
-        dependencies.add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.1.2")
+        dependencies.add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.1.3")
     }
 }
