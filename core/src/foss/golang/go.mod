@@ -53,7 +53,7 @@ require (
 	github.com/metacubex/sing-quic v0.0.0-20240827003841-cd97758ed8b4 // indirect
 	github.com/metacubex/sing-shadowsocks v0.2.8 // indirect
 	github.com/metacubex/sing-shadowsocks2 v0.2.2 // indirect
-	github.com/metacubex/sing-tun v0.2.7-0.20241105010444-9ece61968014 // indirect
+	github.com/metacubex/sing-tun v0.2.7-0.20241106120309-53606a70db98 // indirect
 	github.com/metacubex/sing-vmess v0.1.9-0.20240719134745-1df6fb20bbf9 // indirect
 	github.com/metacubex/sing-wireguard v0.0.0-20240924052438-b0976fc59ea3 // indirect
 	github.com/metacubex/tfo-go v0.0.0-20241006021335-daedaf0ca7aa // indirect
