@@ -1,5 +1,6 @@
 package com.github.kr328.clash.service.clash.module
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -25,6 +26,7 @@ abstract class Module<E>(val service: Service) {
         events.send(event)
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     protected fun receiveBroadcast(
         requireSelf: Boolean = true,
         capacity: Int = Channel.UNLIMITED,

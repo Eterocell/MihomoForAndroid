@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.common.util.grantPermissions
@@ -20,7 +21,7 @@ import com.github.kr328.clash.util.fileName
 import com.github.kr328.clash.util.withProfile
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
-import java.util.*
+import java.util.Stack
 import java.util.concurrent.TimeUnit
 
 class FilesActivity : BaseActivity<FilesDesign>() {
@@ -37,6 +38,10 @@ class FilesActivity : BaseActivity<FilesDesign>() {
         design.fetch(client, stack, root)
 
         setContentDesign(design)
+
+        onBackPressedDispatcher.addCallback {
+            design.requests.trySend(FilesDesign.Request.PopStack)
+        }
 
         val ticker = ticker(TimeUnit.MINUTES.toMillis(1))
 
@@ -138,10 +143,6 @@ class FilesActivity : BaseActivity<FilesDesign>() {
                 }
             }
         }
-    }
-
-    override fun onBackPressed() {
-        design?.requests?.trySend(FilesDesign.Request.PopStack)
     }
 
     private suspend fun FilesDesign.fetch(client: FilesClient, stack: Stack<String>, root: String) {

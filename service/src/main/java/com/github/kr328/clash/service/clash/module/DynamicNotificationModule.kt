@@ -1,11 +1,14 @@
 package com.github.kr328.clash.service.clash.module
 
+import android.Manifest
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.github.kr328.clash.common.compat.getColorCompat
 import com.github.kr328.clash.common.compat.pendingIntentFlags
@@ -67,7 +70,9 @@ class DynamicNotificationModule(service: Service) : Module<Unit>(service) {
             )
             .build()
 
-        notificationManager.notify(R.id.nf_clash_status, notification)
+        if (ContextCompat.checkSelfPermission(service, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(R.id.nf_clash_status, notification)
+        }
     }
 
     override suspend fun run() = coroutineScope {

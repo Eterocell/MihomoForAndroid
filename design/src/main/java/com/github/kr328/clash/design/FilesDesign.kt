@@ -22,7 +22,7 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
         data class ImportFile(val file: File?) : Request()
         data class ExportFile(val file: File) : Request()
 
-        object PopStack : Request()
+        data object PopStack : Request()
     }
 
     private val binding = DesignFilesBinding

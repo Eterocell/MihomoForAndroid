@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <include
+            domain="sharedpref"
+            path="." />
+        <include
+            domain="database"
+            path="." />
+        <include
+            domain="file"
+            path="imported" />
+        <include
+            domain="file"
+            path="pending" />
+        <include
+            domain="file"
+            path="clash/override.json" />
+    </cloud-backup>
+</data-extraction-rules>

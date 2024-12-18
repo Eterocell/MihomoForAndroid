@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.github.kr328.clash.common.compat
 
 import android.content.Context

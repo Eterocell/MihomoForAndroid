@@ -19,8 +19,8 @@ import kotlin.coroutines.resume
 
 class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(context) {
     sealed class Request {
-        object Commit : Request()
-        object BrowseFiles : Request()
+        data object Commit : Request()
+        data object BrowseFiles : Request()
     }
 
     private val binding = DesignPropertiesBinding

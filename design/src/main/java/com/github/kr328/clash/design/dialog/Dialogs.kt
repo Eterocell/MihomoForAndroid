@@ -3,11 +3,11 @@ package com.github.kr328.clash.design.dialog
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import com.github.kr328.clash.common.compat.isAllowForceDarkCompat
 import com.github.kr328.clash.common.compat.isSystemBarsTranslucentCompat
 import com.github.kr328.clash.design.R
@@ -42,7 +42,7 @@ class AppBottomSheetDialog(context: Context) : BottomSheetDialog(context) {
                     insets = it
 
                     (layoutParams as CoordinatorLayout.LayoutParams).also { params ->
-                        if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_LTR) {
+                        if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
                             params.setMargins(it.start, 0, it.end, 0)
                         } else {
                             params.setMargins(it.end, 0, it.start, 0)

@@ -51,10 +51,10 @@ class MainApplication : Application() {
             }
         }
 
-        val ASNFile = File(clashDir, "ASN.mmdb")
-        if(!ASNFile.exists()) {
-            FileOutputStream(ASNFile).use {
-                assets.open("ASN.mmdb").copyTo(it);
+        val asnFile = File(clashDir, "ASN.mmdb")
+        if(!asnFile.exists()) {
+            FileOutputStream(asnFile).use {
+                assets.open("ASN.mmdb").copyTo(it)
             }
         }
     }

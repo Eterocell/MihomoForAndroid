@@ -14,8 +14,8 @@ import kotlin.coroutines.resume
 
 class LogsDesign(context: Context) : Design<LogsDesign.Request>(context) {
     sealed class Request {
-        object StartLogcat : Request()
-        object DeleteAll : Request()
+        data object StartLogcat : Request()
+        data object DeleteAll : Request()
 
         data class OpenFile(val file: LogFile) : Request()
     }

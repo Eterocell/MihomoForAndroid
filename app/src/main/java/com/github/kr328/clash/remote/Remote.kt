@@ -48,7 +48,7 @@ object Remote {
         }
     }
 
-    private suspend fun verifyApp() {
+    private fun verifyApp() {
         val context = Global.application
         val store = AppStore(context)
         val updatedAt = getLastUpdated(context)

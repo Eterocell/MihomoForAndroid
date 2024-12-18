@@ -29,8 +29,8 @@ class ProxyDesign(
     uiStore: UiStore,
 ) : Design<ProxyDesign.Request>(context) {
     sealed class Request {
-        object ReloadAll : Request()
-        object ReLaunch : Request()
+        data object ReloadAll : Request()
+        data object ReLaunch : Request()
 
         data class PatchMode(val mode: TunnelState.Mode?) : Request()
         data class Reload(val index: Int) : Request()

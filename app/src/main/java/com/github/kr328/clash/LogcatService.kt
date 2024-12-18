@@ -12,8 +12,10 @@ import android.os.IInterface
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import com.github.kr328.clash.common.compat.getColorCompat
 import com.github.kr328.clash.common.compat.pendingIntentFlags
+import com.github.kr328.clash.common.compat.stopForegroundCompat
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.core.model.LogMessage
@@ -24,10 +26,15 @@ import com.github.kr328.clash.service.remote.ILogObserver
 import com.github.kr328.clash.service.remote.IRemoteService
 import com.github.kr328.clash.service.remote.unwrap
 import com.github.kr328.clash.util.logsDir
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.util.*
 
 class LogcatService :
     Service(),
@@ -62,7 +69,7 @@ class LogcatService :
 
         unbindService(connection)
 
-        stopForeground(true)
+        stopForegroundCompat(ServiceCompat.STOP_FOREGROUND_REMOVE)
 
         running = false
 

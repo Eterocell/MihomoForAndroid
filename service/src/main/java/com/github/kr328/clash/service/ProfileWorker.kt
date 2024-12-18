@@ -10,8 +10,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import com.github.kr328.clash.common.compat.getColorCompat
 import com.github.kr328.clash.common.compat.pendingIntentFlags
+import com.github.kr328.clash.common.compat.stopForegroundCompat
 import com.github.kr328.clash.common.constants.Components
 import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.id.UndefinedIds
@@ -49,7 +51,7 @@ class ProfileWorker : BaseService() {
     }
 
     override fun onDestroy() {
-        stopForeground(true)
+        stopForegroundCompat(ServiceCompat.STOP_FOREGROUND_REMOVE)
 
         super.onDestroy()
     }

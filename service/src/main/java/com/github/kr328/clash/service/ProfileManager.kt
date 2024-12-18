@@ -137,7 +137,7 @@ class ProfileManager(private val context: Context) :
         }
     }
 
-    suspend fun updateFlow(old: Imported) {
+    private suspend fun updateFlow(old: Imported) {
         val client = OkHttpClient()
         try {
             val request = Request.Builder()
@@ -190,21 +190,16 @@ class ProfileManager(private val context: Context) :
                     download,
                     total,
                     expire,
-                    old?.createdAt ?: System.currentTimeMillis(),
+                    old.createdAt,
                 )
 
-                if (old != null) {
-                    ImportedDao().update(new)
-                } else {
-                    ImportedDao().insert(new)
-                }
+                ImportedDao().update(new)
 
                 PendingDao().remove(new.uuid)
                 context.sendProfileChanged(new.uuid)
-                // println(response.body!!.string())
             }
         } catch (e: Exception) {
-            System.out.println(e)
+            e.printStackTrace()
         }
     }
 

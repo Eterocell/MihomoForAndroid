@@ -71,7 +71,7 @@ object ProfileProcessor {
                         var download: Long = 0
                         var total: Long = 0
                         var expire: Long = 0
-                        if (snapshot?.type == Profile.Type.Url) {
+                        if (snapshot.type == Profile.Type.Url) {
                             if (snapshot.source.startsWith("https://", true)) {
                                 val client = OkHttpClient()
                                 val request = Request.Builder()
@@ -130,7 +130,7 @@ object ProfileProcessor {
                                 .deleteRecursively()
 
                             context.sendProfileChanged(snapshot.uuid)
-                        } else if (snapshot?.type == Profile.Type.File) {
+                        } else if (snapshot.type == Profile.Type.File) {
                             val new = Imported(
                                 snapshot.uuid,
                                 snapshot.name,
