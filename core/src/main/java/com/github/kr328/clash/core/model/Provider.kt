@@ -21,6 +21,7 @@ data class Provider(
     enum class VehicleType {
         HTTP,
         File,
+        Inline,
         Compatible,
     }
 
