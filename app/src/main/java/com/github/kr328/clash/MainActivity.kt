@@ -1,6 +1,10 @@
 package com.github.kr328.clash
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.ticker
@@ -45,6 +49,7 @@ class MainActivity : BaseActivity<MainDesign>() {
                             if (clashRunning) {
                                 stopClashService()
                             } else {
+                                requestNotificationPermissionIfNecessary()
                                 design.startClash()
                             }
                         }
@@ -69,6 +74,22 @@ class MainActivity : BaseActivity<MainDesign>() {
                         design.fetchTraffic()
                     }
                 }
+            }
+        }
+    }
+
+    private fun requestNotificationPermissionIfNecessary() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                    0   // requestCode ignored
+                )
             }
         }
     }
