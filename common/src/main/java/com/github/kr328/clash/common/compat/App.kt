@@ -24,7 +24,8 @@ val Application.currentProcessName: String
 
 fun Drawable.foreground(): Drawable {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-        this is AdaptiveIconDrawable && this.background == null
+        this is AdaptiveIconDrawable &&
+        this.background == null
     ) {
         return this.foreground
     }

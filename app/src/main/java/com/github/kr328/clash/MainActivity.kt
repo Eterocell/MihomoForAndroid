@@ -82,13 +82,13 @@ class MainActivity : BaseActivity<MainDesign>() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    android.Manifest.permission.POST_NOTIFICATIONS,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                    0   // requestCode ignored
+                    0, // requestCode ignored
                 )
             }
         }
