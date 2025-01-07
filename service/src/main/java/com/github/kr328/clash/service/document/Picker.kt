@@ -12,7 +12,9 @@ import com.github.kr328.clash.service.util.pendingDir
 import java.io.FileNotFoundException
 import java.util.*
 
-class Picker(private val context: Context) {
+class Picker(
+    private val context: Context,
+) {
     suspend fun list(path: Path): List<Document> {
         if (path.uuid == null) {
             return ImportedDao().queryAllUUIDs().map {
@@ -37,7 +39,10 @@ class Picker(private val context: Context) {
         }
     }
 
-    suspend fun pick(path: Path, writable: Boolean): Document {
+    suspend fun pick(
+        path: Path,
+        writable: Boolean,
+    ): Document {
         if (path.uuid == null) {
             return VirtualDocument(
                 "",
@@ -63,8 +68,9 @@ class Picker(private val context: Context) {
 
             return VirtualDocument(
                 id = path.uuid.toString(),
-                name = pending?.name ?: imported?.name
-                    ?: throw FileNotFoundException("profile not found"),
+                name =
+                    pending?.name ?: imported?.name
+                        ?: throw FileNotFoundException("profile not found"),
                 mimeType = DocumentsContract.Document.MIME_TYPE_DIR,
                 size = 0,
                 updatedAt = 0,
@@ -74,36 +80,40 @@ class Picker(private val context: Context) {
 
         if (path.relative == null) {
             if (path.scope == Path.Scope.Configuration) {
-                val type = pending?.type ?: imported?.type
-                    ?: throw FileNotFoundException("profile not found")
+                val type =
+                    pending?.type ?: imported?.type
+                        ?: throw FileNotFoundException("profile not found")
 
                 if (writable && type != Profile.Type.File) {
                     throw IllegalArgumentException("invalid open mode")
                 }
 
-                val flags: Set<Flag> = if (type == Profile.Type.Url) {
-                    emptySet()
-                } else {
-                    setOf(Flag.Writable)
-                }
+                val flags: Set<Flag> =
+                    if (type == Profile.Type.Url) {
+                        emptySet()
+                    } else {
+                        setOf(Flag.Writable)
+                    }
 
                 return FileDocument(
-                    file = when {
-                        pending != null -> context.pendingDir.resolve(pending.uuid.toString())
-                        imported != null -> context.importedDir.resolve(imported.uuid.toString())
-                        else -> throw FileNotFoundException("profile not found")
-                    }.resolve("config.yaml"),
+                    file =
+                        when {
+                            pending != null -> context.pendingDir.resolve(pending.uuid.toString())
+                            imported != null -> context.importedDir.resolve(imported.uuid.toString())
+                            else -> throw FileNotFoundException("profile not found")
+                        }.resolve("config.yaml"),
                     flags = flags,
                     idOverride = Paths.CONFIGURATION_ID,
                     nameOverride = context.getString(R.string.configuration_yaml),
                 )
             } else {
                 return FileDocument(
-                    file = when {
-                        pending != null -> context.pendingDir.resolve(pending.uuid.toString())
-                        imported != null -> context.importedDir.resolve(imported.uuid.toString())
-                        else -> throw FileNotFoundException("profile not found")
-                    }.resolve("providers"),
+                    file =
+                        when {
+                            pending != null -> context.pendingDir.resolve(pending.uuid.toString())
+                            imported != null -> context.importedDir.resolve(imported.uuid.toString())
+                            else -> throw FileNotFoundException("profile not found")
+                        }.resolve("providers"),
                     idOverride = Paths.PROVIDERS_ID,
                     nameOverride = context.getString(R.string.provider_files),
                     flags = setOf(Flag.Virtual),
@@ -116,11 +126,12 @@ class Picker(private val context: Context) {
         }
 
         return FileDocument(
-            file = when {
-                pending != null -> context.pendingDir.resolve(pending.uuid.toString())
-                imported != null -> context.importedDir.resolve(imported.uuid.toString())
-                else -> throw FileNotFoundException("profile not found")
-            }.resolve("providers").resolve(path.relative.joinToString(separator = "/")),
+            file =
+                when {
+                    pending != null -> context.pendingDir.resolve(pending.uuid.toString())
+                    imported != null -> context.importedDir.resolve(imported.uuid.toString())
+                    else -> throw FileNotFoundException("profile not found")
+                }.resolve("providers").resolve(path.relative.joinToString(separator = "/")),
             flags = setOf(Flag.Writable, Flag.Deletable),
         )
     }

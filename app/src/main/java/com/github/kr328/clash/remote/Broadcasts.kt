@@ -10,14 +10,25 @@ import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.log.Log
 import java.util.*
 
-class Broadcasts(private val context: Application) {
+class Broadcasts(
+    private val context: Application,
+) {
     interface Observer {
         fun onServiceRecreated()
+
         fun onStarted()
+
         fun onStopped(cause: String?)
+
         fun onProfileChanged()
+
         fun onProfileUpdateCompleted(uuid: UUID?)
-        fun onProfileUpdateFailed(uuid: UUID?, reason: String?)
+
+        fun onProfileUpdateFailed(
+            uuid: UUID?,
+            reason: String?,
+        )
+
         fun onProfileLoaded()
     }
 
@@ -25,59 +36,63 @@ class Broadcasts(private val context: Application) {
 
     private var registered = false
     private val receivers = mutableListOf<Observer>()
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.`package` != context?.packageName) {
-                return
-            }
-
-            when (intent?.action) {
-                Intents.ACTION_SERVICE_RECREATED -> {
-                    clashRunning = false
-
-                    receivers.forEach {
-                        it.onServiceRecreated()
-                    }
+    private val broadcastReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                if (intent?.`package` != context?.packageName) {
+                    return
                 }
-                Intents.ACTION_CLASH_STARTED -> {
-                    clashRunning = true
 
-                    receivers.forEach {
-                        it.onStarted()
-                    }
-                }
-                Intents.ACTION_CLASH_STOPPED -> {
-                    clashRunning = false
+                when (intent?.action) {
+                    Intents.ACTION_SERVICE_RECREATED -> {
+                        clashRunning = false
 
-                    receivers.forEach {
-                        it.onStopped(intent.getStringExtra(Intents.EXTRA_STOP_REASON))
+                        receivers.forEach {
+                            it.onServiceRecreated()
+                        }
                     }
-                }
-                Intents.ACTION_PROFILE_CHANGED ->
-                    receivers.forEach {
-                        it.onProfileChanged()
+                    Intents.ACTION_CLASH_STARTED -> {
+                        clashRunning = true
+
+                        receivers.forEach {
+                            it.onStarted()
+                        }
                     }
-                Intents.ACTION_PROFILE_UPDATE_COMPLETED ->
-                    receivers.forEach {
-                        it.onProfileUpdateCompleted(
-                            UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
-                        )
+                    Intents.ACTION_CLASH_STOPPED -> {
+                        clashRunning = false
+
+                        receivers.forEach {
+                            it.onStopped(intent.getStringExtra(Intents.EXTRA_STOP_REASON))
+                        }
                     }
-                Intents.ACTION_PROFILE_UPDATE_FAILED ->
-                    receivers.forEach {
-                        it.onProfileUpdateFailed(
-                            UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
-                            intent.getStringExtra(Intents.EXTRA_FAIL_REASON),
-                        )
-                    }
-                Intents.ACTION_PROFILE_LOADED -> {
-                    receivers.forEach {
-                        it.onProfileLoaded()
+                    Intents.ACTION_PROFILE_CHANGED ->
+                        receivers.forEach {
+                            it.onProfileChanged()
+                        }
+                    Intents.ACTION_PROFILE_UPDATE_COMPLETED ->
+                        receivers.forEach {
+                            it.onProfileUpdateCompleted(
+                                UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
+                            )
+                        }
+                    Intents.ACTION_PROFILE_UPDATE_FAILED ->
+                        receivers.forEach {
+                            it.onProfileUpdateFailed(
+                                UUID.fromString(intent.getStringExtra(Intents.EXTRA_UUID)),
+                                intent.getStringExtra(Intents.EXTRA_FAIL_REASON),
+                            )
+                        }
+                    Intents.ACTION_PROFILE_LOADED -> {
+                        receivers.forEach {
+                            it.onProfileLoaded()
+                        }
                     }
                 }
             }
         }
-    }
 
     fun addObserver(observer: Observer) {
         receivers.add(observer)

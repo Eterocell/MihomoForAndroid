@@ -12,7 +12,9 @@ import kotlinx.coroutines.withContext
 import java.net.InetSocketAddress
 import java.security.SecureRandom
 
-class TunModule(private val vpn: VpnService) : Module<Unit>(vpn) {
+class TunModule(
+    private val vpn: VpnService,
+) : Module<Unit>(vpn) {
     data class TunDevice(
         val fd: Int,
         var stack: String,

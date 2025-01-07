@@ -34,12 +34,13 @@ android {
         all {
             externalNativeBuild {
                 cmake {
-                    arguments += listOf(
-                        "-DGO_SOURCE:STRING=$golangSource",
-                        "-DGO_OUTPUT:STRING=${GolangPlugin.outputDirOf(project, null, null)}",
-                        "-DFLAVOR_NAME:STRING=$name",
-                        "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON",
-                    )
+                    arguments +=
+                        listOf(
+                            "-DGO_SOURCE:STRING=$golangSource",
+                            "-DGO_OUTPUT:STRING=${GolangPlugin.outputDirOf(project, null, null)}",
+                            "-DFLAVOR_NAME:STRING=$name",
+                            "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON",
+                        )
                 }
             }
         }

@@ -7,7 +7,9 @@ import com.github.kr328.clash.util.logsDir
 import java.io.BufferedWriter
 import java.io.FileWriter
 
-class LogcatWriter(context: Context) : AutoCloseable {
+class LogcatWriter(
+    context: Context,
+) : AutoCloseable {
     private val file = LogFile.generate()
     private val writer = BufferedWriter(FileWriter(context.logsDir.resolve(file.fileName)))
 

@@ -23,7 +23,10 @@ import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.TimeUnit
 
 class ProfileReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED,
             Intent.ACTION_TIMEZONE_CHANGED, Intent.ACTION_TIME_CHANGED,
@@ -31,8 +34,9 @@ class ProfileReceiver : BroadcastReceiver() {
                 Global.launch {
                     reset()
 
-                    val service = Intent(Intents.ACTION_PROFILE_SCHEDULE_UPDATES)
-                        .setComponent(ProfileWorker::class.componentName)
+                    val service =
+                        Intent(Intents.ACTION_PROFILE_SCHEDULE_UPDATES)
+                            .setComponent(ProfileWorker::class.componentName)
 
                     context.startForegroundServiceCompat(service)
                 }
@@ -49,28 +53,36 @@ class ProfileReceiver : BroadcastReceiver() {
         private val lock = Mutex()
         private var initialized: Boolean = false
 
-        suspend fun rescheduleAll(context: Context) = lock.withLock {
-            if (initialized) {
-                return
+        suspend fun rescheduleAll(context: Context) =
+            lock.withLock {
+                if (initialized) {
+                    return
+                }
+
+                initialized = true
+
+                Log.i("Reschedule all profiles update")
+
+                ImportedDao()
+                    .queryAllUUIDs()
+                    .mapNotNull { ImportedDao().queryByUUID(it) }
+                    .filter { it.type != Profile.Type.File }
+                    .forEach { scheduleNext(context, it) }
             }
 
-            initialized = true
-
-            Log.i("Reschedule all profiles update")
-
-            ImportedDao().queryAllUUIDs()
-                .mapNotNull { ImportedDao().queryByUUID(it) }
-                .filter { it.type != Profile.Type.File }
-                .forEach { scheduleNext(context, it) }
-        }
-
-        fun cancelNext(context: Context, imported: Imported) {
+        fun cancelNext(
+            context: Context,
+            imported: Imported,
+        ) {
             val intent = pendingIntentOf(context, imported)
 
             context.getSystemService<AlarmManager>()?.cancel(intent)
         }
 
-        fun schedule(context: Context, imported: Imported) {
+        fun schedule(
+            context: Context,
+            imported: Imported,
+        ) {
             val intent = pendingIntentOf(context, imported)
 
             context.getSystemService<AlarmManager>()?.cancel(intent)
@@ -78,7 +90,10 @@ class ProfileReceiver : BroadcastReceiver() {
             intent.send(context, 0, null)
         }
 
-        fun scheduleNext(context: Context, imported: Imported) {
+        fun scheduleNext(
+            context: Context,
+            imported: Imported,
+        ) {
             val intent = pendingIntentOf(context, imported)
 
             context.getSystemService<AlarmManager>()?.cancel(intent)
@@ -88,10 +103,11 @@ class ProfileReceiver : BroadcastReceiver() {
             }
 
             val current = System.currentTimeMillis()
-            val last = context.importedDir
-                .resolve(imported.uuid.toString())
-                .resolve("config.yaml")
-                .lastModified()
+            val last =
+                context.importedDir
+                    .resolve(imported.uuid.toString())
+                    .resolve("config.yaml")
+                    .lastModified()
 
             // file not existed
             if (last < 0) {
@@ -100,18 +116,24 @@ class ProfileReceiver : BroadcastReceiver() {
 
             val interval = (imported.interval - (current - last)).coerceAtLeast(0)
 
-            context.getSystemService<AlarmManager>()
+            context
+                .getSystemService<AlarmManager>()
                 ?.set(AlarmManager.RTC, current + interval, intent)
         }
 
-        private suspend fun reset() = lock.withLock {
-            initialized = false
-        }
+        private suspend fun reset() =
+            lock.withLock {
+                initialized = false
+            }
 
-        private fun pendingIntentOf(context: Context, imported: Imported): PendingIntent {
-            val intent = Intent(Intents.ACTION_PROFILE_REQUEST_UPDATE)
-                .setComponent(ProfileReceiver::class.componentName)
-                .setUUID(imported.uuid)
+        private fun pendingIntentOf(
+            context: Context,
+            imported: Imported,
+        ): PendingIntent {
+            val intent =
+                Intent(Intents.ACTION_PROFILE_REQUEST_UPDATE)
+                    .setComponent(ProfileReceiver::class.componentName)
+                    .setUUID(imported.uuid)
 
             return PendingIntent.getBroadcast(
                 context,

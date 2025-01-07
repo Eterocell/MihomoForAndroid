@@ -7,14 +7,22 @@ import com.github.kr328.clash.design.databinding.DesignNewProfileBinding
 import com.github.kr328.clash.design.model.ProfileProvider
 import com.github.kr328.clash.design.util.*
 
-class NewProfileDesign(context: Context) : Design<NewProfileDesign.Request>(context) {
+class NewProfileDesign(
+    context: Context,
+) : Design<NewProfileDesign.Request>(context) {
     sealed class Request {
-        data class Create(val provider: ProfileProvider) : Request()
-        data class OpenDetail(val provider: ProfileProvider.External) : Request()
+        data class Create(
+            val provider: ProfileProvider,
+        ) : Request()
+
+        data class OpenDetail(
+            val provider: ProfileProvider.External,
+        ) : Request()
     }
 
-    private val binding = DesignNewProfileBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignNewProfileBinding
+            .inflate(context.layoutInflater, context.root, false)
     private val adapter = ProfileProviderAdapter(context, this::requestCreate, this::requestDetail)
 
     override val root: View

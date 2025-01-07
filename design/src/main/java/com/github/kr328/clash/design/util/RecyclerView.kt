@@ -13,7 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KMutableProperty0
 
-fun RecyclerView.applyLinearAdapter(context: Context, adapter: RecyclerView.Adapter<*>) {
+fun RecyclerView.applyLinearAdapter(
+    context: Context,
+    adapter: RecyclerView.Adapter<*>,
+) {
     this.layoutManager = LinearLayoutManager(context)
     this.adapter = adapter
 }
@@ -23,9 +26,10 @@ suspend fun <H : RecyclerView.ViewHolder, T> RecyclerView.Adapter<H>.swapDataSet
     newDataset: List<T>,
     compareEquals: Boolean = true,
 ) {
-    val ignore = withContext(Dispatchers.Default) {
-        compareEquals && property.get() == newDataset
-    }
+    val ignore =
+        withContext(Dispatchers.Default) {
+            compareEquals && property.get() == newDataset
+        }
 
     if (ignore) return
 
@@ -50,9 +54,10 @@ suspend fun <H : RecyclerView.ViewHolder, T> RecyclerView.Adapter<H>.patchDataSe
     detectMove: Boolean = false,
     id: (T) -> Any? = { it },
 ) {
-    val result = withContext(Dispatchers.Default) {
-        property.get().diffWith(newDataset, detectMove, id)
-    }
+    val result =
+        withContext(Dispatchers.Default) {
+            property.get().diffWith(newDataset, detectMove, id)
+        }
 
     withContext(Dispatchers.Main) {
         property.set(newDataset)
@@ -66,7 +71,11 @@ fun RecyclerView.invalidateChildren() {
     }
 }
 
-fun RecyclerView.bindInsets(surface: Surface, top: Int = 0, bottom: Int = 0) {
+fun RecyclerView.bindInsets(
+    surface: Surface,
+    top: Int = 0,
+    bottom: Int = 0,
+) {
     fun applyInsets() {
         val t = surface.insets.top + top
         val b = surface.insets.bottom + bottom
@@ -74,25 +83,34 @@ fun RecyclerView.bindInsets(surface: Surface, top: Int = 0, bottom: Int = 0) {
         setPaddingRelative(0, t, 0, b)
     }
 
-    surface.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            if (propertyId == BR.insets) {
-                applyInsets()
+    surface.addOnPropertyChangedCallback(
+        object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(
+                sender: Observable?,
+                propertyId: Int,
+            ) {
+                if (propertyId == BR.insets) {
+                    applyInsets()
+                }
             }
-        }
-    })
+        },
+    )
 
     applyInsets()
 }
 
 fun RecyclerView.addScrolledToBottomObserver(listener: (RecyclerView, Boolean) -> Unit) {
-    val observer = object : RecyclerView.OnScrollListener() {
-        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                listener(this@addScrolledToBottomObserver, recyclerView.isBottom)
+    val observer =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(
+                recyclerView: RecyclerView,
+                newState: Int,
+            ) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    listener(this@addScrolledToBottomObserver, recyclerView.isBottom)
+                }
             }
         }
-    }
 
     addOnScrollListener(observer)
 }

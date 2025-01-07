@@ -14,7 +14,9 @@ class ProfileAdapter(
     private val onClicked: (Profile) -> Unit,
     private val onMenuClicked: (Profile) -> Unit,
 ) : RecyclerView.Adapter<ProfileAdapter.Holder>() {
-    class Holder(val binding: AdapterProfileBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterProfileBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     private val currentTime = ObservableCurrentTime()
 
@@ -25,13 +27,20 @@ class ProfileAdapter(
         currentTime.update()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterProfileBinding
-            .inflate(context.layoutInflater, parent, false)
-            .also { it.currentTime = currentTime },
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterProfileBinding
+                .inflate(context.layoutInflater, parent, false)
+                .also { it.currentTime = currentTime },
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = profiles[position]
         val binding = holder.binding
 

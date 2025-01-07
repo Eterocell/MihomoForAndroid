@@ -14,18 +14,23 @@ class ProvidersDesign(
     providers: List<Provider>,
 ) : Design<ProvidersDesign.Request>(context) {
     sealed class Request {
-        data class Update(val index: Int, val provider: Provider) : Request()
+        data class Update(
+            val index: Int,
+            val provider: Provider,
+        ) : Request()
     }
 
-    private val binding = DesignProvidersBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignProvidersBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     override val root: View
         get() = binding.root
 
-    private val adapter = ProviderAdapter(context, providers) { index, provider ->
-        requests.trySend(Request.Update(index, provider))
-    }
+    private val adapter =
+        ProviderAdapter(context, providers) { index, provider ->
+            requests.trySend(Request.Update(index, provider))
+        }
 
     fun updateElapsed() {
         adapter.updateElapsed()

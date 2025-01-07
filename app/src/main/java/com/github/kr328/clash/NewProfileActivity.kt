@@ -40,27 +40,28 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
                             withProfile {
                                 val name = getString(R.string.new_profile)
 
-                                val uuid: UUID? = when (val p = it.provider) {
-                                    is ProfileProvider.File ->
-                                        create(Profile.Type.File, name)
-                                    is ProfileProvider.Url ->
-                                        create(Profile.Type.Url, name)
-                                    is ProfileProvider.External -> {
-                                        val data = p.get()
+                                val uuid: UUID? =
+                                    when (val p = it.provider) {
+                                        is ProfileProvider.File ->
+                                            create(Profile.Type.File, name)
+                                        is ProfileProvider.Url ->
+                                            create(Profile.Type.Url, name)
+                                        is ProfileProvider.External -> {
+                                            val data = p.get()
 
-                                        if (data != null) {
-                                            val (uri, initialName) = data
+                                            if (data != null) {
+                                                val (uri, initialName) = data
 
-                                            create(
-                                                Profile.Type.External,
-                                                initialName ?: name,
-                                                uri.toString(),
-                                            )
-                                        } else {
-                                            null
+                                                create(
+                                                    Profile.Type.External,
+                                                    initialName ?: name,
+                                                    uri.toString(),
+                                                )
+                                            } else {
+                                                null
+                                            }
                                         }
                                     }
-                                }
 
                                 if (uuid != null) {
                                     launchProperties(uuid)
@@ -77,20 +78,22 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
     }
 
     private fun launchAppDetailed(provider: ProfileProvider.External) {
-        val data = Uri.fromParts(
-            "package",
-            provider.intent.component?.packageName ?: return,
-            null,
-        )
+        val data =
+            Uri.fromParts(
+                "package",
+                provider.intent.component?.packageName ?: return,
+                null,
+            )
 
         startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(data))
     }
 
     private suspend fun launchProperties(uuid: UUID) {
-        val r = startActivityForResult(
-            ActivityResultContracts.StartActivityForResult(),
-            PropertiesActivity::class.intent.setUUID(uuid),
-        )
+        val r =
+            startActivityForResult(
+                ActivityResultContracts.StartActivityForResult(),
+                PropertiesActivity::class.intent.setUUID(uuid),
+            )
 
         if (r.resultCode == Activity.RESULT_OK) {
             finish()
@@ -98,10 +101,11 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
     }
 
     private suspend fun ProfileProvider.External.get(): Pair<Uri, String?>? {
-        val result = startActivityForResult(
-            ActivityResultContracts.StartActivityForResult(),
-            intent,
-        )
+        val result =
+            startActivityForResult(
+                ActivityResultContracts.StartActivityForResult(),
+                intent,
+            )
 
         if (result.resultCode != RESULT_OK) {
             return null
@@ -117,27 +121,31 @@ class NewProfileActivity : BaseActivity<NewProfileDesign>() {
         return null
     }
 
-    private suspend fun queryProfileProviders(): List<ProfileProvider> = withContext(Dispatchers.IO) {
-        val providers = packageManager.queryIntentActivities(
-            Intent(Intents.ACTION_PROVIDE_URL),
-            0,
-        ).map {
-            val activity = it.activityInfo
+    private suspend fun queryProfileProviders(): List<ProfileProvider> =
+        withContext(Dispatchers.IO) {
+            val providers =
+                packageManager
+                    .queryIntentActivities(
+                        Intent(Intents.ACTION_PROVIDE_URL),
+                        0,
+                    ).map {
+                        val activity = it.activityInfo
 
-            val name = activity.applicationInfo.loadLabel(packageManager)
-            val summary = activity.loadLabel(packageManager)
-            val icon = activity.loadIcon(packageManager)
-            val intent = Intent(Intents.ACTION_PROVIDE_URL)
-                .setComponent(
-                    ComponentName(
-                        activity.packageName,
-                        activity.name,
-                    ),
-                )
+                        val name = activity.applicationInfo.loadLabel(packageManager)
+                        val summary = activity.loadLabel(packageManager)
+                        val icon = activity.loadIcon(packageManager)
+                        val intent =
+                            Intent(Intents.ACTION_PROVIDE_URL)
+                                .setComponent(
+                                    ComponentName(
+                                        activity.packageName,
+                                        activity.name,
+                                    ),
+                                )
 
-            ProfileProvider.External(name.toString(), summary.toString(), icon, intent)
+                        ProfileProvider.External(name.toString(), summary.toString(), icon, intent)
+                    }
+
+            listOf(ProfileProvider.File(self), ProfileProvider.Url(self)) + providers
         }
-
-        listOf(ProfileProvider.File(self), ProfileProvider.Url(self)) + providers
-    }
 }

@@ -12,11 +12,16 @@ import com.github.kr328.clash.design.util.bindAppBarElevation
 import com.github.kr328.clash.design.util.layoutInflater
 import com.github.kr328.clash.design.util.root
 
-class ApkBrokenDesign(context: Context) : Design<ApkBrokenDesign.Request>(context) {
-    data class Request(val url: String)
+class ApkBrokenDesign(
+    context: Context,
+) : Design<ApkBrokenDesign.Request>(context) {
+    data class Request(
+        val url: String,
+    )
 
-    private val binding = DesignSettingsCommonBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignSettingsCommonBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     override val root: View
         get() = binding.root
@@ -28,20 +33,21 @@ class ApkBrokenDesign(context: Context) : Design<ApkBrokenDesign.Request>(contex
 
         binding.scrollRoot.bindAppBarElevation(binding.activityBarLayout)
 
-        val screen = preferenceScreen(context) {
-            tips(R.string.application_broken_tips)
+        val screen =
+            preferenceScreen(context) {
+                tips(R.string.application_broken_tips)
 
-            category(R.string.reinstall)
+                category(R.string.reinstall)
 
-            clickable(
-                title = R.string.github_releases,
-                summary = R.string.meta_github_url,
-            ) {
-                clicked {
-                    requests.trySend(Request(context.getString(R.string.meta_github_url)))
+                clickable(
+                    title = R.string.github_releases,
+                    summary = R.string.meta_github_url,
+                ) {
+                    clicked {
+                        requests.trySend(Request(context.getString(R.string.meta_github_url)))
+                    }
                 }
             }
-        }
 
         binding.content.addView(screen.root)
     }

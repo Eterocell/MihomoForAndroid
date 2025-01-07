@@ -8,7 +8,9 @@ import com.github.kr328.clash.design.util.bindAppBarElevation
 import com.github.kr328.clash.design.util.layoutInflater
 import com.github.kr328.clash.design.util.root
 
-class SettingsDesign(context: Context) : Design<SettingsDesign.Request>(context) {
+class SettingsDesign(
+    context: Context,
+) : Design<SettingsDesign.Request>(context) {
     enum class Request {
         StartApp,
         StartNetwork,
@@ -16,8 +18,9 @@ class SettingsDesign(context: Context) : Design<SettingsDesign.Request>(context)
         StartMetaFeature,
     }
 
-    private val binding = DesignSettingsBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignSettingsBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     override val root: View
         get() = binding.root

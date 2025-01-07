@@ -25,7 +25,10 @@ data class TunnelState(
         Script,
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 

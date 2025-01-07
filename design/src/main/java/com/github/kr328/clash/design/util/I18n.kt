@@ -12,24 +12,27 @@ private const val DATE_DATE_ONLY = "yyyy-MM-dd"
 private const val DATE_TIME_ONLY = "HH:mm:ss.SSS"
 private const val DATE_ALL = "$DATE_DATE_ONLY $DATE_TIME_ONLY"
 
-fun Profile.Type.toString(context: Context): String = when (this) {
-    Profile.Type.File -> context.getString(R.string.file)
-    Profile.Type.Url -> context.getString(R.string.url)
-    Profile.Type.External -> context.getString(R.string.external)
-}
+fun Profile.Type.toString(context: Context): String =
+    when (this) {
+        Profile.Type.File -> context.getString(R.string.file)
+        Profile.Type.Url -> context.getString(R.string.url)
+        Profile.Type.External -> context.getString(R.string.external)
+    }
 
 fun Provider.type(context: Context): String {
-    val type = when (type) {
-        Provider.Type.Proxy -> context.getString(R.string.proxy)
-        Provider.Type.Rule -> context.getString(R.string.rule)
-    }
+    val type =
+        when (type) {
+            Provider.Type.Proxy -> context.getString(R.string.proxy)
+            Provider.Type.Rule -> context.getString(R.string.rule)
+        }
 
-    val vehicle = when (vehicleType) {
-        Provider.VehicleType.HTTP -> context.getString(R.string.http)
-        Provider.VehicleType.File -> context.getString(R.string.file)
-        Provider.VehicleType.Inline -> context.getString(R.string.inline)
-        Provider.VehicleType.Compatible -> context.getString(R.string.compatible)
-    }
+    val vehicle =
+        when (vehicleType) {
+            Provider.VehicleType.HTTP -> context.getString(R.string.http)
+            Provider.VehicleType.File -> context.getString(R.string.file)
+            Provider.VehicleType.Inline -> context.getString(R.string.inline)
+            Provider.VehicleType.Compatible -> context.getString(R.string.compatible)
+        }
 
     return context.getString(R.string.format_provider_type, type, vehicle)
 }
@@ -53,24 +56,26 @@ fun Date.format(
     }
 }
 
-fun Long.toBytesString(): String = when {
-    this > 1024.0 * 1024 * 1024 * 1024 * 1024 * 1024 ->
-        String.format("%.2f EiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024 / 1024 / 1024))
-    this > 1024.0 * 1024 * 1024 * 1024 * 1024 ->
-        String.format("%.2f PiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024 / 1024))
-    this > 1024.0 * 1024 * 1024 * 1024 ->
-        String.format("%.2f TiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024))
-    this > 1024 * 1024 * 1024 ->
-        String.format("%.2f GiB", (this.toDouble() / 1024 / 1024 / 1024))
-    this > 1024 * 1024 ->
-        String.format("%.2f MiB", (this.toDouble() / 1024 / 1024))
-    this > 1024 ->
-        String.format("%.2f KiB", (this.toDouble() / 1024))
-    else ->
-        "$this Bytes"
-}
+fun Long.toBytesString(): String =
+    when {
+        this > 1024.0 * 1024 * 1024 * 1024 * 1024 * 1024 ->
+            String.format("%.2f EiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024 / 1024 / 1024))
+        this > 1024.0 * 1024 * 1024 * 1024 * 1024 ->
+            String.format("%.2f PiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024 / 1024))
+        this > 1024.0 * 1024 * 1024 * 1024 ->
+            String.format("%.2f TiB", (this.toDouble() / 1024 / 1024 / 1024 / 1024))
+        this > 1024 * 1024 * 1024 ->
+            String.format("%.2f GiB", (this.toDouble() / 1024 / 1024 / 1024))
+        this > 1024 * 1024 ->
+            String.format("%.2f MiB", (this.toDouble() / 1024 / 1024))
+        this > 1024 ->
+            String.format("%.2f KiB", (this.toDouble() / 1024))
+        else ->
+            "$this Bytes"
+    }
 
 fun Double.toProgress(): Int = this.toInt()
+
 fun Long.toDateStr(): String {
     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     return simpleDateFormat.format(Date(this))

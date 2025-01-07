@@ -22,7 +22,6 @@ data class Profile(
     var download: Long,
     val total: Long,
     val expire: Long,
-
     val updatedAt: Long,
     val imported: Boolean,
     val pending: Boolean,
@@ -33,7 +32,10 @@ data class Profile(
         External,
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 

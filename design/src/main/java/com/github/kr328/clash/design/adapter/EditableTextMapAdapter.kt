@@ -13,9 +13,14 @@ class EditableTextMapAdapter<K, V>(
     private val keyAdapter: TextAdapter<K>,
     private val valueAdapter: TextAdapter<V>,
 ) : RecyclerView.Adapter<EditableTextMapAdapter.Holder>() {
-    class Holder(val binding: AdapterEditableTextMapBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterEditableTextMapBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
-    fun addElement(key: String, value: String) {
+    fun addElement(
+        key: String,
+        value: String,
+    ) {
         val keyValue = keyAdapter.to(key)
         val valueValue = valueAdapter.to(value)
 
@@ -23,12 +28,19 @@ class EditableTextMapAdapter<K, V>(
         values.add(keyValue to valueValue)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterEditableTextMapBinding
-            .inflate(context.layoutInflater, parent, false),
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterEditableTextMapBinding
+                .inflate(context.layoutInflater, parent, false),
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = values[position]
 
         holder.binding.keyView.text = keyAdapter.from(current.first)

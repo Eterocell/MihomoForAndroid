@@ -42,15 +42,19 @@ class LogcatService :
     IInterface {
     private val cache = LogcatCache()
 
-    private val connection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            stopSelf()
-        }
+    private val connection =
+        object : ServiceConnection {
+            override fun onServiceDisconnected(name: ComponentName?) {
+                stopSelf()
+            }
 
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            startObserver(service ?: return stopSelf())
+            override fun onServiceConnected(
+                name: ComponentName?,
+                service: IBinder?,
+            ) {
+                startObserver(service ?: return stopSelf())
+            }
         }
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -78,9 +82,10 @@ class LogcatService :
 
     override fun onBind(intent: Intent?): IBinder = this.asBinder()
 
-    override fun asBinder(): IBinder = object : Binder() {
-        override fun queryLocalInterface(descriptor: String): IInterface = this@LogcatService
-    }
+    override fun asBinder(): IBinder =
+        object : Binder() {
+            override fun queryLocalInterface(descriptor: String): IInterface = this@LogcatService
+        }
 
     suspend fun snapshot(full: Boolean): LogcatCache.Snapshot? = cache.snapshot(full)
 
@@ -97,11 +102,12 @@ class LogcatService :
                 logsDir.mkdirs()
 
                 LogcatWriter(this@LogcatService).use {
-                    val observer = object : ILogObserver {
-                        override fun newItem(log: LogMessage) {
-                            channel.trySend(log)
+                    val observer =
+                        object : ILogObserver {
+                            override fun newItem(log: LogMessage) {
+                                channel.trySend(log)
+                            }
                         }
-                    }
 
                     service.setLogObserver(observer)
 
@@ -128,32 +134,36 @@ class LogcatService :
     }
 
     private fun createNotificationChannel() {
-        NotificationManagerCompat.from(this)
+        NotificationManagerCompat
+            .from(this)
             .createNotificationChannel(
-                NotificationChannelCompat.Builder(
-                    CHANNEL_ID,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT,
-                ).setName(getString(R.string.clash_logcat)).build(),
+                NotificationChannelCompat
+                    .Builder(
+                        CHANNEL_ID,
+                        NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                    ).setName(getString(R.string.clash_logcat))
+                    .build(),
             )
     }
 
     private fun showNotification() {
-        val notification = NotificationCompat
-            .Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_logo_service)
-            .setColor(getColorCompat(R.color.color_clash_light))
-            .setContentTitle(getString(R.string.clash_logcat))
-            .setContentText(getString(R.string.running))
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    this,
-                    R.id.nf_logcat_status,
-                    LogcatActivity::class.intent
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
-                ),
-            )
-            .build()
+        val notification =
+            NotificationCompat
+                .Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_logo_service)
+                .setColor(getColorCompat(R.color.color_clash_light))
+                .setContentTitle(getString(R.string.clash_logcat))
+                .setContentText(getString(R.string.running))
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        this,
+                        R.id.nf_logcat_status,
+                        LogcatActivity::class
+                            .intent
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                        pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+                    ),
+                ).build()
 
         startForeground(R.id.nf_logcat_status, notification)
     }

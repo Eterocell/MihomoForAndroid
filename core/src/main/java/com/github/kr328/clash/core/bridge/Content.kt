@@ -15,7 +15,9 @@ object Content {
             throw UnsupportedOperationException("Unsupported scheme ${uri.scheme}")
         }
 
-        return Global.application.contentResolver.openFileDescriptor(uri, "r")?.detachFd()
+        return Global.application.contentResolver
+            .openFileDescriptor(uri, "r")
+            ?.detachFd()
             ?: throw FileNotFoundException("$uri not found")
     }
 }

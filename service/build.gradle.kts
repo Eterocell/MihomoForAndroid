@@ -37,8 +37,16 @@ dependencies {
 afterEvaluate {
     android {
         libraryVariants.forEach {
-            sourceSets[it.name].kotlin.srcDir(layout.buildDirectory.asFile.get().resolve("generated/ksp/${it.name}/kotlin"))
-            sourceSets[it.name].java.srcDir(layout.buildDirectory.asFile.get().resolve("generated/ksp/${it.name}/java"))
+            sourceSets[it.name].kotlin.srcDir(
+                layout.buildDirectory.asFile
+                    .get()
+                    .resolve("generated/ksp/${it.name}/kotlin"),
+            )
+            sourceSets[it.name].java.srcDir(
+                layout.buildDirectory.asFile
+                    .get()
+                    .resolve("generated/ksp/${it.name}/java"),
+            )
         }
     }
 }

@@ -17,22 +17,24 @@ class FilesProvider : DocumentsProvider() {
     companion object {
         private const val DEFAULT_ROOT_ID = "0"
 
-        private val DEFAULT_DOCUMENT_COLUMNS = arrayOf(
-            D.COLUMN_DOCUMENT_ID,
-            D.COLUMN_DISPLAY_NAME,
-            D.COLUMN_MIME_TYPE,
-            D.COLUMN_LAST_MODIFIED,
-            D.COLUMN_SIZE,
-            D.COLUMN_FLAGS,
-        )
-        private val DEFAULT_ROOT_COLUMNS = arrayOf(
-            Root.COLUMN_ROOT_ID,
-            Root.COLUMN_FLAGS,
-            Root.COLUMN_ICON,
-            Root.COLUMN_TITLE,
-            Root.COLUMN_SUMMARY,
-            Root.COLUMN_DOCUMENT_ID,
-        )
+        private val DEFAULT_DOCUMENT_COLUMNS =
+            arrayOf(
+                D.COLUMN_DOCUMENT_ID,
+                D.COLUMN_DISPLAY_NAME,
+                D.COLUMN_MIME_TYPE,
+                D.COLUMN_LAST_MODIFIED,
+                D.COLUMN_SIZE,
+                D.COLUMN_FLAGS,
+            )
+        private val DEFAULT_ROOT_COLUMNS =
+            arrayOf(
+                Root.COLUMN_ROOT_ID,
+                Root.COLUMN_FLAGS,
+                Root.COLUMN_ICON,
+                Root.COLUMN_TITLE,
+                Root.COLUMN_SUMMARY,
+                Root.COLUMN_DOCUMENT_ID,
+            )
 
         private val FLAG_VIRTUAL: Int =
             if (Build.VERSION.SDK_INT >= 24) D.FLAG_VIRTUAL_DOCUMENT else 0
@@ -82,7 +84,10 @@ class FilesProvider : DocumentsProvider() {
         }
     }
 
-    override fun renameDocument(documentId: String?, displayName: String?): String {
+    override fun renameDocument(
+        documentId: String?,
+        displayName: String?,
+    ): String {
         val name = displayName ?: ""
 
         if (!PatternFileName.matches(name)) {
@@ -118,36 +123,42 @@ class FilesProvider : DocumentsProvider() {
         parentDocumentId: String?,
         projection: Array<out String>?,
         sortOrder: String?,
-    ): Cursor = runBlocking {
-        try {
-            val doc = parentDocumentId ?: "/"
-            val path = Paths.resolve(doc)
-            val documents = picker.list(path)
+    ): Cursor =
+        runBlocking {
+            try {
+                val doc = parentDocumentId ?: "/"
+                val path = Paths.resolve(doc)
+                val documents = picker.list(path)
 
-            MatrixCursor(resolveDocumentProjection(projection)).apply {
-                documents.forEach {
-                    newRow().applyDocument(it)
-                        .add(D.COLUMN_DOCUMENT_ID, "$doc/${it.id}")
+                MatrixCursor(resolveDocumentProjection(projection)).apply {
+                    documents.forEach {
+                        newRow()
+                            .applyDocument(it)
+                            .add(D.COLUMN_DOCUMENT_ID, "$doc/${it.id}")
+                    }
                 }
+            } catch (e: Exception) {
+                MatrixCursor(resolveDocumentProjection(projection))
             }
-        } catch (e: Exception) {
-            MatrixCursor(resolveDocumentProjection(projection))
         }
-    }
 
-    override fun queryDocument(documentId: String?, projection: Array<out String>?): Cursor = runBlocking {
-        try {
-            val doc = documentId ?: "/"
-            val path = Paths.resolve(doc)
-            val document = picker.pick(path, false)
+    override fun queryDocument(
+        documentId: String?,
+        projection: Array<out String>?,
+    ): Cursor =
+        runBlocking {
+            try {
+                val doc = documentId ?: "/"
+                val path = Paths.resolve(doc)
+                val document = picker.pick(path, false)
 
-            MatrixCursor(resolveDocumentProjection(projection)).apply {
-                newRow().applyDocument(document).add(D.COLUMN_DOCUMENT_ID, doc)
+                MatrixCursor(resolveDocumentProjection(projection)).apply {
+                    newRow().applyDocument(document).add(D.COLUMN_DOCUMENT_ID, doc)
+                }
+            } catch (e: Exception) {
+                MatrixCursor(resolveDocumentProjection(projection))
             }
-        } catch (e: Exception) {
-            MatrixCursor(resolveDocumentProjection(projection))
         }
-    }
 
     override fun onCreate(): Boolean = true
 
@@ -167,7 +178,10 @@ class FilesProvider : DocumentsProvider() {
         }
     }
 
-    override fun isChildDocument(parentDocumentId: String?, documentId: String?): Boolean {
+    override fun isChildDocument(
+        parentDocumentId: String?,
+        documentId: String?,
+    ): Boolean {
         if (parentDocumentId == null || documentId == null) {
             return false
         }
@@ -179,11 +193,12 @@ class FilesProvider : DocumentsProvider() {
         var flags = 0
 
         document.flags.forEach {
-            flags = when (it) {
-                Flag.Writable -> flags or D.FLAG_SUPPORTS_WRITE
-                Flag.Deletable -> flags or D.FLAG_SUPPORTS_DELETE
-                Flag.Virtual -> flags or FLAG_VIRTUAL
-            }
+            flags =
+                when (it) {
+                    Flag.Writable -> flags or D.FLAG_SUPPORTS_WRITE
+                    Flag.Deletable -> flags or D.FLAG_SUPPORTS_DELETE
+                    Flag.Virtual -> flags or FLAG_VIRTUAL
+                }
         }
 
         add(D.COLUMN_DISPLAY_NAME, document.name)

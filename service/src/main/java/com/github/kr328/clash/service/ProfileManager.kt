@@ -25,8 +25,9 @@ import java.io.FileNotFoundException
 import java.math.BigDecimal
 import java.util.*
 
-class ProfileManager(private val context: Context) :
-    IProfileManager,
+class ProfileManager(
+    private val context: Context,
+) : IProfileManager,
     CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private val store = ServiceStore(context)
 
@@ -38,19 +39,24 @@ class ProfileManager(private val context: Context) :
         }
     }
 
-    override suspend fun create(type: Profile.Type, name: String, source: String): UUID {
+    override suspend fun create(
+        type: Profile.Type,
+        name: String,
+        source: String,
+    ): UUID {
         val uuid = generateProfileUUID()
-        val pending = Pending(
-            uuid = uuid,
-            name = name,
-            type = type,
-            source = source,
-            interval = 0,
-            upload = 0,
-            total = 0,
-            download = 0,
-            expire = 0,
-        )
+        val pending =
+            Pending(
+                uuid = uuid,
+                name = name,
+                type = type,
+                source = source,
+                interval = 0,
+                upload = 0,
+                total = 0,
+                download = 0,
+                expire = 0,
+            )
 
         PendingDao().insert(pending)
 
@@ -69,20 +75,22 @@ class ProfileManager(private val context: Context) :
     override suspend fun clone(uuid: UUID): UUID {
         val newUUID = generateProfileUUID()
 
-        val imported = ImportedDao().queryByUUID(uuid)
-            ?: throw FileNotFoundException("profile $uuid not found")
+        val imported =
+            ImportedDao().queryByUUID(uuid)
+                ?: throw FileNotFoundException("profile $uuid not found")
 
-        val pending = Pending(
-            uuid = newUUID,
-            name = imported.name,
-            type = Profile.Type.File,
-            source = imported.source,
-            interval = imported.interval,
-            upload = imported.upload,
-            total = imported.total,
-            download = imported.download,
-            expire = imported.expire,
-        )
+        val pending =
+            Pending(
+                uuid = newUUID,
+                name = imported.name,
+                type = Profile.Type.File,
+                source = imported.source,
+                interval = imported.interval,
+                upload = imported.upload,
+                total = imported.total,
+                download = imported.download,
+                expire = imported.expire,
+            )
 
         cloneImportedFiles(uuid, newUUID)
 
@@ -91,12 +99,18 @@ class ProfileManager(private val context: Context) :
         return newUUID
     }
 
-    override suspend fun patch(uuid: UUID, name: String, source: String, interval: Long) {
+    override suspend fun patch(
+        uuid: UUID,
+        name: String,
+        source: String,
+        interval: Long,
+    ) {
         val pending = PendingDao().queryByUUID(uuid)
 
         if (pending == null) {
-            val imported = ImportedDao().queryByUUID(uuid)
-                ?: throw FileNotFoundException("profile $uuid not found")
+            val imported =
+                ImportedDao().queryByUUID(uuid)
+                    ?: throw FileNotFoundException("profile $uuid not found")
 
             cloneImportedFiles(uuid)
 
@@ -114,15 +128,16 @@ class ProfileManager(private val context: Context) :
                 ),
             )
         } else {
-            val newPending = pending.copy(
-                name = name,
-                source = source,
-                interval = interval,
-                upload = 0,
-                total = 0,
-                download = 0,
-                expire = 0,
-            )
+            val newPending =
+                pending.copy(
+                    name = name,
+                    source = source,
+                    interval = interval,
+                    upload = 0,
+                    total = 0,
+                    download = 0,
+                    expire = 0,
+                )
 
             PendingDao().update(newPending)
         }
@@ -140,10 +155,12 @@ class ProfileManager(private val context: Context) :
     private suspend fun updateFlow(old: Imported) {
         val client = OkHttpClient()
         try {
-            val request = Request.Builder()
-                .url(old.source)
-                .header("User-Agent", "ClashforWindows/0.19.23")
-                .build()
+            val request =
+                Request
+                    .Builder()
+                    .url(old.source)
+                    .header("User-Agent", "ClashforWindows/0.19.23")
+                    .build()
 
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful || response.headers["subscription-userinfo"] == null) return
@@ -180,18 +197,19 @@ class ProfileManager(private val context: Context) :
                     }
                 }
 
-                val new = Imported(
-                    old.uuid,
-                    old.name,
-                    old.type,
-                    old.source,
-                    old.interval,
-                    upload,
-                    download,
-                    total,
-                    expire,
-                    old.createdAt,
-                )
+                val new =
+                    Imported(
+                        old.uuid,
+                        old.name,
+                        old.type,
+                        old.source,
+                        old.interval,
+                        upload,
+                        download,
+                        total,
+                        expire,
+                        old.createdAt,
+                    )
 
                 ImportedDao().update(new)
 
@@ -203,7 +221,10 @@ class ProfileManager(private val context: Context) :
         }
     }
 
-    override suspend fun commit(uuid: UUID, callback: IFetchObserver?) {
+    override suspend fun commit(
+        uuid: UUID,
+        callback: IFetchObserver?,
+    ) {
         ProfileProcessor.apply(context, uuid, callback)
 
         scheduleUpdate(uuid, false)
@@ -224,9 +245,10 @@ class ProfileManager(private val context: Context) :
     override suspend fun queryByUUID(uuid: UUID): Profile? = resolveProfile(uuid)
 
     override suspend fun queryAll(): List<Profile> {
-        val uuids = withContext(Dispatchers.IO) {
-            (ImportedDao().queryAllUUIDs() + PendingDao().queryAllUUIDs()).distinct()
-        }
+        val uuids =
+            withContext(Dispatchers.IO) {
+                (ImportedDao().queryAllUUIDs() + PendingDao().queryAllUUIDs()).distinct()
+            }
 
         return uuids.mapNotNull { resolveProfile(it) }
     }
@@ -276,11 +298,15 @@ class ProfileManager(private val context: Context) :
         )
     }
 
-    private fun resolveUpdatedAt(uuid: UUID): Long = context.pendingDir.resolve(uuid.toString()).directoryLastModified
-        ?: context.importedDir.resolve(uuid.toString()).directoryLastModified
-        ?: -1
+    private fun resolveUpdatedAt(uuid: UUID): Long =
+        context.pendingDir.resolve(uuid.toString()).directoryLastModified
+            ?: context.importedDir.resolve(uuid.toString()).directoryLastModified
+            ?: -1
 
-    private fun cloneImportedFiles(source: UUID, target: UUID = source) {
+    private fun cloneImportedFiles(
+        source: UUID,
+        target: UUID = source,
+    ) {
         val s = context.importedDir.resolve(source.toString())
         val t = context.pendingDir.resolve(target.toString())
 
@@ -293,7 +319,10 @@ class ProfileManager(private val context: Context) :
         s.copyRecursively(t)
     }
 
-    private suspend fun scheduleUpdate(uuid: UUID, startImmediately: Boolean) {
+    private suspend fun scheduleUpdate(
+        uuid: UUID,
+        startImmediately: Boolean,
+    ) {
         val imported = ImportedDao().queryByUUID(uuid) ?: return
 
         if (startImmediately) {

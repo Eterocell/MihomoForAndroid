@@ -18,10 +18,11 @@ class OverrideSettingsActivity : BaseActivity<OverrideSettingsDesign>() {
             }
         }
 
-        val design = OverrideSettingsDesign(
-            this,
-            configuration,
-        )
+        val design =
+            OverrideSettingsDesign(
+                this,
+                configuration,
+            )
 
         setContentDesign(design)
 

@@ -15,6 +15,7 @@ interface ClashRuntimeScope {
 
 interface ClashRuntime {
     fun launch()
+
     fun requestGc()
 }
 
@@ -31,17 +32,18 @@ fun CoroutineScope.clashRuntime(block: suspend ClashRuntimeScope.() -> Unit): Cl
                         Clash.reset()
                         Clash.clearOverride(Clash.OverrideSlot.Session)
 
-                        val scope = object : ClashRuntimeScope {
-                            override fun <E, T : Module<E>> install(module: T): T {
-                                launch {
-                                    modules.add(module)
+                        val scope =
+                            object : ClashRuntimeScope {
+                                override fun <E, T : Module<E>> install(module: T): T {
+                                    launch {
+                                        modules.add(module)
 
-                                    module.execute()
+                                        module.execute()
+                                    }
+
+                                    return module
                                 }
-
-                                return module
                             }
-                        }
 
                         scope.block()
 

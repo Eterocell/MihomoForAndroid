@@ -14,7 +14,9 @@ data class Proxy(
     val delay: Int,
 ) : Parcelable {
     @Suppress("unused")
-    enum class Type(val group: Boolean) {
+    enum class Type(
+        val group: Boolean,
+    ) {
         Direct(false),
         Reject(false),
         RejectDrop(false),
@@ -46,7 +48,10 @@ data class Proxy(
         Unknown(false),
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 

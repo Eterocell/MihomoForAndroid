@@ -8,7 +8,11 @@ import android.os.Bundle
 import com.github.kr328.clash.common.Global
 
 class StatusProvider : ContentProvider() {
-    override fun call(method: String, arg: String?, extras: Bundle?): Bundle? {
+    override fun call(
+        method: String,
+        arg: String?,
+        extras: Bundle?,
+    ): Bundle? {
         return when (method) {
             METHOD_CURRENT_PROFILE -> {
                 return if (serviceRunning) {
@@ -23,7 +27,10 @@ class StatusProvider : ContentProvider() {
         }
     }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? = throw IllegalArgumentException("Stub!")
+    override fun insert(
+        uri: Uri,
+        values: ContentValues?,
+    ): Uri? = throw IllegalArgumentException("Stub!")
 
     override fun query(
         uri: Uri,
@@ -40,7 +47,11 @@ class StatusProvider : ContentProvider() {
         selectionArgs: Array<out String>?,
     ): Int = throw IllegalArgumentException("Stub!")
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int = throw IllegalArgumentException("Stub!")
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<out String>?,
+    ): Int = throw IllegalArgumentException("Stub!")
 
     override fun getType(uri: Uri): String? = throw IllegalArgumentException("Stub!")
 
@@ -58,7 +69,10 @@ class StatusProvider : ContentProvider() {
                 shouldStartClashOnBoot = value
             }
         var shouldStartClashOnBoot: Boolean
-            get() = Global.application.filesDir.resolve(CLASH_SERVICE_RUNNING_FILE).exists()
+            get() =
+                Global.application.filesDir
+                    .resolve(CLASH_SERVICE_RUNNING_FILE)
+                    .exists()
             set(value) {
                 Global.application.filesDir.resolve(CLASH_SERVICE_RUNNING_FILE).apply {
                     if (value) {

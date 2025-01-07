@@ -28,8 +28,9 @@ class AccessControlDesign(
         Export,
     }
 
-    private val binding = DesignAccessControlBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignAccessControlBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     private val adapter = AppAdapter(context, selected)
 
@@ -82,8 +83,9 @@ class AccessControlDesign(
 
     private suspend fun requestSearch() {
         coroutineScope {
-            val binding = DialogSearchBinding
-                .inflate(context.layoutInflater, context.root, false)
+            val binding =
+                DialogSearchBinding
+                    .inflate(context.layoutInflater, context.root, false)
             val adapter = AppAdapter(context, selected)
             val dialog = FullScreenDialog(context)
             val filter = Channel<Unit>(Channel.CONFLATED)
@@ -114,16 +116,17 @@ class AccessControlDesign(
 
                 val keyword = binding.keywordView.text?.toString() ?: ""
 
-                val apps: List<AppInfo> = if (keyword.isEmpty()) {
-                    emptyList()
-                } else {
-                    withContext(Dispatchers.Default) {
-                        apps.filter {
-                            it.label.contains(keyword, ignoreCase = true) ||
-                                it.packageName.contains(keyword, ignoreCase = true)
+                val apps: List<AppInfo> =
+                    if (keyword.isEmpty()) {
+                        emptyList()
+                    } else {
+                        withContext(Dispatchers.Default) {
+                            apps.filter {
+                                it.label.contains(keyword, ignoreCase = true) ||
+                                    it.packageName.contains(keyword, ignoreCase = true)
+                            }
                         }
                     }
-                }
 
                 adapter.patchDataSet(adapter::apps, apps, false, AppInfo::packageName)
 

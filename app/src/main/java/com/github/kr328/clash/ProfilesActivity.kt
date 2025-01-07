@@ -103,7 +103,11 @@ class ProfilesActivity : BaseActivity<ProfilesDesign>() {
             )
         }
     }
-    override fun onProfileUpdateFailed(uuid: UUID?, reason: String?) {
+
+    override fun onProfileUpdateFailed(
+        uuid: UUID?,
+        reason: String?,
+    ) {
         if (uuid == null) {
             return
         }

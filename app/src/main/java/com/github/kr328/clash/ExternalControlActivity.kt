@@ -29,40 +29,45 @@ class ExternalControlActivity :
                 val url = uri.getQueryParameter("url") ?: return finish()
 
                 launch {
-                    val uuid = withProfile {
-                        val type = when (uri.getQueryParameter("type")?.lowercase(Locale.getDefault())) {
-                            "url" -> Profile.Type.Url
-                            "file" -> Profile.Type.File
-                            else -> Profile.Type.Url
-                        }
-                        val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
+                    val uuid =
+                        withProfile {
+                            val type =
+                                when (uri.getQueryParameter("type")?.lowercase(Locale.getDefault())) {
+                                    "url" -> Profile.Type.Url
+                                    "file" -> Profile.Type.File
+                                    else -> Profile.Type.Url
+                                }
+                            val name = uri.getQueryParameter("name") ?: getString(R.string.new_profile)
 
-                        create(type, name).also {
-                            patch(it, name, url, 0)
+                            create(type, name).also {
+                                patch(it, name, url, 0)
+                            }
                         }
-                    }
                     startActivity(PropertiesActivity::class.intent.setUUID(uuid))
                     finish()
                 }
             }
 
-            Intents.ACTION_TOGGLE_CLASH -> if (Remote.broadcasts.clashRunning) {
-                stopClash()
-            } else {
-                startClash()
-            }
+            Intents.ACTION_TOGGLE_CLASH ->
+                if (Remote.broadcasts.clashRunning) {
+                    stopClash()
+                } else {
+                    startClash()
+                }
 
-            Intents.ACTION_START_CLASH -> if (!Remote.broadcasts.clashRunning) {
-                startClash()
-            } else {
-                Toast.makeText(this, R.string.external_control_started, Toast.LENGTH_LONG).show()
-            }
+            Intents.ACTION_START_CLASH ->
+                if (!Remote.broadcasts.clashRunning) {
+                    startClash()
+                } else {
+                    Toast.makeText(this, R.string.external_control_started, Toast.LENGTH_LONG).show()
+                }
 
-            Intents.ACTION_STOP_CLASH -> if (Remote.broadcasts.clashRunning) {
-                stopClash()
-            } else {
-                Toast.makeText(this, R.string.external_control_stopped, Toast.LENGTH_LONG).show()
-            }
+            Intents.ACTION_STOP_CLASH ->
+                if (Remote.broadcasts.clashRunning) {
+                    stopClash()
+                } else {
+                    Toast.makeText(this, R.string.external_control_stopped, Toast.LENGTH_LONG).show()
+                }
         }
         return finish()
     }

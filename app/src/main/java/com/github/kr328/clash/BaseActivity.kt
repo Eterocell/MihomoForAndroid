@@ -33,7 +33,6 @@ abstract class BaseActivity<D : Design<*>> :
     AppCompatActivity(),
     CoroutineScope by MainScope(),
     Broadcasts.Observer {
-
     protected val uiStore by lazy { UiStore(this) }
     protected val events = Channel<Event>(Channel.UNLIMITED)
     protected var activityStarted: Boolean = false
@@ -63,17 +62,20 @@ abstract class BaseActivity<D : Design<*>> :
     suspend fun <I, O> startActivityForResult(
         contracts: ActivityResultContract<I, O>,
         input: I,
-    ): O = withContext(Dispatchers.Main) {
-        val requestKey = nextRequestKey.getAndIncrement().toString()
+    ): O =
+        withContext(Dispatchers.Main) {
+            val requestKey = nextRequestKey.getAndIncrement().toString()
 
-        ActivityResultLifecycle().use { lifecycle, start ->
-            suspendCoroutine { c ->
-                activityResultRegistry.register(requestKey, lifecycle, contracts) {
-                    c.resume(it)
-                }.apply { start() }.launch(input)
+            ActivityResultLifecycle().use { lifecycle, start ->
+                suspendCoroutine { c ->
+                    activityResultRegistry
+                        .register(requestKey, lifecycle, contracts) {
+                            c.resume(it)
+                        }.apply { start() }
+                        .launch(input)
+                }
             }
         }
-    }
 
     suspend fun setContentDesign(design: D) {
         suspendCoroutine<Unit> {
@@ -153,7 +155,10 @@ abstract class BaseActivity<D : Design<*>> :
         events.trySend(Event.ProfileUpdateCompleted)
     }
 
-    override fun onProfileUpdateFailed(uuid: UUID?, reason: String?) {
+    override fun onProfileUpdateFailed(
+        uuid: UUID?,
+        reason: String?,
+    ) {
         events.trySend(Event.ProfileUpdateFailed)
     }
 
@@ -179,11 +184,12 @@ abstract class BaseActivity<D : Design<*>> :
         }
     }
 
-    private fun queryDayNight(config: Configuration = resources.configuration): DayNight = when (uiStore.darkMode) {
-        DarkMode.Auto -> if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) DayNight.Night else DayNight.Day
-        DarkMode.ForceLight -> DayNight.Day
-        DarkMode.ForceDark -> DayNight.Night
-    }
+    private fun queryDayNight(config: Configuration = resources.configuration): DayNight =
+        when (uiStore.darkMode) {
+            DarkMode.Auto -> if (config.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) DayNight.Night else DayNight.Day
+            DarkMode.ForceLight -> DayNight.Day
+            DarkMode.ForceDark -> DayNight.Night
+        }
 
     private fun applyDayNight(config: Configuration = resources.configuration) {
         val dayNight = queryDayNight(config)

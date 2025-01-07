@@ -13,8 +13,9 @@ import com.github.kr328.clash.service.util.sendOverrideChanged
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 
-class ClashManager(private val context: Context) :
-    IClashManager,
+class ClashManager(
+    private val context: Context,
+) : IClashManager,
     CoroutineScope by CoroutineScope(Dispatchers.IO) {
     private val store = ServiceStore(context)
     private var logReceiver: ReceiveChannel<LogMessage>? = null
@@ -25,7 +26,10 @@ class ClashManager(private val context: Context) :
 
     override fun queryProxyGroupNames(excludeNotSelectable: Boolean): List<String> = Clash.queryGroupNames(excludeNotSelectable)
 
-    override fun queryProxyGroup(name: String, proxySort: ProxySort): ProxyGroup = Clash.queryGroup(name, proxySort)
+    override fun queryProxyGroup(
+        name: String,
+        proxySort: ProxySort,
+    ): ProxyGroup = Clash.queryGroup(name, proxySort)
 
     override fun queryConfiguration(): UiConfiguration = Clash.queryConfiguration()
 
@@ -33,7 +37,10 @@ class ClashManager(private val context: Context) :
 
     override fun queryOverride(slot: Clash.OverrideSlot): ConfigurationOverride = Clash.queryOverride(slot)
 
-    override fun patchSelector(group: String, name: String): Boolean {
+    override fun patchSelector(
+        group: String,
+        name: String,
+    ): Boolean {
         return Clash.patchSelector(group, name).also {
             val current = store.activeProfile ?: return@also
 
@@ -45,7 +52,10 @@ class ClashManager(private val context: Context) :
         }
     }
 
-    override fun patchOverride(slot: Clash.OverrideSlot, configuration: ConfigurationOverride) {
+    override fun patchOverride(
+        slot: Clash.OverrideSlot,
+        configuration: ConfigurationOverride,
+    ) {
         Clash.patchOverride(slot, configuration)
 
         context.sendOverrideChanged()
@@ -57,7 +67,10 @@ class ClashManager(private val context: Context) :
 
     override suspend fun healthCheck(group: String) = Clash.healthCheck(group).await()
 
-    override suspend fun updateProvider(type: Provider.Type, name: String) = Clash.updateProvider(type, name).await()
+    override suspend fun updateProvider(
+        type: Provider.Type,
+        name: String,
+    ) = Clash.updateProvider(type, name).await()
 
     override fun setLogObserver(observer: ILogObserver?) {
         synchronized(this) {
@@ -68,26 +81,27 @@ class ClashManager(private val context: Context) :
             }
 
             if (observer != null) {
-                logReceiver = Clash.subscribeLogcat().also { c ->
-                    launch {
-                        try {
-                            while (isActive) {
-                                observer.newItem(c.receive())
-                            }
-                        } catch (e: CancellationException) {
-                            // intended behavior
-                            // ignore
-                        } catch (e: Exception) {
-                            Log.w("UI crashed", e)
-                        } finally {
-                            withContext(NonCancellable) {
-                                c.cancel()
+                logReceiver =
+                    Clash.subscribeLogcat().also { c ->
+                        launch {
+                            try {
+                                while (isActive) {
+                                    observer.newItem(c.receive())
+                                }
+                            } catch (e: CancellationException) {
+                                // intended behavior
+                                // ignore
+                            } catch (e: Exception) {
+                                Log.w("UI crashed", e)
+                            } finally {
+                                withContext(NonCancellable) {
+                                    c.cancel()
 
-                                Clash.forceGc()
+                                    Clash.forceGc()
+                                }
                             }
                         }
                     }
-                }
             }
         }
     }

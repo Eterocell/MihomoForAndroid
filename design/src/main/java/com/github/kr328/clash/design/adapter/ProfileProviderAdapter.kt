@@ -12,19 +12,28 @@ class ProfileProviderAdapter(
     private val select: (ProfileProvider) -> Unit,
     private val detail: (ProfileProvider) -> Boolean,
 ) : RecyclerView.Adapter<ProfileProviderAdapter.Holder>() {
-    class Holder(val binding: AdapterProfileProviderBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterProfileProviderBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     var providers: List<ProfileProvider> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterProfileProviderBinding.inflate(
-            context.layoutInflater,
-            parent,
-            false,
-        ),
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterProfileProviderBinding.inflate(
+                context.layoutInflater,
+                parent,
+                false,
+            ),
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = providers[position]
         val binding = holder.binding
 

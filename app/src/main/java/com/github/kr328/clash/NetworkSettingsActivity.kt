@@ -8,12 +8,13 @@ import kotlinx.coroutines.selects.select
 
 class NetworkSettingsActivity : BaseActivity<NetworkSettingsDesign>() {
     override suspend fun main() {
-        val design = NetworkSettingsDesign(
-            this,
-            uiStore,
-            ServiceStore(this),
-            clashRunning,
-        )
+        val design =
+            NetworkSettingsDesign(
+                this,
+                uiStore,
+                ServiceStore(this),
+                clashRunning,
+            )
 
         setContentDesign(design)
 

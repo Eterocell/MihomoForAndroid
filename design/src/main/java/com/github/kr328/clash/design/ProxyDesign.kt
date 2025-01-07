@@ -30,16 +30,30 @@ class ProxyDesign(
 ) : Design<ProxyDesign.Request>(context) {
     sealed class Request {
         data object ReloadAll : Request()
+
         data object ReLaunch : Request()
 
-        data class PatchMode(val mode: TunnelState.Mode?) : Request()
-        data class Reload(val index: Int) : Request()
-        data class Select(val index: Int, val name: String) : Request()
-        data class UrlTest(val index: Int) : Request()
+        data class PatchMode(
+            val mode: TunnelState.Mode?,
+        ) : Request()
+
+        data class Reload(
+            val index: Int,
+        ) : Request()
+
+        data class Select(
+            val index: Int,
+            val name: String,
+        ) : Request()
+
+        data class UrlTest(
+            val index: Int,
+        ) : Request()
     }
 
-    private val binding = DesignProxyBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignProxyBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     private var config = ProxyViewConfig(context, uiStore.proxyLine)
 
@@ -107,36 +121,40 @@ class ProxyDesign(
             binding.pagesView.visibility = View.GONE
             binding.urlTestFloatView.visibility = View.GONE
         } else {
-            binding.urlTestFloatView.supportImageTintList = ColorStateList.valueOf(
-                context.resolveThemedColor(R.attr.colorOnPrimary),
-            )
+            binding.urlTestFloatView.supportImageTintList =
+                ColorStateList.valueOf(
+                    context.resolveThemedColor(R.attr.colorOnPrimary),
+                )
 
             binding.pagesView.apply {
-                adapter = ProxyPageAdapter(
-                    surface,
-                    config,
-                    List(groupNames.size) { index ->
-                        ProxyAdapter(config) { name ->
-                            requests.trySend(Request.Select(index, name))
+                adapter =
+                    ProxyPageAdapter(
+                        surface,
+                        config,
+                        List(groupNames.size) { index ->
+                            ProxyAdapter(config) { name ->
+                                requests.trySend(Request.Select(index, name))
+                            }
+                        },
+                    ) {
+                        if (it == currentItem) {
+                            updateUrlTestButtonStatus()
+                        }
+                    }
+
+                registerOnPageChangeCallback(
+                    object : ViewPager2.OnPageChangeCallback() {
+                        override fun onPageScrollStateChanged(state: Int) {
+                            horizontalScrolling = state != ViewPager2.SCROLL_STATE_IDLE
+
+                            updateUrlTestButtonStatus()
+                        }
+
+                        override fun onPageSelected(position: Int) {
+                            uiStore.proxyLastGroup = groupNames[position]
                         }
                     },
-                ) {
-                    if (it == currentItem) {
-                        updateUrlTestButtonStatus()
-                    }
-                }
-
-                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageScrollStateChanged(state: Int) {
-                        horizontalScrolling = state != ViewPager2.SCROLL_STATE_IDLE
-
-                        updateUrlTestButtonStatus()
-                    }
-
-                    override fun onPageSelected(position: Int) {
-                        uiStore.proxyLastGroup = groupNames[position]
-                    }
-                })
+                )
             }
 
             TabLayoutMediator(binding.tabLayoutView, binding.pagesView) { tab, index ->

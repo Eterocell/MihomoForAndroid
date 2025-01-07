@@ -101,9 +101,10 @@ subprojects {
             val keystore = rootProject.file("signing.properties")
             if (keystore.exists()) {
                 create("release") {
-                    val prop = Properties().apply {
-                        keystore.inputStream().use(this::load)
-                    }
+                    val prop =
+                        Properties().apply {
+                            keystore.inputStream().use(this::load)
+                        }
 
                     storeFile = rootProject.file(prop.getProperty("keystore.path"))
                     storePassword = prop.getProperty("keystore.password")!!

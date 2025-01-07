@@ -7,12 +7,15 @@ import com.github.kr328.clash.service.PreferenceProvider
 import com.github.kr328.clash.service.model.AccessControlMode
 import java.util.*
 
-class ServiceStore(context: Context) {
-    private val store = Store(
-        PreferenceProvider
-            .createSharedPreferencesFromContext(context)
-            .asStoreProvider(),
-    )
+class ServiceStore(
+    context: Context,
+) {
+    private val store =
+        Store(
+            PreferenceProvider
+                .createSharedPreferencesFromContext(context)
+                .asStoreProvider(),
+        )
 
     var activeProfile: UUID? by store.typedString(
         key = "active_profile",

@@ -17,16 +17,18 @@ fun CoroutineScope.preferenceScreen(
     context: Context,
     configure: PreferenceScreen.() -> Unit,
 ): PreferenceScreen {
-    val root = LinearLayout(context).apply {
-        orientation = LinearLayout.VERTICAL
-    }
+    val root =
+        LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+        }
 
-    val impl = object : PreferenceScreen, CoroutineScope by this {
-        override val context: Context
-            get() = context
-        override val root: ViewGroup
-            get() = root
-    }
+    val impl =
+        object : PreferenceScreen, CoroutineScope by this {
+            override val context: Context
+                get() = context
+            override val root: ViewGroup
+                get() = root
+        }
 
     impl.configure()
 

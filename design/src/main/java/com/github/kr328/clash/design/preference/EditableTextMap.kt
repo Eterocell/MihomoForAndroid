@@ -55,21 +55,23 @@ fun <K, V> PreferenceScreen.editableTextMap(
     impl.configure()
 
     launch(Dispatchers.Main) {
-        val v = withContext(Dispatchers.IO) {
-            value.get()
-        }
+        val v =
+            withContext(Dispatchers.IO) {
+                value.get()
+            }
 
         impl.map = v
 
         impl.clicked {
             this@editableTextMap.launch(Dispatchers.Main) {
-                val newMap = requestEditTextMap(
-                    impl.map,
-                    context,
-                    keyAdapter,
-                    valueAdapter,
-                    impl.title,
-                )
+                val newMap =
+                    requestEditTextMap(
+                        impl.map,
+                        context,
+                        keyAdapter,
+                        valueAdapter,
+                        impl.title,
+                    )
 
                 withContext(Dispatchers.IO) {
                     value.set(newMap)
@@ -90,24 +92,27 @@ private suspend fun <K, V> requestEditTextMap(
     valueAdapter: TextAdapter<V>,
     title: CharSequence,
 ): Map<K, V>? {
-    val editableValue = withContext(Dispatchers.Default) {
-        initialValue?.map { it.key to it.value }?.toMutableList() ?: mutableListOf()
-    }
-
-    val recyclerAdapter = EditableTextMapAdapter(
-        context,
-        editableValue,
-        keyAdapter,
-        valueAdapter,
-    )
-
-    val result = requestEditableListOverlay(context, recyclerAdapter, title) {
-        val newItem = requestModelInputEntry(context, title)
-
-        if (newItem != null) {
-            recyclerAdapter.addElement(newItem.first, newItem.second)
+    val editableValue =
+        withContext(Dispatchers.Default) {
+            initialValue?.map { it.key to it.value }?.toMutableList() ?: mutableListOf()
         }
-    }
+
+    val recyclerAdapter =
+        EditableTextMapAdapter(
+            context,
+            editableValue,
+            keyAdapter,
+            valueAdapter,
+        )
+
+    val result =
+        requestEditableListOverlay(context, recyclerAdapter, title) {
+            val newItem = requestModelInputEntry(context, title)
+
+            if (newItem != null) {
+                recyclerAdapter.addElement(newItem.first, newItem.second)
+            }
+        }
 
     return when (result) {
         EditableListOverlayResult.Cancel -> initialValue
@@ -119,29 +124,37 @@ private suspend fun <K, V> requestEditTextMap(
 private suspend fun requestModelInputEntry(
     context: Context,
     title: CharSequence,
-): Pair<String, String>? = suspendCancellableCoroutine { ctx ->
-    val binding = DialogEditableMapTextFieldBinding
-        .inflate(context.layoutInflater, context.root, false)
+): Pair<String, String>? =
+    suspendCancellableCoroutine { ctx ->
+        val binding =
+            DialogEditableMapTextFieldBinding
+                .inflate(context.layoutInflater, context.root, false)
 
-    val dialog = MaterialAlertDialogBuilder(context)
-        .setTitle(title)
-        .setNegativeButton(R.string.cancel) { _, _ -> }
-        .setPositiveButton(R.string.ok) { _, _ ->
-            val k = binding.keyView.text?.toString()?.trim() ?: ""
-            val v = binding.valueView.text?.toString()?.trim() ?: ""
+        val dialog =
+            MaterialAlertDialogBuilder(context)
+                .setTitle(title)
+                .setNegativeButton(R.string.cancel) { _, _ -> }
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    val k =
+                        binding.keyView.text
+                            ?.toString()
+                            ?.trim() ?: ""
+                    val v =
+                        binding.valueView.text
+                            ?.toString()
+                            ?.trim() ?: ""
 
-            if (k.isNotEmpty() && v.isNotEmpty()) {
-                ctx.resume(k to v)
+                    if (k.isNotEmpty() && v.isNotEmpty()) {
+                        ctx.resume(k to v)
+                    }
+                }.setView(binding.root)
+                .create()
+
+        dialog.setOnCancelListener {
+            if (!ctx.isCompleted) {
+                ctx.resume(null)
             }
         }
-        .setView(binding.root)
-        .create()
 
-    dialog.setOnCancelListener {
-        if (!ctx.isCompleted) {
-            ctx.resume(null)
-        }
+        dialog.show()
     }
-
-    dialog.show()
-}

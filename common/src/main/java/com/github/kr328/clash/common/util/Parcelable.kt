@@ -4,8 +4,16 @@ import android.os.Binder
 import android.os.Parcel
 import android.os.Parcelable
 
-private class SliceParcelableListBpBinder(val list: List<Parcelable>, val flags: Int) : Binder() {
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, tFlags: Int): Boolean {
+private class SliceParcelableListBpBinder(
+    val list: List<Parcelable>,
+    val flags: Int,
+) : Binder() {
+    override fun onTransact(
+        code: Int,
+        data: Parcel,
+        reply: Parcel?,
+        tFlags: Int,
+    ): Boolean {
         when (code) {
             TRANSACTION_GET_ITEMS -> {
                 reply ?: return false
@@ -33,7 +41,10 @@ private class SliceParcelableListBpBinder(val list: List<Parcelable>, val flags:
     }
 }
 
-fun <T : Parcelable> List<T>.writeToParcelSlice(parcel: Parcel, flags: Int) {
+fun <T : Parcelable> List<T>.writeToParcelSlice(
+    parcel: Parcel,
+    flags: Int,
+) {
     val bp = SliceParcelableListBpBinder(this, flags)
 
     parcel.writeInt(size)

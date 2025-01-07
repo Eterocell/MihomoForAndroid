@@ -8,8 +8,11 @@ plugins {
 val wrapper: Wrapper by tasks.named<Wrapper>("wrapper") {
     gradleVersion = "8.10.2"
     distributionType = Wrapper.DistributionType.ALL
-    val sha256 = URI("$distributionUrl.sha256").toURL().openStream()
-        .use { it.reader().readText().trim() }
+    val sha256 =
+        URI("$distributionUrl.sha256")
+            .toURL()
+            .openStream()
+            .use { it.reader().readText().trim() }
     distributionSha256Sum = sha256
 }
 

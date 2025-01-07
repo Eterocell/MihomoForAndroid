@@ -25,7 +25,10 @@ data class Provider(
         Compatible,
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 

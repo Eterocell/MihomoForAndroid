@@ -32,13 +32,14 @@ class ProxyPageAdapter(
         parent: ProxyState,
         links: Map<String, ProxyState>,
     ) {
-        val states = withContext(Dispatchers.Default) {
-            proxies.map {
-                val link = if (it.type.group) links[it.name] else null
+        val states =
+            withContext(Dispatchers.Default) {
+                proxies.map {
+                    val link = if (it.type.group) links[it.name] else null
 
-                ProxyViewState(config, it, parent, link)
+                    ProxyViewState(config, it, parent, link)
+                }
             }
-        }
 
         withContext(Dispatchers.Main) {
             adapters[position].apply {
@@ -51,11 +52,16 @@ class ProxyPageAdapter(
     }
 
     fun requestRedrawVisible() {
-        factory.fromRoot(parent?.firstVisibleView ?: return)
-            .recyclerView.invalidateChildren()
+        factory
+            .fromRoot(parent?.firstVisibleView ?: return)
+            .recyclerView
+            .invalidateChildren()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProxyPageFactory.Holder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ProxyPageFactory.Holder {
         val holder = factory.newInstance()
 
         val toolbarHeight = config.context.getPixels(R.dimen.toolbar_height)
@@ -76,7 +82,10 @@ class ProxyPageAdapter(
         return holder
     }
 
-    override fun onBindViewHolder(holder: ProxyPageFactory.Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ProxyPageFactory.Holder,
+        position: Int,
+    ) {
         val adapter = adapters[position]
 
         states[position].bottom = false

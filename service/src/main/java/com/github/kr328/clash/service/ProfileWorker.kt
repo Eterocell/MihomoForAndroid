@@ -56,25 +56,31 @@ class ProfileWorker : BaseService() {
         super.onDestroy()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         super.onStartCommand(intent, flags, startId)
 
         when (intent?.action) {
             Intents.ACTION_PROFILE_REQUEST_UPDATE -> {
                 intent.uuid?.also {
-                    val job = launch {
-                        run(it)
-                    }
+                    val job =
+                        launch {
+                            run(it)
+                        }
 
                     jobs.add(job)
                 }
             }
             Intents.ACTION_PROFILE_SCHEDULE_UPDATES -> {
-                val job = launch {
-                    ProfileReceiver.rescheduleAll(service)
+                val job =
+                    launch {
+                        ProfileReceiver.rescheduleAll(service)
 
-                    delay(TimeUnit.SECONDS.toMillis(30))
-                }
+                        delay(TimeUnit.SECONDS.toMillis(30))
+                    }
 
                 jobs.add(job)
             }
@@ -102,71 +108,91 @@ class ProfileWorker : BaseService() {
     private fun createChannels() {
         NotificationManagerCompat.from(this).createNotificationChannelsCompat(
             listOf(
-                NotificationChannelCompat.Builder(
-                    SERVICE_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_LOW,
-                ).setName(getString(R.string.profile_service_status)).build(),
-                NotificationChannelCompat.Builder(
-                    STATUS_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_LOW,
-                ).setName(getString(R.string.profile_process_status)).build(),
-                NotificationChannelCompat.Builder(
-                    RESULT_CHANNEL,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT,
-                ).setName(getString(R.string.profile_process_result)).build(),
+                NotificationChannelCompat
+                    .Builder(
+                        SERVICE_CHANNEL,
+                        NotificationManagerCompat.IMPORTANCE_LOW,
+                    ).setName(getString(R.string.profile_service_status))
+                    .build(),
+                NotificationChannelCompat
+                    .Builder(
+                        STATUS_CHANNEL,
+                        NotificationManagerCompat.IMPORTANCE_LOW,
+                    ).setName(getString(R.string.profile_process_status))
+                    .build(),
+                NotificationChannelCompat
+                    .Builder(
+                        RESULT_CHANNEL,
+                        NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                    ).setName(getString(R.string.profile_process_result))
+                    .build(),
             ),
         )
     }
 
     private fun foreground() {
-        val notification = NotificationCompat.Builder(this, SERVICE_CHANNEL)
-            .setContentTitle(getString(R.string.profile_updater))
-            .setContentText(getString(R.string.running))
-            .setColor(getColorCompat(R.color.color_clash))
-            .setSmallIcon(R.drawable.ic_logo_service)
-            .setOngoing(true)
-            .setOnlyAlertOnce(true)
-            .build()
+        val notification =
+            NotificationCompat
+                .Builder(this, SERVICE_CHANNEL)
+                .setContentTitle(getString(R.string.profile_updater))
+                .setContentText(getString(R.string.running))
+                .setColor(getColorCompat(R.color.color_clash))
+                .setSmallIcon(R.drawable.ic_logo_service)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .build()
 
         startForeground(R.id.nf_profile_worker, notification)
     }
 
-    private suspend inline fun processing(name: String, block: () -> Unit) {
+    private suspend inline fun processing(
+        name: String,
+        block: () -> Unit,
+    ) {
         val id = UndefinedIds.next()
 
-        val notification = NotificationCompat.Builder(this, STATUS_CHANNEL)
-            .setContentTitle(getString(R.string.profile_updating))
-            .setContentText(name)
-            .setColor(getColorCompat(R.color.color_clash))
-            .setSmallIcon(R.drawable.ic_logo_service)
-            .setOngoing(true)
-            .setOnlyAlertOnce(true)
-            .setGroup(STATUS_CHANNEL)
-            .build()
+        val notification =
+            NotificationCompat
+                .Builder(this, STATUS_CHANNEL)
+                .setContentTitle(getString(R.string.profile_updating))
+                .setContentText(name)
+                .setColor(getColorCompat(R.color.color_clash))
+                .setSmallIcon(R.drawable.ic_logo_service)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setGroup(STATUS_CHANNEL)
+                .build()
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat.from(this)
+            NotificationManagerCompat
+                .from(this)
                 .notify(id, notification)
         }
         try {
             block()
         } finally {
             withContext(NonCancellable) {
-                NotificationManagerCompat.from(applicationContext)
+                NotificationManagerCompat
+                    .from(applicationContext)
                     .cancel(id)
             }
         }
     }
 
-    private fun resultBuilder(id: Int, uuid: UUID): NotificationCompat.Builder {
-        val intent = PendingIntent.getActivity(
-            this,
-            id,
-            Intent().setComponent(Components.PROPERTIES_ACTIVITY).setUUID(uuid),
-            pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
-        )
+    private fun resultBuilder(
+        id: Int,
+        uuid: UUID,
+    ): NotificationCompat.Builder {
+        val intent =
+            PendingIntent.getActivity(
+                this,
+                id,
+                Intent().setComponent(Components.PROPERTIES_ACTIVITY).setUUID(uuid),
+                pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+            )
 
-        return NotificationCompat.Builder(this, RESULT_CHANNEL)
+        return NotificationCompat
+            .Builder(this, RESULT_CHANNEL)
             .setColor(getColorCompat(R.color.color_clash))
             .setSmallIcon(R.drawable.ic_logo_service)
             .setOnlyAlertOnce(true)
@@ -175,35 +201,46 @@ class ProfileWorker : BaseService() {
             .setGroup(RESULT_CHANNEL)
     }
 
-    private fun completed(uuid: UUID, name: String) {
+    private fun completed(
+        uuid: UUID,
+        name: String,
+    ) {
         val id = UndefinedIds.next()
 
-        val notification = resultBuilder(id, uuid)
-            .setContentTitle(getString(R.string.update_successfully))
-            .setContentText(getString(R.string.format_update_complete, name))
-            .build()
+        val notification =
+            resultBuilder(id, uuid)
+                .setContentTitle(getString(R.string.update_successfully))
+                .setContentText(getString(R.string.format_update_complete, name))
+                .build()
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat.from(this)
+            NotificationManagerCompat
+                .from(this)
                 .notify(id, notification)
         }
 
         sendProfileUpdateCompleted(uuid)
     }
 
-    private fun failed(uuid: UUID, name: String, reason: String) {
+    private fun failed(
+        uuid: UUID,
+        name: String,
+        reason: String,
+    ) {
         val id = UndefinedIds.next()
 
         val content = getString(R.string.format_update_failure, name, reason)
 
-        val notification = resultBuilder(id, uuid)
-            .setContentTitle(getString(R.string.update_failure))
-            .setContentText(content)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            .build()
+        val notification =
+            resultBuilder(id, uuid)
+                .setContentTitle(getString(R.string.update_failure))
+                .setContentText(content)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(content))
+                .build()
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat.from(this)
+            NotificationManagerCompat
+                .from(this)
                 .notify(id, notification)
         }
 

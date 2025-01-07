@@ -12,19 +12,26 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 
-class LogsDesign(context: Context) : Design<LogsDesign.Request>(context) {
+class LogsDesign(
+    context: Context,
+) : Design<LogsDesign.Request>(context) {
     sealed class Request {
         data object StartLogcat : Request()
+
         data object DeleteAll : Request()
 
-        data class OpenFile(val file: LogFile) : Request()
+        data class OpenFile(
+            val file: LogFile,
+        ) : Request()
     }
 
-    private val binding = DesignLogsBinding
-        .inflate(context.layoutInflater, context.root, false)
-    private val adapter = LogFileAdapter(context) {
-        requests.trySend(Request.OpenFile(it))
-    }
+    private val binding =
+        DesignLogsBinding
+            .inflate(context.layoutInflater, context.root, false)
+    private val adapter =
+        LogFileAdapter(context) {
+            requests.trySend(Request.OpenFile(it))
+        }
 
     override val root: View
         get() = binding.root
@@ -33,17 +40,18 @@ class LogsDesign(context: Context) : Design<LogsDesign.Request>(context) {
         adapter.patchDataSet(adapter::logs, logs, false, LogFile::fileName)
     }
 
-    suspend fun requestDeleteAll(): Boolean = withContext(Dispatchers.Main) {
-        suspendCancellableCoroutine { ctx ->
-            MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.delete_all_logs)
-                .setMessage(R.string.delete_all_logs_warn)
-                .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .show()
-                .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
+    suspend fun requestDeleteAll(): Boolean =
+        withContext(Dispatchers.Main) {
+            suspendCancellableCoroutine { ctx ->
+                MaterialAlertDialogBuilder(context)
+                    .setTitle(R.string.delete_all_logs)
+                    .setMessage(R.string.delete_all_logs_warn)
+                    .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
+                    .show()
+                    .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
+            }
         }
-    }
 
     init {
         binding.self = this

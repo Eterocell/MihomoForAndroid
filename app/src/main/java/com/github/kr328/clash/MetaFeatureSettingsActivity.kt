@@ -27,10 +27,11 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
             }
         }
 
-        val design = MetaFeatureSettingsDesign(
-            this,
-            configuration,
-        )
+        val design =
+            MetaFeatureSettingsDesign(
+                this,
+                configuration,
+            )
 
         setContentDesign(design)
 
@@ -51,31 +52,35 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
                             }
                         }
                         MetaFeatureSettingsDesign.Request.ImportGeoIp -> {
-                            val uri = startActivityForResult(
-                                ActivityResultContracts.GetContent(),
-                                "*/*",
-                            )
+                            val uri =
+                                startActivityForResult(
+                                    ActivityResultContracts.GetContent(),
+                                    "*/*",
+                                )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportGeoIp)
                         }
                         MetaFeatureSettingsDesign.Request.ImportGeoSite -> {
-                            val uri = startActivityForResult(
-                                ActivityResultContracts.GetContent(),
-                                "*/*",
-                            )
+                            val uri =
+                                startActivityForResult(
+                                    ActivityResultContracts.GetContent(),
+                                    "*/*",
+                                )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportGeoSite)
                         }
                         MetaFeatureSettingsDesign.Request.ImportCountry -> {
-                            val uri = startActivityForResult(
-                                ActivityResultContracts.GetContent(),
-                                "*/*",
-                            )
+                            val uri =
+                                startActivityForResult(
+                                    ActivityResultContracts.GetContent(),
+                                    "*/*",
+                                )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportCountry)
                         }
                         MetaFeatureSettingsDesign.Request.ImportASN -> {
-                            val uri = startActivityForResult(
-                                ActivityResultContracts.GetContent(),
-                                "*/*",
-                            )
+                            val uri =
+                                startActivityForResult(
+                                    ActivityResultContracts.GetContent(),
+                                    "*/*",
+                                )
                             importGeoFile(uri, MetaFeatureSettingsDesign.Request.ImportASN)
                         }
                     }
@@ -84,14 +89,19 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
         }
     }
 
-    private val validDatabaseExtensions = listOf(
-        ".metadb", ".db", ".dat", ".mmdb",
-    )
+    private val validDatabaseExtensions =
+        listOf(
+            ".metadb", ".db", ".dat", ".mmdb",
+        )
 
-    private suspend fun importGeoFile(uri: Uri?, importType: MetaFeatureSettingsDesign.Request) {
-        val cursor: Cursor? = uri?.let {
-            contentResolver.query(it, null, null, null, null, null)
-        }
+    private suspend fun importGeoFile(
+        uri: Uri?,
+        importType: MetaFeatureSettingsDesign.Request,
+    ) {
+        val cursor: Cursor? =
+            uri?.let {
+                contentResolver.query(it, null, null, null, null, null)
+            }
         cursor?.use {
             if (it.moveToFirst()) {
                 val columnIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -107,22 +117,22 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
                                 R.string.geofile_unknown_db_format_message,
                                 validDatabaseExtensions.joinToString("/"),
                             ),
-                        )
-                        .setPositiveButton("OK") { _, _ -> }
+                        ).setPositiveButton("OK") { _, _ -> }
                         .show()
                     return
                 }
-                val outputFileName = when (importType) {
-                    MetaFeatureSettingsDesign.Request.ImportGeoIp ->
-                        "geoip$ext"
-                    MetaFeatureSettingsDesign.Request.ImportGeoSite ->
-                        "geosite$ext"
-                    MetaFeatureSettingsDesign.Request.ImportCountry ->
-                        "country$ext"
-                    MetaFeatureSettingsDesign.Request.ImportASN ->
-                        "ASN$ext"
-                    else -> ""
-                }
+                val outputFileName =
+                    when (importType) {
+                        MetaFeatureSettingsDesign.Request.ImportGeoIp ->
+                            "geoip$ext"
+                        MetaFeatureSettingsDesign.Request.ImportGeoSite ->
+                            "geosite$ext"
+                        MetaFeatureSettingsDesign.Request.ImportCountry ->
+                            "country$ext"
+                        MetaFeatureSettingsDesign.Request.ImportASN ->
+                            "ASN$ext"
+                        else -> ""
+                    }
 
                 withContext(Dispatchers.IO) {
                     val outputFile = File(clashDir, outputFileName)
@@ -132,10 +142,11 @@ class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
                         }
                     }
                 }
-                Toast.makeText(
-                    this, getString(R.string.geofile_imported, displayName),
-                    Toast.LENGTH_LONG,
-                ).show()
+                Toast
+                    .makeText(
+                        this, getString(R.string.geofile_imported, displayName),
+                        Toast.LENGTH_LONG,
+                    ).show()
                 return
             }
         }

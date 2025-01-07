@@ -17,14 +17,18 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 
-class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(context) {
+class PropertiesDesign(
+    context: Context,
+) : Design<PropertiesDesign.Request>(context) {
     sealed class Request {
         data object Commit : Request()
+
         data object BrowseFiles : Request()
     }
 
-    private val binding = DesignPropertiesBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignPropertiesBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     override val root: View
         get() = binding.root
@@ -59,20 +63,22 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
         }
     }
 
-    suspend fun requestExitWithoutSaving(): Boolean = withContext(Dispatchers.Main) {
-        suspendCancellableCoroutine { ctx ->
-            val dialog = MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.exit_without_save)
-                .setMessage(R.string.exit_without_save_warning)
-                .setCancelable(true)
-                .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
-                .show()
+    suspend fun requestExitWithoutSaving(): Boolean =
+        withContext(Dispatchers.Main) {
+            suspendCancellableCoroutine { ctx ->
+                val dialog =
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.exit_without_save)
+                        .setMessage(R.string.exit_without_save_warning)
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+                        .setNegativeButton(R.string.cancel) { _, _ -> }
+                        .setOnDismissListener { if (!ctx.isCompleted) ctx.resume(false) }
+                        .show()
 
-            ctx.invokeOnCancellation { dialog.dismiss() }
+                ctx.invokeOnCancellation { dialog.dismiss() }
+            }
         }
-    }
 
     init {
         binding.self = this
@@ -86,13 +92,14 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
 
     fun inputName() {
         launch {
-            val name = context.requestModelTextInput(
-                initial = profile.name,
-                title = context.getText(R.string.name),
-                hint = context.getText(R.string.properties),
-                error = context.getText(R.string.should_not_be_blank),
-                validator = ValidatorNotBlank,
-            )
+            val name =
+                context.requestModelTextInput(
+                    initial = profile.name,
+                    title = context.getText(R.string.name),
+                    hint = context.getText(R.string.properties),
+                    error = context.getText(R.string.should_not_be_blank),
+                    validator = ValidatorNotBlank,
+                )
 
             if (name != profile.name) {
                 profile = profile.copy(name = name)
@@ -106,13 +113,14 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
         }
 
         launch {
-            val url = context.requestModelTextInput(
-                initial = profile.source,
-                title = context.getText(R.string.url),
-                hint = context.getText(R.string.profile_url),
-                error = context.getText(R.string.accept_http_content),
-                validator = ValidatorHttpUrl,
-            )
+            val url =
+                context.requestModelTextInput(
+                    initial = profile.source,
+                    title = context.getText(R.string.url),
+                    hint = context.getText(R.string.profile_url),
+                    error = context.getText(R.string.accept_http_content),
+                    validator = ValidatorHttpUrl,
+                )
 
             if (url != profile.source) {
                 profile = profile.copy(source = url)
@@ -124,13 +132,14 @@ class PropertiesDesign(context: Context) : Design<PropertiesDesign.Request>(cont
         launch {
             var minutes = TimeUnit.MILLISECONDS.toMinutes(profile.interval)
 
-            minutes = context.requestModelTextInput(
-                initial = if (minutes == 0L) "" else minutes.toString(),
-                title = context.getText(R.string.auto_update),
-                hint = context.getText(R.string.auto_update_minutes),
-                error = context.getText(R.string.at_least_15_minutes),
-                validator = ValidatorAutoUpdateInterval,
-            ).toLongOrNull() ?: 0
+            minutes = context
+                .requestModelTextInput(
+                    initial = if (minutes == 0L) "" else minutes.toString(),
+                    title = context.getText(R.string.auto_update),
+                    hint = context.getText(R.string.auto_update_minutes),
+                    error = context.getText(R.string.at_least_15_minutes),
+                    validator = ValidatorAutoUpdateInterval,
+                ).toLongOrNull() ?: 0
 
             val interval = TimeUnit.MINUTES.toMillis(minutes)
 

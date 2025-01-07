@@ -26,22 +26,24 @@ fun <T> PreferenceScreen.selectableList(
     @DrawableRes icon: Int? = null,
     configure: SelectableListPreference<T>.() -> Unit = {},
 ): SelectableListPreference<T> {
-    val impl = object : SelectableListPreference<T>, ClickablePreference by clickable(title, icon) {
-        override var selected: Int = 0
-            set(value) {
-                field = value
+    val impl =
+        object : SelectableListPreference<T>, ClickablePreference by clickable(title, icon) {
+            override var selected: Int = 0
+                set(value) {
+                    field = value
 
-                this.summary = context.getText(valuesText[value])
-            }
-        override var listener: OnChangedListener? = null
-    }
+                    this.summary = context.getText(valuesText[value])
+                }
+            override var listener: OnChangedListener? = null
+        }
 
     impl.configure()
 
     launch(Dispatchers.Main) {
-        val initial = withContext(Dispatchers.IO) {
-            value.get()
-        }
+        val initial =
+            withContext(Dispatchers.IO) {
+                value.get()
+            }
 
         impl.selected = values.indexOf(initial)
 
@@ -60,18 +62,21 @@ private fun <T> PreferenceScreen.popupSelectMenu(
     values: Array<T>,
 ) {
     ListPopupWindow(context).apply {
-        val adapter = PopupListAdapter(
-            context,
-            valuesText,
-            impl.selected,
-        )
+        val adapter =
+            PopupListAdapter(
+                context,
+                valuesText,
+                impl.selected,
+            )
 
         setAdapter(adapter)
 
         anchorView = impl.view
 
-        width = adapter.measureWidth(context)
-            .coerceAtLeast(context.getPixels(R.dimen.dialog_menu_min_width))
+        width =
+            adapter
+                .measureWidth(context)
+                .coerceAtLeast(context.getPixels(R.dimen.dialog_menu_min_width))
 
         isModal = true
 

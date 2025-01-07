@@ -51,20 +51,22 @@ fun <T> PreferenceScreen.editableTextList(
     impl.configure()
 
     launch(Dispatchers.Main) {
-        val v = withContext(Dispatchers.IO) {
-            value.get()
-        }
+        val v =
+            withContext(Dispatchers.IO) {
+                value.get()
+            }
 
         impl.list = v
 
         impl.clicked {
             this@editableTextList.launch(Dispatchers.Main) {
-                val newList = requestEditTextList(
-                    impl.list,
-                    context,
-                    adapter,
-                    impl.title,
-                )
+                val newList =
+                    requestEditTextList(
+                        impl.list,
+                        context,
+                        adapter,
+                        impl.title,
+                    )
 
                 withContext(Dispatchers.IO) {
                     value.set(newList)
@@ -84,23 +86,26 @@ private suspend fun <T> requestEditTextList(
     adapter: TextAdapter<T>,
     title: CharSequence,
 ): List<T>? {
-    val recyclerAdapter = EditableTextListAdapter(
-        context,
-        initialValue?.toMutableList() ?: mutableListOf(),
-        adapter,
-    )
-
-    val result = requestEditableListOverlay(context, recyclerAdapter, title) {
-        val text = context.requestModelTextInput(
-            initial = "",
-            title = title,
-            hint = title,
+    val recyclerAdapter =
+        EditableTextListAdapter(
+            context,
+            initialValue?.toMutableList() ?: mutableListOf(),
+            adapter,
         )
 
-        if (text.isNotBlank()) {
-            recyclerAdapter.addElement(text)
+    val result =
+        requestEditableListOverlay(context, recyclerAdapter, title) {
+            val text =
+                context.requestModelTextInput(
+                    initial = "",
+                    title = title,
+                    hint = title,
+                )
+
+            if (text.isNotBlank()) {
+                recyclerAdapter.addElement(text)
+            }
         }
-    }
 
     return when (result) {
         EditableListOverlayResult.Cancel -> initialValue

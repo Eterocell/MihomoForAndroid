@@ -25,9 +25,10 @@ class LogsActivity : BaseActivity<LogsDesign>() {
                 events.onReceive {
                     when (it) {
                         Event.ActivityStart -> {
-                            val files = withContext(Dispatchers.IO) {
-                                loadFiles()
-                            }
+                            val files =
+                                withContext(Dispatchers.IO) {
+                                    loadFiles()
+                                }
 
                             design.patchLogs(files)
                         }

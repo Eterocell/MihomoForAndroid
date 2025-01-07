@@ -11,24 +11,28 @@ class ProxyView(
     context: Context,
     config: ProxyViewConfig,
 ) : View(context) {
-
     init {
         background = context.getDrawableCompat(config.clickableBackground)
     }
 
     var state: ProxyViewState? = null
     constructor(context: Context) : this(context, ProxyViewConfig(context, 2))
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+    ) {
         val state = state ?: return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        val width = when (MeasureSpec.getMode(widthMeasureSpec)) {
-            MeasureSpec.UNSPECIFIED ->
-                resources.displayMetrics.widthPixels
-            MeasureSpec.AT_MOST, MeasureSpec.EXACTLY ->
-                MeasureSpec.getSize(widthMeasureSpec)
-            else ->
-                throw IllegalArgumentException("invalid measure spec")
-        }
+        val width =
+            when (MeasureSpec.getMode(widthMeasureSpec)) {
+                MeasureSpec.UNSPECIFIED ->
+                    resources.displayMetrics.widthPixels
+                MeasureSpec.AT_MOST, MeasureSpec.EXACTLY ->
+                    MeasureSpec.getSize(widthMeasureSpec)
+                else ->
+                    throw IllegalArgumentException("invalid measure spec")
+            }
 
         state.paint.apply {
             reset()
@@ -39,21 +43,23 @@ class ProxyView(
         }
 
         val textHeight = state.rect.height()
-        val exceptHeight = (
-            state.config.layoutPadding * 2 +
-                state.config.contentPadding * 2 +
-                textHeight * 2 +
-                state.config.textMargin
+        val exceptHeight =
+            (
+                state.config.layoutPadding * 2 +
+                    state.config.contentPadding * 2 +
+                    textHeight * 2 +
+                    state.config.textMargin
             ).toInt()
 
-        val height = when (MeasureSpec.getMode(heightMeasureSpec)) {
-            MeasureSpec.UNSPECIFIED ->
-                exceptHeight
-            MeasureSpec.AT_MOST, MeasureSpec.EXACTLY ->
-                exceptHeight.coerceAtMost(MeasureSpec.getSize(heightMeasureSpec))
-            else ->
-                throw IllegalArgumentException("invalid measure spec")
-        }
+        val height =
+            when (MeasureSpec.getMode(heightMeasureSpec)) {
+                MeasureSpec.UNSPECIFIED ->
+                    exceptHeight
+                MeasureSpec.AT_MOST, MeasureSpec.EXACTLY ->
+                    exceptHeight.coerceAtMost(MeasureSpec.getSize(heightMeasureSpec))
+                else ->
+                    throw IllegalArgumentException("invalid measure spec")
+            }
 
         setMeasuredDimension(width, height)
     }
@@ -123,42 +129,45 @@ class ProxyView(
         paint.textSize = state.config.textSize
 
         // measure delay text bounds
-        val delayCount = paint.breakText(
-            state.delayText,
-            false,
-            (width - state.config.layoutPadding * 2 - state.config.contentPadding * 2)
-                .coerceAtLeast(0f),
-            null,
-        )
+        val delayCount =
+            paint.breakText(
+                state.delayText,
+                false,
+                (width - state.config.layoutPadding * 2 - state.config.contentPadding * 2)
+                    .coerceAtLeast(0f),
+                null,
+            )
 
         state.paint.getTextBounds(state.delayText, 0, delayCount, state.rect)
 
         val delayWidth = state.rect.width()
 
-        val mainTextWidth = (
-            width -
-                state.config.layoutPadding * 2 -
-                state.config.contentPadding * 2 -
-                delayWidth -
-                state.config.textMargin * 2
-            )
-            .coerceAtLeast(0f)
+        val mainTextWidth =
+            (
+                width -
+                    state.config.layoutPadding * 2 -
+                    state.config.contentPadding * 2 -
+                    delayWidth -
+                    state.config.textMargin * 2
+            ).coerceAtLeast(0f)
 
         // measure title text bounds
-        val titleCount = paint.breakText(
-            state.title,
-            false,
-            mainTextWidth,
-            null,
-        )
+        val titleCount =
+            paint.breakText(
+                state.title,
+                false,
+                mainTextWidth,
+                null,
+            )
 
         // measure subtitle text bounds
-        val subtitleCount = paint.breakText(
-            state.subtitle,
-            false,
-            mainTextWidth,
-            null,
-        )
+        val subtitleCount =
+            paint.breakText(
+                state.subtitle,
+                false,
+                mainTextWidth,
+                null,
+            )
 
         // text draw measure
         val textOffset = (paint.descent() + paint.ascent()) / 2
@@ -180,8 +189,9 @@ class ProxyView(
         // draw title
         canvas.apply {
             val x = state.config.layoutPadding + state.config.contentPadding
-            val y = state.config.layoutPadding +
-                (height - state.config.layoutPadding * 2) / 3f - textOffset
+            val y =
+                state.config.layoutPadding +
+                    (height - state.config.layoutPadding * 2) / 3f - textOffset
 
             drawText(state.title, 0, titleCount, x, y, paint)
         }
@@ -189,8 +199,9 @@ class ProxyView(
         // draw subtitle
         canvas.apply {
             val x = state.config.layoutPadding + state.config.contentPadding
-            val y = state.config.layoutPadding +
-                (height - state.config.layoutPadding * 2) / 3f * 2 - textOffset
+            val y =
+                state.config.layoutPadding +
+                    (height - state.config.layoutPadding * 2) / 3f * 2 - textOffset
 
             drawText(state.subtitle, 0, subtitleCount, x, y, paint)
         }

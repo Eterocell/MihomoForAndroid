@@ -45,10 +45,11 @@ class ProxyViewState(
                 if (linkNow !== link.now) {
                     linkNow = link.now
 
-                    subtitle = "%s(%s)".format(
-                        proxy.type.name,
-                        link.now.ifEmpty { "*" },
-                    )
+                    subtitle =
+                        "%s(%s)".format(
+                            proxy.type.name,
+                            link.now.ifEmpty { "*" },
+                        )
                 }
             }
         } else {
@@ -89,32 +90,35 @@ class ProxyViewState(
                 val dg = tg - sg
                 val db = tb - sb
 
-                val max = max(
-                    da.absoluteValue,
+                val max =
                     max(
-                        dr.absoluteValue,
+                        da.absoluteValue,
                         max(
-                            dg.absoluteValue,
-                            db.absoluteValue,
+                            dr.absoluteValue,
+                            max(
+                                dg.absoluteValue,
+                                db.absoluteValue,
+                            ),
                         ),
-                    ),
-                )
+                    )
 
                 val frameOffset = frameTime - lastFrameTime
 
-                val colorOffset = (frameOffset / max.toFloat().coerceAtLeast(0.001f))
-                    .coerceIn(0.0f, 1.0f)
+                val colorOffset =
+                    (frameOffset / max.toFloat().coerceAtLeast(0.001f))
+                        .coerceIn(0.0f, 1.0f)
 
-                background = if (colorOffset > 0.999f) {
-                    target
-                } else {
-                    Color.argb(
-                        (sa + da * colorOffset).toInt(),
-                        (sr + dr * colorOffset).toInt(),
-                        (sg + dg * colorOffset).toInt(),
-                        (sb + db * colorOffset).toInt(),
-                    )
-                }
+                background =
+                    if (colorOffset > 0.999f) {
+                        target
+                    } else {
+                        Color.argb(
+                            (sa + da * colorOffset).toInt(),
+                            (sr + dr * colorOffset).toInt(),
+                            (sg + dg * colorOffset).toInt(),
+                            (sb + db * colorOffset).toInt(),
+                        )
+                    }
 
                 invalidate = true
             }

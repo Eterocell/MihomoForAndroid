@@ -7,12 +7,15 @@ import com.github.kr328.clash.core.model.ProxySort
 import com.github.kr328.clash.design.model.AppInfoSort
 import com.github.kr328.clash.design.model.DarkMode
 
-class UiStore(context: Context) {
-    private val store = Store(
-        context
-            .getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-            .asStoreProvider(),
-    )
+class UiStore(
+    context: Context,
+) {
+    private val store =
+        Store(
+            context
+                .getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+                .asStoreProvider(),
+        )
 
     var enableVpn: Boolean by store.boolean(
         key = "enable_vpn",

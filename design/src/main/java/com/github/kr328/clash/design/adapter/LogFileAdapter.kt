@@ -12,17 +12,26 @@ class LogFileAdapter(
     private val context: Context,
     private val open: (LogFile) -> Unit,
 ) : RecyclerView.Adapter<LogFileAdapter.Holder>() {
-    class Holder(val label: ActionLabel) : RecyclerView.ViewHolder(label)
+    class Holder(
+        val label: ActionLabel,
+    ) : RecyclerView.ViewHolder(label)
 
     var logs: List<LogFile> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        ActionLabel(context).apply {
-            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        },
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            ActionLabel(context).apply {
+                layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            },
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = logs[position]
 
         holder.label.text = current.fileName

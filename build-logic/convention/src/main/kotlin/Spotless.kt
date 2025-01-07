@@ -18,7 +18,7 @@ fun SpotlessExtension.androidXml(
             "**/AndroidManifest.xml",
             "src/**/*.xml",
         )
-        indentWithSpaces()
+        leadingTabsToSpaces()
         trimTrailingWhitespace()
         endWithNewline()
     },
@@ -29,7 +29,7 @@ fun SpotlessExtension.gradleVersionCatalogs(
         target(
             "**/*.versions.toml",
         )
-        indentWithSpaces()
+        leadingTabsToSpaces()
         trimTrailingWhitespace()
         endWithNewline()
     },
@@ -41,7 +41,7 @@ fun SpotlessExtension.intelliJIDEARunConfiguration(
             "**/.run/*.xml",
             "**/.idea/runConfigurations/*.xml",
         )
-        indentWithSpaces()
+        leadingTabsToSpaces()
         trimTrailingWhitespace()
         endWithNewline()
     },
@@ -59,7 +59,7 @@ fun SpotlessExtension.kotlin(
 ) = kotlin {
     target(targets)
     targetExclude(excludeTargets)
-    indentWithSpaces()
+    leadingTabsToSpaces()
     trimTrailingWhitespace()
     endWithNewline()
     ktlint(ktlintVersion).customRuleSets(customKtlintRuleSets)
@@ -87,7 +87,7 @@ fun SpotlessExtension.kotlinGradle(
             defaultExcludeTargetsForKotlinGradle + additionalExcludeTargets
         },
     )
-    indentWithSpaces()
+    leadingTabsToSpaces()
     trimTrailingWhitespace()
     endWithNewline()
     ktlint(ktlintVersion).customRuleSets(customKtlintRuleSets)

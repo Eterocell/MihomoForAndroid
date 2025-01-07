@@ -7,7 +7,10 @@ import com.github.kr328.clash.design.util.getPixels
 import com.github.kr328.clash.design.util.resolveThemedColor
 import com.github.kr328.clash.design.util.resolveThemedResourceId
 
-class ProxyViewConfig(val context: Context, var proxyLine: Int) {
+class ProxyViewConfig(
+    val context: Context,
+    var proxyLine: Int,
+) {
     private val colorSurface = context.resolveThemedColor(R.attr.colorSurface)
 
     val clickableBackground =
@@ -28,12 +31,13 @@ class ProxyViewConfig(val context: Context, var proxyLine: Int) {
     val textSize
         get() = if (proxyLine == 2) context.getPixels(R.dimen.proxy_text_size).toFloat() else context.getPixels(R.dimen.proxy_text_size_grid3).toFloat()
 
-    val shadow = Color.argb(
-        0x15,
-        Color.red(Color.DKGRAY),
-        Color.green(Color.DKGRAY),
-        Color.blue(Color.DKGRAY),
-    )
+    val shadow =
+        Color.argb(
+            0x15,
+            Color.red(Color.DKGRAY),
+            Color.green(Color.DKGRAY),
+            Color.blue(Color.DKGRAY),
+        )
 
     val cardRadius = context.getPixels(R.dimen.proxy_card_radius).toFloat()
     var cardOffset = context.getPixels(R.dimen.proxy_card_offset).toFloat()

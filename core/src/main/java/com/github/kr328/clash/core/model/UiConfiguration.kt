@@ -7,7 +7,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class UiConfiguration : Parcelable {
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 

@@ -21,51 +21,53 @@ class ClashService : BaseService() {
 
     private var reason: String? = null
 
-    private val runtime = clashRuntime {
-        val store = ServiceStore(self)
+    private val runtime =
+        clashRuntime {
+            val store = ServiceStore(self)
 
-        val close = install(CloseModule(self))
-        val config = install(ConfigurationModule(self))
-        val network = install(NetworkObserveModule(self))
+            val close = install(CloseModule(self))
+            val config = install(ConfigurationModule(self))
+            val network = install(NetworkObserveModule(self))
 
-        if (store.dynamicNotification) {
-            install(DynamicNotificationModule(self))
-        } else {
-            install(StaticNotificationModule(self))
-        }
+            if (store.dynamicNotification) {
+                install(DynamicNotificationModule(self))
+            } else {
+                install(StaticNotificationModule(self))
+            }
 
-        install(AppListCacheModule(self))
-        install(TimeZoneModule(self))
-        install(SuspendModule(self))
+            install(AppListCacheModule(self))
+            install(TimeZoneModule(self))
+            install(SuspendModule(self))
 
-        try {
-            while (isActive) {
-                val quit = select<Boolean> {
-                    close.onEvent {
-                        true
-                    }
-                    config.onEvent {
-                        reason = it.message
+            try {
+                while (isActive) {
+                    val quit =
+                        select<Boolean> {
+                            close.onEvent {
+                                true
+                            }
+                            config.onEvent {
+                                reason = it.message
 
-                        true
-                    }
-                    network.onEvent {
-                        false
-                    }
+                                true
+                            }
+                            network.onEvent {
+                                false
+                            }
+                        }
+
+                    if (quit) break
                 }
+            } catch (e: Exception) {
+                Log.e("Create clash runtime: ${e.message}", e)
 
-                if (quit) break
-            }
-        } catch (e: Exception) {
-            Log.e("Create clash runtime: ${e.message}", e)
-
-            reason = e.message
-        } finally {
-            withContext(NonCancellable) {
-                stopSelf()
+                reason = e.message
+            } finally {
+                withContext(NonCancellable) {
+                    stopSelf()
+                }
             }
         }
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -82,7 +84,11 @@ class ClashService : BaseService() {
         runtime.launch()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         sendClashStarted()
 
         return START_STICKY

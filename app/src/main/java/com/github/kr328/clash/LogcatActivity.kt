@@ -45,12 +45,13 @@ class LogcatActivity : BaseActivity<LogcatDesign>() {
     }
 
     private suspend fun mainLocalFile(file: LogFile) {
-        val messages = try {
-            LogcatReader(this, file).readAll()
-        } catch (e: Exception) {
-            Log.e("Fail to read log file ${file.fileName}: ${e.message}")
-            return showInvalid()
-        }
+        val messages =
+            try {
+                LogcatReader(this, file).readAll()
+            } catch (e: Exception) {
+                Log.e("Fail to read log file ${file.fileName}: ${e.message}")
+                return showInvalid()
+            }
 
         val design = LogcatDesign(this, false)
 
@@ -68,10 +69,11 @@ class LogcatActivity : BaseActivity<LogcatDesign>() {
                     finish()
                 }
                 LogcatDesign.Request.Export -> {
-                    val output = startActivityForResult(
-                        ActivityResultContracts.CreateDocument("text/plain"),
-                        file.fileName,
-                    )
+                    val output =
+                        startActivityForResult(
+                            ActivityResultContracts.CreateDocument("text/plain"),
+                            file.fileName,
+                        )
 
                     if (output != null) {
                         try {
@@ -135,28 +137,36 @@ class LogcatActivity : BaseActivity<LogcatDesign>() {
         super.onDestroy()
     }
 
-    private suspend fun bindLogcatService(): LogcatService = suspendCoroutine { ctx ->
-        bindService(
-            LogcatService::class.intent,
-            object : ServiceConnection {
-                override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                    val srv = service!!.queryLocalInterface("") as LogcatService
+    private suspend fun bindLogcatService(): LogcatService =
+        suspendCoroutine { ctx ->
+            bindService(
+                LogcatService::class.intent,
+                object : ServiceConnection {
+                    override fun onServiceConnected(
+                        name: ComponentName?,
+                        service: IBinder?,
+                    ) {
+                        val srv = service!!.queryLocalInterface("") as LogcatService
 
-                    ctx.resume(srv)
+                        ctx.resume(srv)
 
-                    conn = this
-                }
+                        conn = this
+                    }
 
-                override fun onServiceDisconnected(name: ComponentName?) {
-                    conn = null
-                }
-            },
-            Context.BIND_AUTO_CREATE,
-        )
-    }
+                    override fun onServiceDisconnected(name: ComponentName?) {
+                        conn = null
+                    }
+                },
+                Context.BIND_AUTO_CREATE,
+            )
+        }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun writeLogTo(messages: List<LogMessage>, file: LogFile, uri: Uri) {
+    private suspend fun writeLogTo(
+        messages: List<LogMessage>,
+        file: LogFile,
+        uri: Uri,
+    ) {
         LogcatFilter(OutputStreamWriter(contentResolver.openOutputStream(uri)), this).use {
             withContext(Dispatchers.Main) {
                 withModelProgressBar {

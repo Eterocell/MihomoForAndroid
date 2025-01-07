@@ -6,11 +6,12 @@ subprojects {
 
     afterEvaluate {
         extensions.findByType(PublishingExtension::class)?.apply {
-            val sourcesJar = tasks.register("sourcesJar", type = Jar::class) {
-                archiveClassifier.set("sources")
+            val sourcesJar =
+                tasks.register("sourcesJar", type = Jar::class) {
+                    archiveClassifier.set("sources")
 
-                from((project.extensions.getByName("sourceSets") as SourceSetContainer)["main"].allSource)
-            }
+                    from((project.extensions.getByName("sourceSets") as SourceSetContainer)["main"].allSource)
+                }
 
             publications {
                 create("release", type = MavenPublication::class) {

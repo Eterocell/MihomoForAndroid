@@ -11,16 +11,25 @@ class LogMessageAdapter(
     private val context: Context,
     private val copy: (LogMessage) -> Unit,
 ) : RecyclerView.Adapter<LogMessageAdapter.Holder>() {
-    class Holder(val binding: AdapterLogMessageBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterLogMessageBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     var messages: List<LogMessage> = emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterLogMessageBinding
-            .inflate(context.layoutInflater, parent, false),
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterLogMessageBinding
+                .inflate(context.layoutInflater, parent, false),
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = messages[position]
 
         holder.binding.message = current

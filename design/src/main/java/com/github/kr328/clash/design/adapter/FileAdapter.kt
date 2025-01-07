@@ -13,7 +13,9 @@ class FileAdapter(
     private val open: (File) -> Unit,
     private val more: (File) -> Unit,
 ) : RecyclerView.Adapter<FileAdapter.Holder>() {
-    class Holder(val binding: AdapterFileBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterFileBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     private val currentTime = ObservableCurrentTime()
 
@@ -23,13 +25,20 @@ class FileAdapter(
         currentTime.update()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterFileBinding
-            .inflate(context.layoutInflater, parent, false)
-            .also { it.currentTime = currentTime },
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterFileBinding
+                .inflate(context.layoutInflater, parent, false)
+                .also { it.currentTime = currentTime },
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = files[position]
 
         holder.binding.apply {

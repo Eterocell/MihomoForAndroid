@@ -20,7 +20,10 @@ data class FetchStatus(
 
     override fun describeContents(): Int = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
+    override fun writeToParcel(
+        dest: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), dest, this)
     }
 

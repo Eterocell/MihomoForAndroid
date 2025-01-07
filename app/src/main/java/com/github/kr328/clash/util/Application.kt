@@ -26,33 +26,42 @@ object ApplicationObserver {
     val createdActivities: Set<Activity>
         get() = _createdActivities
 
-    private val activityObserver = object : Application.ActivityLifecycleCallbacks {
-        @Synchronized
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            _createdActivities.add(activity)
-        }
+    private val activityObserver =
+        object : Application.ActivityLifecycleCallbacks {
+            @Synchronized
+            override fun onActivityCreated(
+                activity: Activity,
+                savedInstanceState: Bundle?,
+            ) {
+                _createdActivities.add(activity)
+            }
 
-        @Synchronized
-        override fun onActivityDestroyed(activity: Activity) {
-            _createdActivities.remove(activity)
-            visibleActivities.remove(activity)
-            appVisible = visibleActivities.isNotEmpty()
-        }
+            @Synchronized
+            override fun onActivityDestroyed(activity: Activity) {
+                _createdActivities.remove(activity)
+                visibleActivities.remove(activity)
+                appVisible = visibleActivities.isNotEmpty()
+            }
 
-        override fun onActivityStarted(activity: Activity) {
-            visibleActivities.add(activity)
-            appVisible = true
-        }
+            override fun onActivityStarted(activity: Activity) {
+                visibleActivities.add(activity)
+                appVisible = true
+            }
 
-        override fun onActivityStopped(activity: Activity) {
-            visibleActivities.remove(activity)
-            appVisible = visibleActivities.isNotEmpty()
-        }
+            override fun onActivityStopped(activity: Activity) {
+                visibleActivities.remove(activity)
+                appVisible = visibleActivities.isNotEmpty()
+            }
 
-        override fun onActivityPaused(activity: Activity) {}
-        override fun onActivityResumed(activity: Activity) {}
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-    }
+            override fun onActivityPaused(activity: Activity) {}
+
+            override fun onActivityResumed(activity: Activity) {}
+
+            override fun onActivitySaveInstanceState(
+                activity: Activity,
+                outState: Bundle,
+            ) {}
+        }
 
     fun onVisibleChanged(visibleChanged: (Boolean) -> Unit) {
         this.visibleChanged = visibleChanged
@@ -70,13 +79,14 @@ fun Context.verifyApk(): Boolean {
 
         val regexNativeLibrary = Regex("lib/(\\S+)/libclash.so")
         val availableAbi = Build.SUPPORTED_ABIS.toSet()
-        val apkAbi = sources
-            .asSequence()
-            .filter { File(it).exists() }
-            .flatMap { ZipFile(it).entries().asSequence() }
-            .mapNotNull { regexNativeLibrary.matchEntire(it.name) }
-            .mapNotNull { it.groups[1]?.value }
-            .toSet()
+        val apkAbi =
+            sources
+                .asSequence()
+                .filter { File(it).exists() }
+                .flatMap { ZipFile(it).entries().asSequence() }
+                .mapNotNull { regexNativeLibrary.matchEntire(it.name) }
+                .mapNotNull { it.groups[1]?.value }
+                .toSet()
 
         availableAbi.intersect(apkAbi).isNotEmpty()
     } catch (e: Exception) {

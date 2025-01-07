@@ -13,13 +13,14 @@ class AppSettingsActivity :
     BaseActivity<AppSettingsDesign>(),
     Behavior {
     override suspend fun main() {
-        val design = AppSettingsDesign(
-            this,
-            uiStore,
-            ServiceStore(this),
-            this,
-            clashRunning,
-        )
+        val design =
+            AppSettingsDesign(
+                this,
+                uiStore,
+                ServiceStore(this),
+                this,
+                clashRunning,
+            )
 
         setContentDesign(design)
 
@@ -43,18 +44,20 @@ class AppSettingsActivity :
 
     override var autoRestart: Boolean
         get() {
-            val status = packageManager.getComponentEnabledSetting(
-                RestartReceiver::class.componentName,
-            )
+            val status =
+                packageManager.getComponentEnabledSetting(
+                    RestartReceiver::class.componentName,
+                )
 
             return status == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         }
         set(value) {
-            val status = if (value) {
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            } else {
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            }
+            val status =
+                if (value) {
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                } else {
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                }
 
             packageManager.setComponentEnabledSetting(
                 RestartReceiver::class.componentName,

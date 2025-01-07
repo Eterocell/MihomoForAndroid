@@ -12,7 +12,9 @@ class AppAdapter(
     private val context: Context,
     private val selected: MutableSet<String>,
 ) : RecyclerView.Adapter<AppAdapter.Holder>() {
-    class Holder(val binding: AdapterAppBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterAppBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     var apps: List<AppInfo> = emptyList()
 
@@ -20,12 +22,19 @@ class AppAdapter(
         notifyItemRangeChanged(0, itemCount)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterAppBinding
-            .inflate(context.layoutInflater, context.root, false),
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterAppBinding
+                .inflate(context.layoutInflater, context.root, false),
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val current = apps[position]
 
         holder.binding.app = current

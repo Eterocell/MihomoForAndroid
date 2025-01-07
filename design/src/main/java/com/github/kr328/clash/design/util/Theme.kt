@@ -11,8 +11,11 @@ import com.github.kr328.clash.design.R
 
 interface ClickableScope {
     fun focusable(defaultValue: Boolean): Boolean
+
     fun clickable(defaultValue: Boolean): Boolean
+
     fun background(): Drawable?
+
     fun foreground(): Drawable?
 }
 
@@ -27,36 +30,50 @@ fun Context.resolveClickableAttrs(
     @StyleRes defaultStyleRes: Int = 0,
     block: ClickableScope.() -> Unit,
 ) {
-    theme.obtainStyledAttributes(
-        attributeSet,
-        R.styleable.Clickable,
-        defaultAttrRes,
-        defaultStyleRes,
-    ).apply {
-        val impl = object : ClickableScope {
-            override fun focusable(defaultValue: Boolean): Boolean = getBoolean(R.styleable.Clickable_android_focusable, defaultValue)
+    theme
+        .obtainStyledAttributes(
+            attributeSet,
+            R.styleable.Clickable,
+            defaultAttrRes,
+            defaultStyleRes,
+        ).apply {
+            val impl =
+                object : ClickableScope {
+                    override fun focusable(defaultValue: Boolean): Boolean = getBoolean(R.styleable.Clickable_android_focusable, defaultValue)
 
-            override fun clickable(defaultValue: Boolean): Boolean = getBoolean(R.styleable.Clickable_android_clickable, defaultValue)
+                    override fun clickable(defaultValue: Boolean): Boolean = getBoolean(R.styleable.Clickable_android_clickable, defaultValue)
 
-            override fun background(): Drawable? = getDrawable(R.styleable.Clickable_android_background)
+                    override fun background(): Drawable? = getDrawable(R.styleable.Clickable_android_background)
 
-            override fun foreground(): Drawable? = getDrawable(R.styleable.Clickable_android_focusable)
+                    override fun foreground(): Drawable? = getDrawable(R.styleable.Clickable_android_focusable)
+                }
+
+            impl.apply(block)
+
+            recycle()
         }
-
-        impl.apply(block)
-
-        recycle()
-    }
 }
 
-fun Context.resolveThemedColor(@AttrRes resId: Int): Int = TypedValue().apply {
-    theme.resolveAttribute(resId, this, true)
-}.data
+fun Context.resolveThemedColor(
+    @AttrRes resId: Int,
+): Int =
+    TypedValue()
+        .apply {
+            theme.resolveAttribute(resId, this, true)
+        }.data
 
-fun Context.resolveThemedBoolean(@AttrRes resId: Int): Boolean = TypedValue().apply {
-    theme.resolveAttribute(resId, this, true)
-}.data != 0
+fun Context.resolveThemedBoolean(
+    @AttrRes resId: Int,
+): Boolean =
+    TypedValue()
+        .apply {
+            theme.resolveAttribute(resId, this, true)
+        }.data != 0
 
-fun Context.resolveThemedResourceId(@AttrRes resId: Int): Int = TypedValue().apply {
-    theme.resolveAttribute(resId, this, true)
-}.resourceId
+fun Context.resolveThemedResourceId(
+    @AttrRes resId: Int,
+): Int =
+    TypedValue()
+        .apply {
+            theme.resolveAttribute(resId, this, true)
+        }.resourceId

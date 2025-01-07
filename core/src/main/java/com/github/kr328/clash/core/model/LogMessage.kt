@@ -38,7 +38,10 @@ data class LogMessage(
         Unknown,
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(
+        parcel: Parcel,
+        flags: Int,
+    ) {
         Parcelizer.encodeToParcel(serializer(), parcel, this)
     }
 
@@ -46,10 +49,11 @@ data class LogMessage(
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<LogMessage> {
-            override fun createFromParcel(parcel: Parcel): LogMessage = Parcelizer.decodeFromParcel(serializer(), parcel)
+        val CREATOR =
+            object : Parcelable.Creator<LogMessage> {
+                override fun createFromParcel(parcel: Parcel): LogMessage = Parcelizer.decodeFromParcel(serializer(), parcel)
 
-            override fun newArray(size: Int): Array<LogMessage?> = arrayOfNulls(size)
-        }
+                override fun newArray(size: Int): Array<LogMessage?> = arrayOfNulls(size)
+            }
     }
 }

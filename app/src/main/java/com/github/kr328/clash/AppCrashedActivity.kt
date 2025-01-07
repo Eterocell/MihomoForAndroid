@@ -15,15 +15,17 @@ class AppCrashedActivity : BaseActivity<AppCrashedDesign>() {
 
         setContentDesign(design)
 
-        val packageInfo = withContext(Dispatchers.IO) {
-            packageManager.getPackageInfoCompat(packageName, 0)
-        }
+        val packageInfo =
+            withContext(Dispatchers.IO) {
+                packageManager.getPackageInfoCompat(packageName, 0)
+            }
 
         Log.i("App version: versionName = ${packageInfo.versionName} versionCode = ${packageInfo.versionCodeCompat}")
 
-        val logs = withContext(Dispatchers.IO) {
-            SystemLogcat.dumpCrash()
-        }
+        val logs =
+            withContext(Dispatchers.IO) {
+                SystemLogcat.dumpCrash()
+            }
 
         design.setAppLogs(logs)
 

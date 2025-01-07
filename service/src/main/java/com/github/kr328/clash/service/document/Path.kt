@@ -21,10 +21,11 @@ data class Path(
             return "/$uuid"
         }
 
-        val sc = when (scope) {
-            Scope.Configuration -> Paths.CONFIGURATION_ID
-            Scope.Providers -> Paths.PROVIDERS_ID
-        }
+        val sc =
+            when (scope) {
+                Scope.Configuration -> Paths.CONFIGURATION_ID
+                Scope.Providers -> Paths.PROVIDERS_ID
+            }
 
         if (relative == null) {
             return "/$uuid/$sc"

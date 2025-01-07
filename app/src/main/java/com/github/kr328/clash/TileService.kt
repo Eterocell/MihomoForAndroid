@@ -80,11 +80,12 @@ class TileService : TileService() {
     private fun updateTile() {
         val tile = qsTile ?: return
 
-        tile.state = if (clashRunning) {
-            Tile.STATE_ACTIVE
-        } else {
-            Tile.STATE_INACTIVE
-        }
+        tile.state =
+            if (clashRunning) {
+                Tile.STATE_ACTIVE
+            } else {
+                Tile.STATE_INACTIVE
+            }
 
         tile.label = currentProfile.ifEmpty { getText(R.string.launch_name) }
 
@@ -93,25 +94,29 @@ class TileService : TileService() {
         tile.updateTile()
     }
 
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intents.ACTION_CLASH_STARTED -> {
-                    clashRunning = true
+    private val receiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context?,
+                intent: Intent?,
+            ) {
+                when (intent?.action) {
+                    Intents.ACTION_CLASH_STARTED -> {
+                        clashRunning = true
 
-                    currentProfile = ""
-                }
-                Intents.ACTION_CLASH_STOPPED, Intents.ACTION_SERVICE_RECREATED -> {
-                    clashRunning = false
+                        currentProfile = ""
+                    }
+                    Intents.ACTION_CLASH_STOPPED, Intents.ACTION_SERVICE_RECREATED -> {
+                        clashRunning = false
 
-                    currentProfile = ""
+                        currentProfile = ""
+                    }
+                    Intents.ACTION_PROFILE_LOADED -> {
+                        currentProfile = StatusClient(this@TileService).currentProfile() ?: ""
+                    }
                 }
-                Intents.ACTION_PROFILE_LOADED -> {
-                    currentProfile = StatusClient(this@TileService).currentProfile() ?: ""
-                }
+
+                updateTile()
             }
-
-            updateTile()
         }
-    }
 }

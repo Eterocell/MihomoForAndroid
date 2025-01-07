@@ -4,7 +4,10 @@ import android.content.Intent
 import android.net.Uri
 import java.util.*
 
-fun Intent.grantPermissions(read: Boolean = true, write: Boolean = true): Intent {
+fun Intent.grantPermissions(
+    read: Boolean = true,
+    write: Boolean = true,
+): Intent {
     var flags = 0
 
     if (read) {

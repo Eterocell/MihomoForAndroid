@@ -24,7 +24,8 @@ internal suspend fun migrationFromLegacy(context: Context) {
     Log.i("Migration from legacy database")
 
     try {
-        SQLiteDatabase.openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY)
+        SQLiteDatabase
+            .openDatabase(file.absolutePath, null, SQLiteDatabase.OPEN_READONLY)
             .use { db ->
                 val v = db.version
 
@@ -49,77 +50,80 @@ private suspend fun migrationFromLegacy234(
     legacy: SQLiteDatabase,
     version: Int,
 ) {
-    legacy.query(
-        "profiles",
-        arrayOf("id", "name", "type", "uri", if (version == 2) "update_interval" else "interval"),
-        null,
-        null,
-        null,
-        null,
-        "id",
-    ).use { cursor ->
-        val id = cursor.getColumnIndex("id")
-        val name = cursor.getColumnIndex("name")
-        val type = cursor.getColumnIndex("type")
-        val uri = cursor.getColumnIndex("uri")
-        val interval = cursor.getColumnIndex(if (version == 2) "update_interval" else "interval")
+    legacy
+        .query(
+            "profiles",
+            arrayOf("id", "name", "type", "uri", if (version == 2) "update_interval" else "interval"),
+            null,
+            null,
+            null,
+            null,
+            "id",
+        ).use { cursor ->
+            val id = cursor.getColumnIndex("id")
+            val name = cursor.getColumnIndex("name")
+            val type = cursor.getColumnIndex("type")
+            val uri = cursor.getColumnIndex("uri")
+            val interval = cursor.getColumnIndex(if (version == 2) "update_interval" else "interval")
 
-        if (!cursor.moveToFirst()) {
-            return
+            if (!cursor.moveToFirst()) {
+                return
+            }
+
+            do {
+                val newType =
+                    when (cursor.getInt(type)) {
+                        1 -> { // TYPE_FILE
+                            Profile.Type.File
+                        }
+                        2 -> { // TYPE_URL
+                            Profile.Type.Url
+                        }
+                        3 -> { // TYPE_EXTERNAL
+                            Profile.Type.External
+                        }
+                        else -> { // unknown
+                            continue
+                        }
+                    }
+
+                val idValue = cursor.getInt(id)
+                val intervalValue = cursor.getLong(interval)
+
+                val pending =
+                    Pending(
+                        uuid = generateProfileUUID(),
+                        name = cursor.getString(name),
+                        type = newType,
+                        source = if (newType != Profile.Type.File) cursor.getString(uri) else "",
+                        interval = if (version == 2) intervalValue * 1000 else intervalValue,
+                        0, 0, 0, 0,
+                    )
+
+                val base = context.pendingDir.resolve(pending.uuid.toString())
+
+                base.apply {
+                    mkdirs()
+
+                    resolve("config.yaml").createNewFile()
+                    resolve("providers").mkdir()
+                }
+
+                if (newType == Profile.Type.File) {
+                    val legacyFile = context.filesDir.resolve("profiles/$idValue.yaml")
+
+                    if (legacyFile.isFile) {
+                        legacyFile.copyTo(base.resolve("config.yaml"), overwrite = true)
+                    }
+                }
+
+                PendingDao().insert(pending)
+
+                context.sendProfileChanged(pending.uuid)
+
+                Log.i("${pending.name} migrated")
+            } while (cursor.moveToNext())
         }
-
-        do {
-            val newType = when (cursor.getInt(type)) {
-                1 -> { // TYPE_FILE
-                    Profile.Type.File
-                }
-                2 -> { // TYPE_URL
-                    Profile.Type.Url
-                }
-                3 -> { // TYPE_EXTERNAL
-                    Profile.Type.External
-                }
-                else -> { // unknown
-                    continue
-                }
-            }
-
-            val idValue = cursor.getInt(id)
-            val intervalValue = cursor.getLong(interval)
-
-            val pending = Pending(
-                uuid = generateProfileUUID(),
-                name = cursor.getString(name),
-                type = newType,
-                source = if (newType != Profile.Type.File) cursor.getString(uri) else "",
-                interval = if (version == 2) intervalValue * 1000 else intervalValue,
-                0, 0, 0, 0,
-            )
-
-            val base = context.pendingDir.resolve(pending.uuid.toString())
-
-            base.apply {
-                mkdirs()
-
-                resolve("config.yaml").createNewFile()
-                resolve("providers").mkdir()
-            }
-
-            if (newType == Profile.Type.File) {
-                val legacyFile = context.filesDir.resolve("profiles/$idValue.yaml")
-
-                if (legacyFile.isFile) {
-                    legacyFile.copyTo(base.resolve("config.yaml"), overwrite = true)
-                }
-            }
-
-            PendingDao().insert(pending)
-
-            context.sendProfileChanged(pending.uuid)
-
-            Log.i("${pending.name} migrated")
-        } while (cursor.moveToNext())
-    }
 
     context.filesDir.resolve("profiles").deleteRecursively()
     context.filesDir.resolve("clash").listFiles()?.forEach {
@@ -129,72 +133,79 @@ private suspend fun migrationFromLegacy234(
     }
 }
 
-private suspend fun migrationFromLegacy1(context: Context, legacy: SQLiteDatabase) {
-    legacy.query(
-        "profiles",
-        arrayOf("name", "token", "id", "file"),
-        null,
-        null,
-        null,
-        null,
-        "id",
-    ).use { cursor ->
-        val name = cursor.getColumnIndex("name")
-        val token = cursor.getColumnIndex("token")
-        val file = cursor.getColumnIndex("file")
+private suspend fun migrationFromLegacy1(
+    context: Context,
+    legacy: SQLiteDatabase,
+) {
+    legacy
+        .query(
+            "profiles",
+            arrayOf("name", "token", "id", "file"),
+            null,
+            null,
+            null,
+            null,
+            "id",
+        ).use { cursor ->
+            val name = cursor.getColumnIndex("name")
+            val token = cursor.getColumnIndex("token")
+            val file = cursor.getColumnIndex("file")
 
-        if (!cursor.moveToFirst()) {
-            return
-        }
-
-        do {
-            val legacyToken = cursor.getString(token)
-
-            val newType = when {
-                legacyToken.startsWith("file|") -> Profile.Type.File
-                legacyToken.startsWith("url|") -> Profile.Type.Url
-                else -> continue
+            if (!cursor.moveToFirst()) {
+                return
             }
 
-            val source = if (newType == Profile.Type.Url) {
-                legacyToken.removePrefix("url|")
-            } else {
-                ""
-            }
+            do {
+                val legacyToken = cursor.getString(token)
 
-            val pending = Pending(
-                uuid = generateProfileUUID(),
-                name = cursor.getString(name),
-                type = newType,
-                source = source,
-                interval = 0,
-                0, 0, 0, 0,
-            )
+                val newType =
+                    when {
+                        legacyToken.startsWith("file|") -> Profile.Type.File
+                        legacyToken.startsWith("url|") -> Profile.Type.Url
+                        else -> continue
+                    }
 
-            val base = context.pendingDir.resolve(pending.uuid.toString())
+                val source =
+                    if (newType == Profile.Type.Url) {
+                        legacyToken.removePrefix("url|")
+                    } else {
+                        ""
+                    }
 
-            base.apply {
-                mkdirs()
+                val pending =
+                    Pending(
+                        uuid = generateProfileUUID(),
+                        name = cursor.getString(name),
+                        type = newType,
+                        source = source,
+                        interval = 0,
+                        0, 0, 0, 0,
+                    )
 
-                resolve("config.yaml").createNewFile()
-                resolve("providers").mkdir()
-            }
+                val base = context.pendingDir.resolve(pending.uuid.toString())
 
-            val legacyFile = File(cursor.getString(file))
+                base.apply {
+                    mkdirs()
 
-            if (newType == Profile.Type.File) {
-                if (legacyFile.isFile) {
-                    legacyFile.copyTo(base.resolve("config.yaml"), overwrite = true)
+                    resolve("config.yaml").createNewFile()
+                    resolve("providers").mkdir()
                 }
-            }
 
-            legacyFile.delete()
+                val legacyFile = File(cursor.getString(file))
 
-            PendingDao().insert(pending)
+                if (newType == Profile.Type.File) {
+                    if (legacyFile.isFile) {
+                        legacyFile.copyTo(base.resolve("config.yaml"), overwrite = true)
+                    }
+                }
 
-            context.sendProfileChanged(pending.uuid)
+                legacyFile.delete()
 
-            Log.i("${pending.name} migrated")
-        } while (cursor.moveToNext())
-    }
+                PendingDao().insert(pending)
+
+                context.sendProfileChanged(pending.uuid)
+
+                Log.i("${pending.name} migrated")
+            } while (cursor.moveToNext())
+        }
 }

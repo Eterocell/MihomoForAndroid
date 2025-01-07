@@ -97,12 +97,14 @@ class MainActivity : BaseActivity<MainDesign>() {
     private suspend fun MainDesign.fetch() {
         setClashRunning(clashRunning)
 
-        val state = withClash {
-            queryTunnelState()
-        }
-        val providers = withClash {
-            queryProviders()
-        }
+        val state =
+            withClash {
+                queryTunnelState()
+            }
+        val providers =
+            withClash {
+                queryProviders()
+            }
 
         setMode(state.mode)
         setHasProviders(providers.isNotEmpty())
@@ -135,10 +137,11 @@ class MainActivity : BaseActivity<MainDesign>() {
 
         try {
             if (vpnRequest != null) {
-                val result = startActivityForResult(
-                    ActivityResultContracts.StartActivityForResult(),
-                    vpnRequest,
-                )
+                val result =
+                    startActivityForResult(
+                        ActivityResultContracts.StartActivityForResult(),
+                        vpnRequest,
+                    )
 
                 if (result.resultCode == RESULT_OK) {
                     startClashService()
@@ -149,7 +152,8 @@ class MainActivity : BaseActivity<MainDesign>() {
         }
     }
 
-    private suspend fun queryAppVersionName(): String = withContext(Dispatchers.IO) {
-        packageManager.getPackageInfoCompat(packageName, 0).versionName + "\n" + Bridge.nativeCoreVersion().replace("_", "-")
-    }
+    private suspend fun queryAppVersionName(): String =
+        withContext(Dispatchers.IO) {
+            packageManager.getPackageInfoCompat(packageName, 0).versionName + "\n" + Bridge.nativeCoreVersion().replace("_", "-")
+        }
 }

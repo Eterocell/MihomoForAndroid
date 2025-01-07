@@ -20,12 +20,13 @@ class ProxyActivity : BaseActivity<ProxyDesign>() {
         val unorderedStates = names.indices.associate { names[it] to states[it] }
         val reloadLock = Semaphore(10)
 
-        val design = ProxyDesign(
-            this,
-            mode,
-            names,
-            uiStore,
-        )
+        val design =
+            ProxyDesign(
+                this,
+                mode,
+                names,
+                uiStore,
+            )
 
         setContentDesign(design)
 
@@ -36,9 +37,10 @@ class ProxyActivity : BaseActivity<ProxyDesign>() {
                 events.onReceive {
                     when (it) {
                         Event.ProfileLoaded -> {
-                            val newNames = withClash {
-                                queryProxyGroupNames(uiStore.proxyExcludeNotSelectable)
-                            }
+                            val newNames =
+                                withClash {
+                                    queryProxyGroupNames(uiStore.proxyExcludeNotSelectable)
+                                }
 
                             if (newNames != names) {
                                 startActivity(ProxyActivity::class.intent)
@@ -63,11 +65,12 @@ class ProxyActivity : BaseActivity<ProxyDesign>() {
                         }
                         is ProxyDesign.Request.Reload -> {
                             launch {
-                                val group = reloadLock.withPermit {
-                                    withClash {
-                                        queryProxyGroup(names[it.index], uiStore.proxySort)
+                                val group =
+                                    reloadLock.withPermit {
+                                        withClash {
+                                            queryProxyGroup(names[it.index], uiStore.proxySort)
+                                        }
                                     }
-                                }
                                 val state = states[it.index]
 
                                 state.now = group.now

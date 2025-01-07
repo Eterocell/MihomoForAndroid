@@ -4,12 +4,15 @@ import android.content.Context
 import com.github.kr328.clash.common.store.Store
 import com.github.kr328.clash.common.store.asStoreProvider
 
-class TipsStore(context: Context) {
-    private val store = Store(
-        context
-            .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
-            .asStoreProvider(),
-    )
+class TipsStore(
+    context: Context,
+) {
+    private val store =
+        Store(
+            context
+                .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+                .asStoreProvider(),
+        )
 
     var requestDonate: Boolean by store.boolean(
         key = "request_donate",

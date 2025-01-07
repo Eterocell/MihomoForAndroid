@@ -13,20 +13,40 @@ import com.github.kr328.clash.design.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
+class FilesDesign(
+    context: Context,
+) : Design<FilesDesign.Request>(context) {
     sealed class Request {
-        data class OpenFile(val file: File) : Request()
-        data class OpenDirectory(val file: File) : Request()
-        data class RenameFile(val file: File) : Request()
-        data class DeleteFile(val file: File) : Request()
-        data class ImportFile(val file: File?) : Request()
-        data class ExportFile(val file: File) : Request()
+        data class OpenFile(
+            val file: File,
+        ) : Request()
+
+        data class OpenDirectory(
+            val file: File,
+        ) : Request()
+
+        data class RenameFile(
+            val file: File,
+        ) : Request()
+
+        data class DeleteFile(
+            val file: File,
+        ) : Request()
+
+        data class ImportFile(
+            val file: File?,
+        ) : Request()
+
+        data class ExportFile(
+            val file: File,
+        ) : Request()
 
         data object PopStack : Request()
     }
 
-    private val binding = DesignFilesBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignFilesBinding
+            .inflate(context.layoutInflater, context.root, false)
     private val adapter: FileAdapter = FileAdapter(context, this::requestOpen, this::requestMore)
 
     override val root: View
@@ -38,7 +58,10 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
             binding.configurationEditable = value
         }
 
-    suspend fun swapFiles(files: List<File>, currentInBaseDir: Boolean) {
+    suspend fun swapFiles(
+        files: List<File>,
+        currentInBaseDir: Boolean,
+    ) {
         withContext(Dispatchers.Main) {
             adapter.swapDataSet(adapter::files, files)
             binding.currentInBaseDir = currentInBaseDir
@@ -49,13 +72,14 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
         adapter.updateElapsed()
     }
 
-    suspend fun requestFileName(name: String): String = context.requestModelTextInput(
-        initial = name,
-        title = context.getText(R.string.file_name),
-        hint = context.getText(R.string.file_name),
-        error = context.getText(R.string.invalid_file_name),
-        validator = ValidatorFileName,
-    )
+    suspend fun requestFileName(name: String): String =
+        context.requestModelTextInput(
+            initial = name,
+            title = context.getText(R.string.file_name),
+            hint = context.getText(R.string.file_name),
+            error = context.getText(R.string.invalid_file_name),
+            validator = ValidatorFileName,
+        )
 
     init {
         binding.self = this
@@ -76,25 +100,37 @@ class FilesDesign(context: Context) : Design<FilesDesign.Request>(context) {
         }
     }
 
-    fun requestRename(dialog: Dialog, file: File) {
+    fun requestRename(
+        dialog: Dialog,
+        file: File,
+    ) {
         requests.trySend(Request.RenameFile(file))
 
         dialog.dismiss()
     }
 
-    fun requestImport(dialog: Dialog, file: File) {
+    fun requestImport(
+        dialog: Dialog,
+        file: File,
+    ) {
         requests.trySend(Request.ImportFile(file))
 
         dialog.dismiss()
     }
 
-    fun requestExport(dialog: Dialog, file: File) {
+    fun requestExport(
+        dialog: Dialog,
+        file: File,
+    ) {
         requests.trySend(Request.ExportFile(file))
 
         dialog.dismiss()
     }
 
-    fun requestDelete(dialog: Dialog, file: File) {
+    fun requestDelete(
+        dialog: Dialog,
+        file: File,
+    ) {
         requests.trySend(Request.DeleteFile(file))
 
         dialog.dismiss()

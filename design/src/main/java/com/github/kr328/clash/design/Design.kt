@@ -12,7 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.withContext
 
-abstract class Design<R>(val context: Context) : CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
+abstract class Design<R>(
+    val context: Context,
+) : CoroutineScope by CoroutineScope(Dispatchers.Unconfined) {
     abstract val root: View
 
     val surface = Surface()
@@ -30,15 +32,17 @@ abstract class Design<R>(val context: Context) : CoroutineScope by CoroutineScop
         configure: Snackbar.() -> Unit = {},
     ) {
         withContext(Dispatchers.Main) {
-            Snackbar.make(
-                root,
-                message,
-                when (duration) {
-                    ToastDuration.Short -> Snackbar.LENGTH_SHORT
-                    ToastDuration.Long -> Snackbar.LENGTH_LONG
-                    ToastDuration.Indefinite -> Snackbar.LENGTH_INDEFINITE
-                },
-            ).apply(configure).show()
+            Snackbar
+                .make(
+                    root,
+                    message,
+                    when (duration) {
+                        ToastDuration.Short -> Snackbar.LENGTH_SHORT
+                        ToastDuration.Long -> Snackbar.LENGTH_LONG
+                        ToastDuration.Indefinite -> Snackbar.LENGTH_INDEFINITE
+                    },
+                ).apply(configure)
+                .show()
         }
     }
 

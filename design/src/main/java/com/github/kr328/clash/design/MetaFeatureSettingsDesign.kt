@@ -22,30 +22,33 @@ class MetaFeatureSettingsDesign(
         ImportASN,
     }
 
-    private val binding = DesignSettingsMetaFeatureBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignSettingsMetaFeatureBinding
+            .inflate(context.layoutInflater, context.root, false)
 
     override val root: View
         get() = binding.root
 
-    suspend fun requestResetConfirm(): Boolean = suspendCancellableCoroutine { ctx ->
-        val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.reset_override_settings)
-            .setMessage(R.string.reset_override_settings_message)
-            .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
-            .setNegativeButton(R.string.cancel) { _, _ -> }
-            .show()
+    suspend fun requestResetConfirm(): Boolean =
+        suspendCancellableCoroutine { ctx ->
+            val dialog =
+                MaterialAlertDialogBuilder(context)
+                    .setTitle(R.string.reset_override_settings)
+                    .setMessage(R.string.reset_override_settings_message)
+                    .setPositiveButton(R.string.ok) { _, _ -> ctx.resume(true) }
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
+                    .show()
 
-        dialog.setOnDismissListener {
-            if (!ctx.isCompleted) {
-                ctx.resume(false)
+            dialog.setOnDismissListener {
+                if (!ctx.isCompleted) {
+                    ctx.resume(false)
+                }
+            }
+
+            ctx.invokeOnCancellation {
+                dialog.dismiss()
             }
         }
-
-        ctx.invokeOnCancellation {
-            dialog.dismiss()
-        }
-    }
 
     init {
         binding.self = this
@@ -54,147 +57,156 @@ class MetaFeatureSettingsDesign(
 
         binding.scrollRoot.bindAppBarElevation(binding.activityBarLayout)
 
-        val booleanValues: Array<Boolean?> = arrayOf(
-            null,
-            true,
-            false,
-        )
-        val booleanValuesText: Array<Int> = arrayOf(
-            R.string.dont_modify,
-            R.string.enabled,
-            R.string.disabled,
-        )
-
-        val screen = preferenceScreen(context) {
-            category(R.string.settings)
-
-            selectableList(
-                value = configuration::unifiedDelay,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.unified_delay,
+        val booleanValues: Array<Boolean?> =
+            arrayOf(
+                null,
+                true,
+                false,
+            )
+        val booleanValuesText: Array<Int> =
+            arrayOf(
+                R.string.dont_modify,
+                R.string.enabled,
+                R.string.disabled,
             )
 
-            selectableList(
-                value = configuration::geodataMode,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.geodata_mode,
-            )
+        val screen =
+            preferenceScreen(context) {
+                category(R.string.settings)
 
-            selectableList(
-                value = configuration::tcpConcurrent,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.tcp_concurrent,
-            )
+                selectableList(
+                    value = configuration::unifiedDelay,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.unified_delay,
+                )
 
-            selectableList(
-                value = configuration::findProcessMode,
-                values = arrayOf(
-                    null,
-                    ConfigurationOverride.FindProcessMode.Off,
-                    ConfigurationOverride.FindProcessMode.Strict,
-                    ConfigurationOverride.FindProcessMode.Always,
-                ),
-                valuesText = arrayOf(
-                    R.string.dont_modify,
-                    R.string.off,
-                    R.string.strict,
-                    R.string.always,
-                ),
-                title = R.string.find_process_mode,
-            ) {
-            }
+                selectableList(
+                    value = configuration::geodataMode,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.geodata_mode,
+                )
 
-            category(R.string.sniffer_setting)
+                selectableList(
+                    value = configuration::tcpConcurrent,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.tcp_concurrent,
+                )
 
-            val snifferDependencies: MutableList<Preference> = mutableListOf()
-
-            val sniffer = selectableList(
-                value = configuration.sniffer::enable,
-                values = arrayOf(
-                    null,
-                    true,
-                    false,
-                ),
-                valuesText = arrayOf(
-                    R.string.dont_modify,
-                    R.string.enabled,
-                    R.string.disabled,
-                ),
-                title = R.string.strategy,
-            ) {
-                listener = OnChangedListener {
-                    if (configuration.sniffer.enable == false) {
-                        snifferDependencies.forEach {
-                            it.enabled = false
-                        }
-                    } else {
-                        snifferDependencies.forEach {
-                            it.enabled = true
-                        }
-                    }
+                selectableList(
+                    value = configuration::findProcessMode,
+                    values =
+                        arrayOf(
+                            null,
+                            ConfigurationOverride.FindProcessMode.Off,
+                            ConfigurationOverride.FindProcessMode.Strict,
+                            ConfigurationOverride.FindProcessMode.Always,
+                        ),
+                    valuesText =
+                        arrayOf(
+                            R.string.dont_modify,
+                            R.string.off,
+                            R.string.strict,
+                            R.string.always,
+                        ),
+                    title = R.string.find_process_mode,
+                ) {
                 }
-            }
 
-            editableTextList(
-                value = configuration.sniffer::sniffing,
-                adapter = TextAdapter.String,
-                title = R.string.sniffing,
-                placeholder = R.string.dont_modify,
-                configure = snifferDependencies::add,
-            )
+                category(R.string.sniffer_setting)
 
-            selectableList(
-                value = configuration.sniffer::forceDnsMapping,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.force_dns_mapping,
-                configure = snifferDependencies::add,
-            )
+                val snifferDependencies: MutableList<Preference> = mutableListOf()
 
-            selectableList(
-                value = configuration.sniffer::parsePureIp,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.parse_pure_ip,
-                configure = snifferDependencies::add,
-            )
+                val sniffer =
+                    selectableList(
+                        value = configuration.sniffer::enable,
+                        values =
+                            arrayOf(
+                                null,
+                                true,
+                                false,
+                            ),
+                        valuesText =
+                            arrayOf(
+                                R.string.dont_modify,
+                                R.string.enabled,
+                                R.string.disabled,
+                            ),
+                        title = R.string.strategy,
+                    ) {
+                        listener =
+                            OnChangedListener {
+                                if (configuration.sniffer.enable == false) {
+                                    snifferDependencies.forEach {
+                                        it.enabled = false
+                                    }
+                                } else {
+                                    snifferDependencies.forEach {
+                                        it.enabled = true
+                                    }
+                                }
+                            }
+                    }
 
-            selectableList(
-                value = configuration.sniffer::overrideDestination,
-                values = booleanValues,
-                valuesText = booleanValuesText,
-                title = R.string.override_destination,
-                configure = snifferDependencies::add,
-            )
+                editableTextList(
+                    value = configuration.sniffer::sniffing,
+                    adapter = TextAdapter.String,
+                    title = R.string.sniffing,
+                    placeholder = R.string.dont_modify,
+                    configure = snifferDependencies::add,
+                )
 
-            editableTextList(
-                value = configuration.sniffer::forceDomain,
-                adapter = TextAdapter.String,
-                title = R.string.force_domain,
-                placeholder = R.string.dont_modify,
-                configure = snifferDependencies::add,
-            )
+                selectableList(
+                    value = configuration.sniffer::forceDnsMapping,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.force_dns_mapping,
+                    configure = snifferDependencies::add,
+                )
 
-            editableTextList(
-                value = configuration.sniffer::skipDomain,
-                adapter = TextAdapter.String,
-                title = R.string.skip_domain,
-                placeholder = R.string.dont_modify,
-                configure = snifferDependencies::add,
-            )
+                selectableList(
+                    value = configuration.sniffer::parsePureIp,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.parse_pure_ip,
+                    configure = snifferDependencies::add,
+                )
 
-            editableTextList(
-                value = configuration.sniffer::portWhitelist,
-                adapter = TextAdapter.String,
-                title = R.string.port_whitelist,
-                placeholder = R.string.dont_modify,
-                configure = snifferDependencies::add,
-            )
+                selectableList(
+                    value = configuration.sniffer::overrideDestination,
+                    values = booleanValues,
+                    valuesText = booleanValuesText,
+                    title = R.string.override_destination,
+                    configure = snifferDependencies::add,
+                )
 
-            sniffer.listener?.onChanged()
+                editableTextList(
+                    value = configuration.sniffer::forceDomain,
+                    adapter = TextAdapter.String,
+                    title = R.string.force_domain,
+                    placeholder = R.string.dont_modify,
+                    configure = snifferDependencies::add,
+                )
+
+                editableTextList(
+                    value = configuration.sniffer::skipDomain,
+                    adapter = TextAdapter.String,
+                    title = R.string.skip_domain,
+                    placeholder = R.string.dont_modify,
+                    configure = snifferDependencies::add,
+                )
+
+                editableTextList(
+                    value = configuration.sniffer::portWhitelist,
+                    adapter = TextAdapter.String,
+                    title = R.string.port_whitelist,
+                    placeholder = R.string.dont_modify,
+                    configure = snifferDependencies::add,
+                )
+
+                sniffer.listener?.onChanged()
 
             /*
             category(R.string.geox_url_setting)
@@ -229,44 +241,44 @@ class MetaFeatureSettingsDesign(
             )
              */
 
-            category(R.string.geox_files)
+                category(R.string.geox_files)
 
-            clickable(
-                title = R.string.import_geoip_file,
-                summary = R.string.press_to_import,
-            ) {
-                clicked {
-                    requests.trySend(Request.ImportGeoIp)
+                clickable(
+                    title = R.string.import_geoip_file,
+                    summary = R.string.press_to_import,
+                ) {
+                    clicked {
+                        requests.trySend(Request.ImportGeoIp)
+                    }
+                }
+
+                clickable(
+                    title = R.string.import_geosite_file,
+                    summary = R.string.press_to_import,
+                ) {
+                    clicked {
+                        requests.trySend(Request.ImportGeoSite)
+                    }
+                }
+
+                clickable(
+                    title = R.string.import_country_file,
+                    summary = R.string.press_to_import,
+                ) {
+                    clicked {
+                        requests.trySend(Request.ImportCountry)
+                    }
+                }
+
+                clickable(
+                    title = R.string.import_asn_file,
+                    summary = R.string.press_to_import,
+                ) {
+                    clicked {
+                        requests.trySend(Request.ImportASN)
+                    }
                 }
             }
-
-            clickable(
-                title = R.string.import_geosite_file,
-                summary = R.string.press_to_import,
-            ) {
-                clicked {
-                    requests.trySend(Request.ImportGeoSite)
-                }
-            }
-
-            clickable(
-                title = R.string.import_country_file,
-                summary = R.string.press_to_import,
-            ) {
-                clicked {
-                    requests.trySend(Request.ImportCountry)
-                }
-            }
-
-            clickable(
-                title = R.string.import_asn_file,
-                summary = R.string.press_to_import,
-            ) {
-                clicked {
-                    requests.trySend(Request.ImportASN)
-                }
-            }
-        }
 
         binding.content.addView(screen.root)
     }

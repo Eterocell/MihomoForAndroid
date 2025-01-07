@@ -6,7 +6,11 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 class LogcatCache {
-    data class Snapshot(val messages: List<LogMessage>, val removed: Int, val appended: Int)
+    data class Snapshot(
+        val messages: List<LogMessage>,
+        val removed: Int,
+        val appended: Int,
+    )
 
     private val array = CircularArray<LogMessage>(CAPACITY)
     private val lock = Mutex()

@@ -16,19 +16,38 @@ import com.github.kr328.clash.service.model.Profile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context) {
+class ProfilesDesign(
+    context: Context,
+) : Design<ProfilesDesign.Request>(context) {
     sealed class Request {
         data object UpdateAll : Request()
+
         data object Create : Request()
-        data class Active(val profile: Profile) : Request()
-        data class Update(val profile: Profile) : Request()
-        data class Edit(val profile: Profile) : Request()
-        data class Duplicate(val profile: Profile) : Request()
-        data class Delete(val profile: Profile) : Request()
+
+        data class Active(
+            val profile: Profile,
+        ) : Request()
+
+        data class Update(
+            val profile: Profile,
+        ) : Request()
+
+        data class Edit(
+            val profile: Profile,
+        ) : Request()
+
+        data class Duplicate(
+            val profile: Profile,
+        ) : Request()
+
+        data class Delete(
+            val profile: Profile,
+        ) : Request()
     }
 
-    private val binding = DesignProfilesBinding
-        .inflate(context.layoutInflater, context.root, false)
+    private val binding =
+        DesignProfilesBinding
+            .inflate(context.layoutInflater, context.root, false)
     private val adapter = ProfileAdapter(context, this::requestActive, this::showMenu)
 
     private var allUpdating: Boolean
@@ -46,9 +65,10 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
             patchDataSet(this::profiles, profiles, id = { it.uuid })
         }
 
-        val updatable = withContext(Dispatchers.Default) {
-            profiles.any { it.imported && it.type != Profile.Type.File }
-        }
+        val updatable =
+            withContext(Dispatchers.Default) {
+                profiles.any { it.imported && it.type != Profile.Type.File }
+            }
 
         withContext(Dispatchers.Main) {
             binding.updateView.visibility = if (updatable) View.VISIBLE else View.GONE
@@ -81,8 +101,9 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
     private fun showMenu(profile: Profile) {
         val dialog = AppBottomSheetDialog(context)
 
-        val binding = DialogProfilesMenuBinding
-            .inflate(context.layoutInflater, dialog.window?.decorView as ViewGroup?, false)
+        val binding =
+            DialogProfilesMenuBinding
+                .inflate(context.layoutInflater, dialog.window?.decorView as ViewGroup?, false)
 
         binding.master = this
         binding.self = dialog
@@ -111,25 +132,37 @@ class ProfilesDesign(context: Context) : Design<ProfilesDesign.Request>(context)
         requests.trySend(Request.Active(profile))
     }
 
-    fun requestUpdate(dialog: Dialog, profile: Profile) {
+    fun requestUpdate(
+        dialog: Dialog,
+        profile: Profile,
+    ) {
         requests.trySend(Request.Update(profile))
 
         dialog.dismiss()
     }
 
-    fun requestEdit(dialog: Dialog, profile: Profile) {
+    fun requestEdit(
+        dialog: Dialog,
+        profile: Profile,
+    ) {
         requests.trySend(Request.Edit(profile))
 
         dialog.dismiss()
     }
 
-    fun requestDuplicate(dialog: Dialog, profile: Profile) {
+    fun requestDuplicate(
+        dialog: Dialog,
+        profile: Profile,
+    ) {
         requests.trySend(Request.Duplicate(profile))
 
         dialog.dismiss()
     }
 
-    fun requestDelete(dialog: Dialog, profile: Profile) {
+    fun requestDelete(
+        dialog: Dialog,
+        profile: Profile,
+    ) {
         requests.trySend(Request.Delete(profile))
 
         dialog.dismiss()

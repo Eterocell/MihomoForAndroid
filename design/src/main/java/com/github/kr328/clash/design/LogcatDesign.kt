@@ -25,19 +25,25 @@ class LogcatDesign(
         Export,
     }
 
-    private val binding = DesignLogcatBinding
-        .inflate(context.layoutInflater, context.root, false)
-    private val adapter = LogMessageAdapter(context) {
-        launch {
-            val data = ClipData.newPlainText("log_message", it.message)
+    private val binding =
+        DesignLogcatBinding
+            .inflate(context.layoutInflater, context.root, false)
+    private val adapter =
+        LogMessageAdapter(context) {
+            launch {
+                val data = ClipData.newPlainText("log_message", it.message)
 
-            context.getSystemService<ClipboardManager>()?.setPrimaryClip(data)
+                context.getSystemService<ClipboardManager>()?.setPrimaryClip(data)
 
-            showToast(R.string.copied, ToastDuration.Short)
+                showToast(R.string.copied, ToastDuration.Short)
+            }
         }
-    }
 
-    suspend fun patchMessages(messages: List<LogMessage>, removed: Int, appended: Int) {
+    suspend fun patchMessages(
+        messages: List<LogMessage>,
+        removed: Int,
+        appended: Int,
+    ) {
         withContext(Dispatchers.Main) {
             adapter.messages = messages
 
@@ -61,12 +67,13 @@ class LogcatDesign(
 
         binding.recyclerList.bindAppBarElevation(binding.activityBarLayout)
 
-        binding.recyclerList.layoutManager = LinearLayoutManager(context).apply {
-            if (streaming) {
-                reverseLayout = true
-                stackFromEnd = true
+        binding.recyclerList.layoutManager =
+            LinearLayoutManager(context).apply {
+                if (streaming) {
+                    reverseLayout = true
+                    stackFromEnd = true
+                }
             }
-        }
         binding.recyclerList.adapter = adapter
     }
 }

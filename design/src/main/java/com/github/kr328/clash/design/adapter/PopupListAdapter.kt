@@ -25,9 +25,14 @@ class PopupListAdapter(
 
     override fun getItemId(position: Int): Long = texts[position].hashCode().toLong()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView ?: context.layoutInflater
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+    override fun getView(
+        position: Int,
+        convertView: View?,
+        parent: ViewGroup?,
+    ): View {
+        val view =
+            convertView ?: context.layoutInflater
+                .inflate(android.R.layout.simple_list_item_1, parent, false)
 
         val text: TextView = view.findViewById(android.R.id.text1)
 

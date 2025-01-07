@@ -15,6 +15,8 @@ fun Context.startForegroundServiceCompat(intent: Intent) {
     }
 }
 
-fun Service.stopForegroundCompat(@StopForegroundFlags flags: Int) {
+fun Service.stopForegroundCompat(
+    @StopForegroundFlags flags: Int,
+) {
     ServiceCompat.stopForeground(this, flags)
 }

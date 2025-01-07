@@ -15,7 +15,9 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.selects.SelectClause1
 import kotlinx.coroutines.withContext
 
-abstract class Module<E>(val service: Service) {
+abstract class Module<E>(
+    val service: Service,
+) {
     private val events: Channel<E> = Channel(Channel.UNLIMITED)
     private val receivers: MutableList<BroadcastReceiver> = mutableListOf()
 
@@ -34,17 +36,21 @@ abstract class Module<E>(val service: Service) {
     ): ReceiveChannel<Intent> {
         val filter = IntentFilter().apply(configure)
         val channel = Channel<Intent>(capacity)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (context == null || intent == null) {
-                    channel.close()
+        val receiver =
+            object : BroadcastReceiver() {
+                override fun onReceive(
+                    context: Context?,
+                    intent: Intent?,
+                ) {
+                    if (context == null || intent == null) {
+                        channel.close()
 
-                    return
+                        return
+                    }
+
+                    channel.trySend(intent)
                 }
-
-                channel.trySend(intent)
             }
-        }
 
         if (requireSelf) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

@@ -15,7 +15,9 @@ class ProviderAdapter(
     providers: List<Provider>,
     private val requestUpdate: (Int, Provider) -> Unit,
 ) : RecyclerView.Adapter<ProviderAdapter.Holder>() {
-    class Holder(val binding: AdapterProviderBinding) : RecyclerView.ViewHolder(binding.root)
+    class Holder(
+        val binding: AdapterProviderBinding,
+    ) : RecyclerView.ViewHolder(binding.root)
 
     private val currentTime = ObservableCurrentTime()
 
@@ -42,22 +44,30 @@ class ProviderAdapter(
         notifyItemChanged(index)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder = Holder(
-        AdapterProviderBinding
-            .inflate(context.layoutInflater, parent, false)
-            .also { it.currentTime = currentTime },
-    )
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): Holder =
+        Holder(
+            AdapterProviderBinding
+                .inflate(context.layoutInflater, parent, false)
+                .also { it.currentTime = currentTime },
+        )
 
-    override fun onBindViewHolder(holder: Holder, position: Int) {
+    override fun onBindViewHolder(
+        holder: Holder,
+        position: Int,
+    ) {
         val state = states[position]
 
         holder.binding.provider = state.provider
         holder.binding.state = state
-        holder.binding.update = View.OnClickListener {
-            state.updating = true
+        holder.binding.update =
+            View.OnClickListener {
+                state.updating = true
 
-            requestUpdate(position, state.provider)
-        }
+                requestUpdate(position, state.provider)
+            }
     }
 
     override fun getItemCount(): Int = states.size
