@@ -1,5 +1,5 @@
 [versions]
-agp = "8.7.3"
+agp = "8.8.0"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 coroutine = "1.10.1"
@@ -16,7 +16,7 @@ serialization = "1.8.0"
 kaidl = "1.15"
 room = "2.6.1"
 multiprocess = "1.0.0"
-spotless = "7.0.0"
+spotless = "7.0.1"
 
 [libraries]
 
