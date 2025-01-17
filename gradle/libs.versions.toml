@@ -16,7 +16,7 @@ serialization = "1.8.0"
 kaidl = "1.15"
 room = "2.6.1"
 multiprocess = "1.0.0"
-spotless = "7.0.1"
+spotless = "7.0.2"
 
 [libraries]
 
