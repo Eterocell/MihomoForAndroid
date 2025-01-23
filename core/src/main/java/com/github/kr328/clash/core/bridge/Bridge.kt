@@ -116,12 +116,8 @@ object Bridge {
             .open(File(ctx.packageCodePath), ParcelFileDescriptor.MODE_READ_ONLY)
             .detachFd()
 
-        val home =
-            ctx.filesDir
-                .resolve("clash")
-                .apply { mkdirs() }
-                .absolutePath
-        val versionName = ctx.packageManager.getPackageInfoCompat(ctx.packageName, 0).versionName ?: ""
+        val home = ctx.filesDir.resolve("clash").apply { mkdirs() }.absolutePath
+        val versionName = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "unknown"
         val sdkVersion = Build.VERSION.SDK_INT
 
         Log.d("Home = $home")

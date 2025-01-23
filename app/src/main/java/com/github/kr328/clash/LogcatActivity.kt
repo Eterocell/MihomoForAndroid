@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import com.github.kr328.clash.design.R
 
 class LogcatActivity : BaseActivity<LogcatDesign>() {
     private var conn: ServiceConnection? = null
@@ -112,7 +113,7 @@ class LogcatActivity : BaseActivity<LogcatDesign>() {
                     when (it) {
                         LogcatDesign.Request.Close -> {
                             stopService(LogcatService::class.intent)
-
+                            startActivity(LogsActivity::class.intent)
                             finish()
                         }
                         else -> Unit

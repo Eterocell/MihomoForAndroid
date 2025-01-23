@@ -14,6 +14,7 @@ import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.github.kr328.clash.design.R
 
 class ProfilesActivity : BaseActivity<ProfilesDesign>() {
     override suspend fun main() {

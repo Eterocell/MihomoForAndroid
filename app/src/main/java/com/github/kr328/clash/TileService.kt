@@ -9,6 +9,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
+import com.github.kr328.clash.common.compat.registerReceiverCompat
 import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.constants.Permissions
 import com.github.kr328.clash.remote.StatusClient
@@ -36,32 +37,17 @@ class TileService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(
-                receiver,
-                IntentFilter().apply {
-                    addAction(Intents.ACTION_CLASH_STARTED)
-                    addAction(Intents.ACTION_CLASH_STOPPED)
-                    addAction(Intents.ACTION_PROFILE_LOADED)
-                    addAction(Intents.ACTION_SERVICE_RECREATED)
-                },
-                Permissions.RECEIVE_SELF_BROADCASTS,
-                null,
-                Context.RECEIVER_NOT_EXPORTED,
-            )
-        } else {
-            registerReceiver(
-                receiver,
-                IntentFilter().apply {
-                    addAction(Intents.ACTION_CLASH_STARTED)
-                    addAction(Intents.ACTION_CLASH_STOPPED)
-                    addAction(Intents.ACTION_PROFILE_LOADED)
-                    addAction(Intents.ACTION_SERVICE_RECREATED)
-                },
-                Permissions.RECEIVE_SELF_BROADCASTS,
-                null,
-            )
-        }
+        registerReceiverCompat(
+            receiver,
+            IntentFilter().apply {
+                addAction(Intents.ACTION_CLASH_STARTED)
+                addAction(Intents.ACTION_CLASH_STOPPED)
+                addAction(Intents.ACTION_PROFILE_LOADED)
+                addAction(Intents.ACTION_SERVICE_RECREATED)
+            },
+            Permissions.RECEIVE_SELF_BROADCASTS,
+            null
+        )
 
         val name = StatusClient(this).currentProfile()
 
@@ -89,7 +75,7 @@ class TileService : TileService() {
 
         tile.label = currentProfile.ifEmpty { getText(R.string.launch_name) }
 
-        tile.icon = Icon.createWithResource(this, R.drawable.ic_logo_service)
+        tile.icon = Icon.createWithResource(this, com.github.kr328.clash.service.R.drawable.ic_logo_service)
 
         tile.updateTile()
     }

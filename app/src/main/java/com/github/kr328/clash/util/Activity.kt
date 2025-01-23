@@ -13,8 +13,8 @@ class ActivityResultLifecycle : LifecycleOwner {
         lifecycle.currentState = Lifecycle.State.INITIALIZED
     }
 
-    suspend fun <T> use(block: suspend (lifecycle: ActivityResultLifecycle, start: () -> Unit) -> T): T =
-        try {
+    suspend fun <T> use(block: suspend (lifecycle: ActivityResultLifecycle, start: () -> Unit) -> T): T {
+        return try {
             markCreated()
 
             block(this, this::markStarted)
@@ -23,6 +23,7 @@ class ActivityResultLifecycle : LifecycleOwner {
                 markDestroy()
             }
         }
+    }
 
     private fun markCreated() {
         lifecycle.currentState = Lifecycle.State.CREATED

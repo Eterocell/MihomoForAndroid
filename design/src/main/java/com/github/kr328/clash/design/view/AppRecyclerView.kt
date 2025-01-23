@@ -6,13 +6,12 @@ import androidx.annotation.AttrRes
 import androidx.recyclerview.widget.RecyclerView
 
 class AppRecyclerView
-    @JvmOverloads
-    constructor(
-        context: Context,
-        attributeSet: AttributeSet? = null,
-        @AttrRes defStyleAttr: Int = 0,
-    ) : RecyclerView(context, attributeSet, defStyleAttr) {
-        init {
-            isFocusable = false
-        }
+@JvmOverloads constructor(
+    context: Context,
+    attributeSet: AttributeSet? = null,
+    @AttrRes defStyleAttr: Int = 0,
+) : RecyclerView(context, attributeSet, defStyleAttr) {
+    init {
+        isFocusable = false
     }
+}

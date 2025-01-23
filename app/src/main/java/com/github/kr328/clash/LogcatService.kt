@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.os.IBinder
 import android.os.IInterface
@@ -15,7 +16,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import com.github.kr328.clash.common.compat.getColorCompat
 import com.github.kr328.clash.common.compat.pendingIntentFlags
-import com.github.kr328.clash.common.compat.stopForegroundCompat
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.core.model.LogMessage
@@ -73,7 +73,7 @@ class LogcatService :
 
         unbindService(connection)
 
-        stopForegroundCompat(ServiceCompat.STOP_FOREGROUND_REMOVE)
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
 
         running = false
 
@@ -137,35 +137,32 @@ class LogcatService :
         NotificationManagerCompat
             .from(this)
             .createNotificationChannel(
-                NotificationChannelCompat
-                    .Builder(
-                        CHANNEL_ID,
-                        NotificationManagerCompat.IMPORTANCE_DEFAULT,
-                    ).setName(getString(R.string.clash_logcat))
-                    .build(),
+                NotificationChannelCompat.Builder(
+                    CHANNEL_ID,
+                    NotificationManagerCompat.IMPORTANCE_DEFAULT
+                ).setName(getString(com.github.kr328.clash.design.R.string.clash_logcat)).build()
             )
     }
 
     private fun showNotification() {
-        val notification =
-            NotificationCompat
-                .Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_logo_service)
-                .setColor(getColorCompat(R.color.color_clash_light))
-                .setContentTitle(getString(R.string.clash_logcat))
-                .setContentText(getString(R.string.running))
-                .setContentIntent(
-                    PendingIntent.getActivity(
-                        this,
-                        R.id.nf_logcat_status,
-                        LogcatActivity::class
-                            .intent
-                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                        pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
-                    ),
-                ).build()
+        val notification = NotificationCompat
+            .Builder(this, CHANNEL_ID)
+            .setSmallIcon(com.github.kr328.clash.service.R.drawable.ic_logo_service)
+            .setColor(getColorCompat(com.github.kr328.clash.design.R.color.color_clash_light))
+            .setContentTitle(getString(com.github.kr328.clash.design.R.string.clash_logcat))
+            .setContentText(getString(com.github.kr328.clash.design.R.string.running))
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    this,
+                    R.id.nf_logcat_status,
+                    LogcatActivity::class.intent
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
+                )
+            )
+            .build()
 
-        startForeground(R.id.nf_logcat_status, notification)
+        ServiceCompat.startForeground(this, R.id.nf_logcat_status, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST)
     }
 
     companion object {

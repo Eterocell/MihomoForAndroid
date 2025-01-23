@@ -20,6 +20,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import com.github.kr328.clash.design.R
 
 class MainActivity : BaseActivity<MainDesign>() {
     override suspend fun main() {
@@ -59,8 +60,13 @@ class MainActivity : BaseActivity<MainDesign>() {
                             startActivity(ProfilesActivity::class.intent)
                         MainDesign.Request.OpenProviders ->
                             startActivity(ProvidersActivity::class.intent)
-                        MainDesign.Request.OpenLogs ->
-                            startActivity(LogsActivity::class.intent)
+                        MainDesign.Request.OpenLogs -> {
+                            if (LogcatService.running) {
+                                startActivity(LogcatActivity::class.intent)
+                            } else {
+                                startActivity(LogsActivity::class.intent)
+                            }
+                        }
                         MainDesign.Request.OpenSettings ->
                             startActivity(SettingsActivity::class.intent)
                         MainDesign.Request.OpenHelp ->

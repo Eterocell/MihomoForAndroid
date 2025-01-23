@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.ActivityCompat
@@ -13,7 +14,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
 import com.github.kr328.clash.common.compat.getColorCompat
 import com.github.kr328.clash.common.compat.pendingIntentFlags
-import com.github.kr328.clash.common.compat.stopForegroundCompat
 import com.github.kr328.clash.common.constants.Components
 import com.github.kr328.clash.common.constants.Intents
 import com.github.kr328.clash.common.id.UndefinedIds
@@ -51,7 +51,7 @@ class ProfileWorker : BaseService() {
     }
 
     override fun onDestroy() {
-        stopForegroundCompat(ServiceCompat.STOP_FOREGROUND_REMOVE)
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
 
         super.onDestroy()
     }
@@ -142,7 +142,7 @@ class ProfileWorker : BaseService() {
                 .setOnlyAlertOnce(true)
                 .build()
 
-        startForeground(R.id.nf_profile_worker, notification)
+        ServiceCompat.startForeground(this, R.id.nf_profile_worker, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST)
     }
 
     private suspend inline fun processing(

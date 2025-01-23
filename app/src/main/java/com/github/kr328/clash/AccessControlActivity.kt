@@ -127,7 +127,11 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                     it.packageName != packageName
                 }.filter {
                     it.packageName == "android" || it.requestedPermissions?.contains(INTERNET) == true
-                }.filter {
+                }
+                .filter {
+                    it.applicationInfo != null
+                }
+                .filter {
                     systemApp || !it.isSystemApp
                 }.map {
                     it.toAppInfo(pm)
@@ -137,6 +141,6 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
 
     private val PackageInfo.isSystemApp: Boolean
         get() {
-            return applicationInfo!!.flags and ApplicationInfo.FLAG_SYSTEM != 0
+            return applicationInfo?.flags?.and(ApplicationInfo.FLAG_SYSTEM) != 0
         }
 }
