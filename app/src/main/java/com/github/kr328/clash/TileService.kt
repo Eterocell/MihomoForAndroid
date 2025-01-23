@@ -46,7 +46,7 @@ class TileService : TileService() {
                 addAction(Intents.ACTION_SERVICE_RECREATED)
             },
             Permissions.RECEIVE_SELF_BROADCASTS,
-            null
+            null,
         )
 
         val name = StatusClient(this).currentProfile()

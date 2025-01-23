@@ -127,11 +127,9 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                     it.packageName != packageName
                 }.filter {
                     it.packageName == "android" || it.requestedPermissions?.contains(INTERNET) == true
-                }
-                .filter {
+                }.filter {
                     it.applicationInfo != null
-                }
-                .filter {
+                }.filter {
                     systemApp || !it.isSystemApp
                 }.map {
                     it.toAppInfo(pm)

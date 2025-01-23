@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.core.Clash
 import com.github.kr328.clash.design.MetaFeatureSettingsDesign
+import com.github.kr328.clash.design.R
 import com.github.kr328.clash.util.clashDir
 import com.github.kr328.clash.util.withClash
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,7 +17,6 @@ import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import com.github.kr328.clash.design.R
 
 class MetaFeatureSettingsActivity : BaseActivity<MetaFeatureSettingsDesign>() {
     override suspend fun main() {

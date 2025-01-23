@@ -7,7 +7,10 @@ import com.github.kr328.clash.design.util.getPixels
 import com.github.kr328.clash.design.util.resolveThemedColor
 import com.github.kr328.clash.design.util.resolveThemedResourceId
 
-class ProxyViewConfig(val context: Context, var proxyLine: Int) {
+class ProxyViewConfig(
+    val context: Context,
+    var proxyLine: Int,
+) {
     private val colorSurface = context.resolveThemedColor(com.google.android.material.R.attr.colorSurface)
 
     val clickableBackground =

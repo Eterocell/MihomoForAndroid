@@ -108,15 +108,18 @@ class Broadcasts(
         }
 
         try {
-            context.registerReceiverCompat(broadcastReceiver, IntentFilter().apply {
-                addAction(Intents.ACTION_SERVICE_RECREATED)
-                addAction(Intents.ACTION_CLASH_STARTED)
-                addAction(Intents.ACTION_CLASH_STOPPED)
-                addAction(Intents.ACTION_PROFILE_CHANGED)
-                addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
-                addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
-                addAction(Intents.ACTION_PROFILE_LOADED)
-            })
+            context.registerReceiverCompat(
+                broadcastReceiver,
+                IntentFilter().apply {
+                    addAction(Intents.ACTION_SERVICE_RECREATED)
+                    addAction(Intents.ACTION_CLASH_STARTED)
+                    addAction(Intents.ACTION_CLASH_STOPPED)
+                    addAction(Intents.ACTION_PROFILE_CHANGED)
+                    addAction(Intents.ACTION_PROFILE_UPDATE_COMPLETED)
+                    addAction(Intents.ACTION_PROFILE_UPDATE_FAILED)
+                    addAction(Intents.ACTION_PROFILE_LOADED)
+                },
+            )
 
             clashRunning = StatusClient(context).currentProfile() != null
         } catch (e: Exception) {

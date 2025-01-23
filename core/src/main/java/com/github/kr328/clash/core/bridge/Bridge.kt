@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import androidx.annotation.Keep
 import com.github.kr328.clash.common.Global
-import com.github.kr328.clash.common.compat.getPackageInfoCompat
 import com.github.kr328.clash.common.log.Log
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
@@ -116,7 +115,11 @@ object Bridge {
             .open(File(ctx.packageCodePath), ParcelFileDescriptor.MODE_READ_ONLY)
             .detachFd()
 
-        val home = ctx.filesDir.resolve("clash").apply { mkdirs() }.absolutePath
+        val home =
+            ctx.filesDir
+                .resolve("clash")
+                .apply { mkdirs() }
+                .absolutePath
         val versionName = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "unknown"
         val sdkVersion = Build.VERSION.SDK_INT
 

@@ -137,30 +137,33 @@ class LogcatService :
         NotificationManagerCompat
             .from(this)
             .createNotificationChannel(
-                NotificationChannelCompat.Builder(
-                    CHANNEL_ID,
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT
-                ).setName(getString(com.github.kr328.clash.design.R.string.clash_logcat)).build()
+                NotificationChannelCompat
+                    .Builder(
+                        CHANNEL_ID,
+                        NotificationManagerCompat.IMPORTANCE_DEFAULT,
+                    ).setName(getString(com.github.kr328.clash.design.R.string.clash_logcat))
+                    .build(),
             )
     }
 
     private fun showNotification() {
-        val notification = NotificationCompat
-            .Builder(this, CHANNEL_ID)
-            .setSmallIcon(com.github.kr328.clash.service.R.drawable.ic_logo_service)
-            .setColor(getColorCompat(com.github.kr328.clash.design.R.color.color_clash_light))
-            .setContentTitle(getString(com.github.kr328.clash.design.R.string.clash_logcat))
-            .setContentText(getString(com.github.kr328.clash.design.R.string.running))
-            .setContentIntent(
-                PendingIntent.getActivity(
-                    this,
-                    R.id.nf_logcat_status,
-                    LogcatActivity::class.intent
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                    pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT)
-                )
-            )
-            .build()
+        val notification =
+            NotificationCompat
+                .Builder(this, CHANNEL_ID)
+                .setSmallIcon(com.github.kr328.clash.service.R.drawable.ic_logo_service)
+                .setColor(getColorCompat(com.github.kr328.clash.design.R.color.color_clash_light))
+                .setContentTitle(getString(com.github.kr328.clash.design.R.string.clash_logcat))
+                .setContentText(getString(com.github.kr328.clash.design.R.string.running))
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        this,
+                        R.id.nf_logcat_status,
+                        LogcatActivity::class
+                            .intent
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+                        pendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT),
+                    ),
+                ).build()
 
         ServiceCompat.startForeground(this, R.id.nf_logcat_status, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST)
     }

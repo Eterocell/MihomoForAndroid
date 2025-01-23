@@ -11,7 +11,6 @@ import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 
 class LogsActivity : BaseActivity<LogsDesign>() {
-
     override suspend fun main() {
         val design = LogsDesign(this)
 
