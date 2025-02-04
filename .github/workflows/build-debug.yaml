@@ -30,7 +30,7 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Setup ninja
-        uses: seanmiddleditch/gha-setup-ninja@v5
+        uses: seanmiddleditch/gha-setup-ninja@v6
 
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
