@@ -27,7 +27,7 @@ subprojects {
 
             minSdk = 21
             targetSdk = 35
-            buildToolsVersion = "35.0.0"
+            buildToolsVersion = "35.0.1"
 
             versionName = "3.0.0-alpha03"
             versionCode = "03000003".toInt()
