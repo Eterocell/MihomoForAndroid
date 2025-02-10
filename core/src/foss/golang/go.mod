@@ -49,7 +49,7 @@ require (
 	github.com/metacubex/chacha v0.1.0 // indirect
 	github.com/metacubex/gopacket v1.1.20-0.20230608035415-7e2f98a3e759 // indirect
 	github.com/metacubex/gvisor v0.0.0-20241126021258-5b028898cc5a // indirect
-	github.com/metacubex/mihomo v1.19.1 // indirect
+	github.com/metacubex/mihomo v1.19.2 // indirect
 	github.com/metacubex/quic-go v0.48.3-0.20241126053724-b69fea3888da // indirect
 	github.com/metacubex/randv2 v0.2.0 // indirect
 	github.com/metacubex/sing-quic v0.0.0-20250119013740-2a19cce83925 // indirect
