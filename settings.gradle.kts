@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 
 includeBuild("golang-android-plugin")
 
-rootProject.name = "MihomoForAndroid"
+rootProject.name = "CoKlash"
 
 include(":app")
 include(":core")
